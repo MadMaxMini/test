@@ -77,8 +77,15 @@ The tradeoff is worth it for Tier 2 where we're accepting slower speed for isola
 - [x] Install Ollama (native, macOS)
 - [x] Lock Ollama to localhost:11434
 - [x] Create folder structure ~/Work/local/
-- [ ] Harden system firewall (pf / Little Snitch)
-- [ ] Configure Claude Code permissions (reduce prompts)
+- [x] Harden system firewall + stealth mode
+- [x] Configure Claude Code permissions (settings.json + CLAUDE.md)
+- [x] Install Docker Desktop
+- [x] Install Homebrew, Python 3.12, HuggingFace CLI (hf)
+- [x] Write OpenBao docker-compose + init/unseal/store/get scripts
+- [x] Write Ollama helper scripts (status, pull-tier1, switch, test-api)
+- [ ] Open Docker + start OpenBao (`docker compose up -d` in ~/Work/local/openbao)
+- [ ] Init + unseal OpenBao (run scripts/init.sh)
+- [ ] Create HuggingFace account + token → store in OpenBao
 - [ ] Pull first Tier 1 model and test API
 
 ### Phase 2 — Tier 1 Models
@@ -96,22 +103,24 @@ The tradeoff is worth it for Tier 2 where we're accepting slower speed for isola
 - [ ] Document behavioral differences and red flags found
 
 ### Phase 4 — Workflow Integration
-- [ ] Build scripts in ~/Work/local/ollama/scripts/ for model switching
+- [x] Build scripts in ~/Work/local/ollama/scripts/ for model switching
 - [ ] Create custom Modelfiles for specialized personas/configs
 - [ ] Set up Claude ↔ local model handoff workflow
 - [ ] Explore MCP server or API bridge between local models and Claude
+- [ ] Raspberry Pi as dedicated OpenBao node (HA cluster Phase 2)
 
 ---
 
 ## Hardening Checklist
-- [ ] Ollama bound to 127.0.0.1 (done — verified)
-- [ ] macOS firewall enabled
+- [x] Ollama bound to 127.0.0.1 (verified)
+- [x] macOS firewall enabled
+- [x] Stealth mode enabled
+- [x] FileVault disk encryption on
+- [x] SIP enabled
 - [ ] Port 11434 blocked externally (pf rules)
 - [ ] Open WebUI auth enabled if exposed beyond localhost
 - [ ] Docker network isolation for Tier 2 (--network none)
-- [ ] FileVault disk encryption verified
-- [ ] SIP status checked
-- [ ] Ollama telemetry audited (OLLAMA_NOPRUNE, network monitor)
+- [ ] Ollama telemetry audited (network monitor)
 - [ ] No model output piped directly to shell without review
 
 ---
