@@ -2,7 +2,28 @@
 
 ---
 
-## 2026-03-02
+## 2026-03-02 (session 2)
+
+### Done
+- OpenBao container started (v2.5.1, not yet initialized — pending Rod's decisions)
+- Plan review completed — 4 concerns flagged, written to proposals/mad-max-concerns.md
+- local/ contents inventoried — all scripts present, not yet in git (risk noted)
+
+### Pending Rod's Decisions (see mad-max-concerns.md)
+- Unseal key storage method (plaintext file vs Keychain vs accept risk)
+- macOS account architecture (macBot admin vs standard user)
+- Auto-unseal strategy (manual for now vs Pi node sooner)
+- Move local/ scripts into madmax repo (recommended)
+
+### Next (after decisions)
+- Initialize OpenBao with chosen key storage method
+- Run setup-transit.sh → setup-mailbox.sh
+- HuggingFace account + token → into vault
+- First model pull
+
+---
+
+## 2026-03-02 (session 1)
 
 ### Done
 - Reviewed Mad Max skill from laptop — now have full v2 context
