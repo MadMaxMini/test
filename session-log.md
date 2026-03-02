@@ -8,12 +8,17 @@
 - OpenBao container started (v2.5.1, not yet initialized — pending Rod's decisions)
 - Plan review completed — 4 concerns flagged, written to proposals/mad-max-concerns.md
 - local/ contents inventoried — all scripts present, not yet in git (risk noted)
+- Written while waiting: init-keychain.sh + unseal-keychain.sh (Option B for unseal key)
+- Written while waiting: local/tier2/ — isolated Docker for DeepSeek/MiniMax (--network none)
+- Written while waiting: local/open-webui/docker-compose.yml — browser chat UI
+- Written while waiting: local/n8n/docker-compose.yml — workflow automation skeleton (Phase 4)
+- Written while waiting: README.md — repo overview, stack table, model tiers
 
-### Pending Rod's Decisions (see mad-max-concerns.md)
-- Unseal key storage method (plaintext file vs Keychain vs accept risk)
-- macOS account architecture (macBot admin vs standard user)
-- Auto-unseal strategy (manual for now vs Pi node sooner)
-- Move local/ scripts into madmax repo (recommended)
+### Pending Rod's Decisions (see proposals/mad-max-concerns.md)
+- #1 Unseal key storage: Keychain (B), physical (A), or accept risk (C)?
+- #2 Account architecture: is macBot your only account? keep admin or create standard user?
+- #3 Auto-unseal: manual for now (B) or Pi node sooner (D)?
+- #4 Move local/ scripts into madmax repo? (recommended yes)
 
 ### Next (after decisions)
 - Initialize OpenBao with chosen key storage method
