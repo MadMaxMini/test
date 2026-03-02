@@ -3,6 +3,10 @@
 Where everything lives and what it does.
 Last updated: 2026-03-02
 
+> **Note for Claude:** This file is a reference map only. Do NOT proactively read
+> the files listed here unless explicitly needed for the current task. Know they exist,
+> load them on demand.
+
 ---
 
 ## Repo (~/Work/test/ → github:MadMaxMini/test)
