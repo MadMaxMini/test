@@ -115,11 +115,15 @@ claude-life repo (laptop)
 
 ## Session End
 
-Every session — whether on laptop or mini:
+Every session — whether on laptop or mini — do this WITHOUT being asked:
+
 1. Update `~/Work/madmax/session-log.md` with what was done, decisions made, what's next
 2. Commit and push to origin
 3. If on laptop and decisions touch Life Coach's domain: write to `_agent_office_/life-coach/mailbox/inbox/`
 4. If on mini and you need Rod's input: add to `~/Work/madmax/needs-rod.md` (create if needed)
+5. If any other repos were touched this session (e.g. `recruiting-coach`), confirm they are committed and pushed too
+
+**Do not wait for Rod to ask.** Session close is your responsibility. Log → commit → push, then confirm to Rod it's done.
 
 **The mini should never go silent.** If it worked, it logs it.
 
