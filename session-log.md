@@ -2,6 +2,36 @@
 
 ---
 
+## 2026-03-03 (laptop session — Rod + Mad Max)
+
+### Done
+- Pulled latest from mini (9 files, significant progress from sessions 1+2)
+- Read full mini state: Docker up, OpenBao container running (not initialized), all scripts written
+- Packaged recruiting-coach as standalone repo: `git@github.com:Roderick-Clemente/recruiting-coach.git`
+  - Skill (`SKILL.md`) = portable SE recruiting methodology
+  - Office = Harness-specific context (pipeline, interview style, sell doc, templates)
+  - Architecture decision: skill/office split — skill is reusable, office is Rod's actual data
+- Dropped `att-mad-max.md` in this repo with clone instructions + SSH key note
+- Pushed both repos
+
+### Decisions Made
+- New repo (Roderick-Clemente/recruiting-coach) not the madmax test repo — clean, shareable, no personal system exposure
+- Skill vs. office separation is the pattern for future agent repos
+- Recruiting Coach = first standalone agent in v2 system
+- Start on Claude (cloud), test local AI when Ollama is ready
+
+### Notes for Mini
+- See `att-mad-max.md` for clone instructions
+- SSH key issue: Roderick-Clemente account, not MadMaxMini — check with Rod or add MadMaxMini as deploy key
+- 4 decisions from `proposals/mad-max-concerns.md` still pending (OpenBao unseal key, macBot account, auto-unseal, local/ in git)
+
+### Next
+- Mini: clone recruiting-coach, wire up Claude Code, confirm it runs
+- Mini: get Rod's answers on the 4 OpenBao decisions → initialize vault
+- Laptop: test `/recruiting-coach` from the new repo (not claude-life)
+
+---
+
 ## 2026-03-02 (session 2)
 
 ### Done
