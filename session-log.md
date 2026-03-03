@@ -13,6 +13,7 @@
   - Architecture decision: skill/office split — skill is reusable, office is Rod's actual data
 - Dropped `att-mad-max.md` in this repo with clone instructions + SSH key note
 - Pushed both repos
+- Rewrote Mad Max SKILL.md to match system standards (YAML frontmatter, smart loading, mid-session writes, owns session close)
 
 ### Decisions Made
 - New repo (Roderick-Clemente/recruiting-coach) not the madmax test repo — clean, shareable, no personal system exposure
