@@ -23,7 +23,7 @@
 
 ### Notes for Mini
 - See `att-mad-max.md` for clone instructions
-- SSH key issue: Roderick-Clemente account, not MadMaxMini — check with Rod or add MadMaxMini as deploy key
+- SSH access: Roderick-Clemente owns repo, MadMaxMini added as collaborator — invite accepted in browser
 - 4 decisions from `proposals/mad-max-concerns.md` — all resolved this session (see below)
 
 ### Next
