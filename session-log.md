@@ -33,28 +33,33 @@
 
 ---
 
-## 2026-03-02 (mini session 3)
+## 2026-03-03 (mini session 3)
 
 ### Done
 - All 4 open decisions resolved (see proposals/mad-max-concerns.md)
-- local/ scripts moved into repo and committed — no longer at risk of loss
-- Inventory updated to reflect local/ in git
+- local/ scripts moved into repo — 27 files, now version controlled and safe
+- Resolved git merge conflict with laptop session (both session entries preserved)
+- Expanded Claude Code permissions: Write/Edit scoped to ~/Work/**, full bash toolset, no sudo
+- settings.json backed up to docs/claude-settings.json
+- Cloned recruiting-coach to ~/Work/recruiting-coach (MadMaxMini as collaborator, invite accepted)
+- Confirmed SSH access working — Roderick-Clemente owns repo, MadMaxMini is collaborator
 
 ### Decisions Made
 - **#1 Unseal key:** Keychain on mini (scripts) + KeePass on Dropbox (laptop) + paper (fallback)
-- **#2 Account:** rod (owner) + macBot (admin) — keep as-is. Standard automation user deferred to Phase 4.
+- **#2 Account:** rod (owner) + macBot (admin) — keep as-is. Dedicated automation user deferred to Phase 4.
 - **#3 Auto-unseal:** Manual for now. Wire launchd when overnight automations need vault.
-- **#4 local/ in git:** Done — copied into ~/Work/test/local/, committed.
+- **#4 local/ in git:** Done.
+- **Permissions:** Write/Edit scoped to ~/Work/ only, no sudo (right gate to keep)
 
 ### Future Hardening (logged)
 - Dedicated non-admin macOS sub-account for automation daemons (n8n, cron) — Phase 4
 - Drop macBot from admin once automation account exists
 
 ### Next
-- Initialize OpenBao: run init-keychain.sh
+- Initialize OpenBao: `cd ~/Work/test/local/openbao && docker compose up -d` → run init-keychain.sh
 - HuggingFace account + token into vault
 - Pull first Tier 1 model, test API
-- GitHub repo rename (test → madmax) + local folder rename — next session
+- GitHub repo rename (test → madmax) + local folder rename
 
 ---
 
