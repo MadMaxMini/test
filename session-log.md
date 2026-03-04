@@ -67,6 +67,7 @@
 - Laptop cannot run Docker (not work-authorized, may change)
 - All Docker services (OpenBao, Open WebUI, n8n, Tier 2 models) are mini-only
 - Laptop = planning/Claude interface only until Docker access granted
+- Pi (already in roadmap for OpenBao auto-unseal) could also solve this — laptop SSHes to Pi for Docker work
 
 ---
 
