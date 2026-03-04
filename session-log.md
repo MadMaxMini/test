@@ -7,7 +7,7 @@
 ### Done
 - Pulled latest from mini (9 files, significant progress from sessions 1+2)
 - Read full mini state: Docker up, OpenBao container running (not initialized), all scripts written
-- Packaged recruiting-coach as standalone repo: `git@github.com:Roderick-Clemente/recruiting-coach.git`
+- Ported recruiting-coach from claude-life v1 into standalone repo: `git@github.com:Roderick-Clemente/recruiting-coach.git`
   - Skill (`SKILL.md`) = portable SE recruiting methodology
   - Office = Harness-specific context (pipeline, interview style, sell doc, templates)
   - Architecture decision: skill/office split — skill is reusable, office is Rod's actual data
