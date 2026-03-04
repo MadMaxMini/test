@@ -55,11 +55,18 @@
 - Dedicated non-admin macOS sub-account for automation daemons (n8n, cron) — Phase 4
 - Drop macBot from admin once automation account exists
 
-### Next
-- Initialize OpenBao: `cd ~/Work/test/local/openbao && docker compose up -d` → run init-keychain.sh
-- HuggingFace account + token into vault
-- Pull first Tier 1 model, test API
-- GitHub repo rename (test → madmax) + local folder rename
+### Next — START HERE NEXT SESSION
+1. **OpenBao init** — `cd ~/Work/test/local/openbao && docker compose up -d` → `bash scripts/init-keychain.sh`
+   - Have KeePass open and paper ready to record unseal key + root token
+   - Then run setup-transit.sh → setup-mailbox.sh
+2. HuggingFace account + token into vault
+3. Pull first Tier 1 model, test API
+4. GitHub repo rename (test → madmax) + local folder rename
+
+### Architecture Note
+- Laptop cannot run Docker (not work-authorized, may change)
+- All Docker services (OpenBao, Open WebUI, n8n, Tier 2 models) are mini-only
+- Laptop = planning/Claude interface only until Docker access granted
 
 ---
 
