@@ -118,7 +118,12 @@ Currently at risk of being lost.
 
 ## Decision Checklist
 
-- [ ] **#1 Unseal key:** A (physical), B (Keychain), or C (accept risk)?
-- [ ] **#2 Account:** Is macBot your only account? Keep admin or create standard user?
-- [ ] **#3 Auto-unseal:** B (manual for now) or start on Pi setup sooner?
-- [ ] **#4 local/ in git:** Move into madmax repo? (Recommended yes)
+- [x] **#1 Unseal key:** Combo A+B+paper — Keychain on mini (scripts), KeePass on Dropbox (laptop access), paper (fallback)
+- [x] **#2 Account:** rod (owner) + macBot (admin, agent work) — keep as-is. Add dedicated standard automation user when n8n goes live (Phase 4).
+- [x] **#3 Auto-unseal:** Manual for now (B). Wire launchd when overnight automations need vault access.
+- [x] **#4 local/ in git:** Yes — copied into ~/Work/test/local/, committed to git.
+
+## Future Hardening (deferred — revisit when system is running)
+- Create dedicated non-admin macOS sub-account for running automation daemons (n8n, cron, etc.)
+- Drop macBot from admin once automation account is in place
+- Goal: limit blast radius if agent session is compromised

@@ -35,9 +35,9 @@ README.md                    # Repo overview
 
 ---
 
-## Local Only — NOT in repo (~/Work/local/)
+## Local Services — IN repo (~/Work/test/local/)
 
-⚠️ These exist only on this machine. Lost on wipe. See proposals/repo-structure.md.
+Previously at ~/Work/local/ — moved into repo 2026-03-02. Now version controlled.
 
 ### Ollama (~/Work/local/ollama/)
 ```

@@ -1,0 +1,10 @@
+services:
+  ollama-tier2:
+    image: ollama/ollama:latest
+    container_name: ollama-tier2
+    # NO network access — complete isolation for untrusted models
+    network_mode: none
+    volumes:
+      - ./models:/root/.ollama
+    # Access via: docker exec -it ollama-tier2 ollama run <model>
+    # No port mapping — intentional, not reachable from host network

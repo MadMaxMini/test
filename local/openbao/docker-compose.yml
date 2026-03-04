@@ -1,0 +1,25 @@
+services:
+  openbao:
+    image: quay.io/openbao/openbao:latest
+    container_name: openbao
+    restart: unless-stopped
+    ports:
+      - "127.0.0.1:8200:8200"
+    environment:
+      BAO_ADDR: "http://0.0.0.0:8200"
+      BAO_LOCAL_CONFIG: |
+        ui = true
+        listener "tcp" {
+          address     = "0.0.0.0:8200"
+          tls_disable = 1
+        }
+        storage "file" {
+          path = "/openbao/data"
+        }
+        api_addr = "http://127.0.0.1:8200"
+    volumes:
+      - ./data:/openbao/data
+      - ./config:/openbao/config
+    cap_add:
+      - IPC_LOCK
+    command: server

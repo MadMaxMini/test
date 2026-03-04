@@ -24,12 +24,37 @@
 ### Notes for Mini
 - See `att-mad-max.md` for clone instructions
 - SSH key issue: Roderick-Clemente account, not MadMaxMini — check with Rod or add MadMaxMini as deploy key
-- 4 decisions from `proposals/mad-max-concerns.md` still pending (OpenBao unseal key, macBot account, auto-unseal, local/ in git)
+- 4 decisions from `proposals/mad-max-concerns.md` — all resolved this session (see below)
 
 ### Next
 - Mini: clone recruiting-coach, wire up Claude Code, confirm it runs
-- Mini: get Rod's answers on the 4 OpenBao decisions → initialize vault
+- Mini: initialize OpenBao (decisions now made)
 - Laptop: test `/recruiting-coach` from the new repo (not claude-life)
+
+---
+
+## 2026-03-02 (mini session 3)
+
+### Done
+- All 4 open decisions resolved (see proposals/mad-max-concerns.md)
+- local/ scripts moved into repo and committed — no longer at risk of loss
+- Inventory updated to reflect local/ in git
+
+### Decisions Made
+- **#1 Unseal key:** Keychain on mini (scripts) + KeePass on Dropbox (laptop) + paper (fallback)
+- **#2 Account:** rod (owner) + macBot (admin) — keep as-is. Standard automation user deferred to Phase 4.
+- **#3 Auto-unseal:** Manual for now. Wire launchd when overnight automations need vault.
+- **#4 local/ in git:** Done — copied into ~/Work/test/local/, committed.
+
+### Future Hardening (logged)
+- Dedicated non-admin macOS sub-account for automation daemons (n8n, cron) — Phase 4
+- Drop macBot from admin once automation account exists
+
+### Next
+- Initialize OpenBao: run init-keychain.sh
+- HuggingFace account + token into vault
+- Pull first Tier 1 model, test API
+- GitHub repo rename (test → madmax) + local folder rename — next session
 
 ---
 
