@@ -2,9 +2,7 @@
   "permissions": {
     "allow": [
       "Write(/Users/macBot/Work/**)",
-      "Write(/Users/macBot/.claude/**)",
       "Edit(/Users/macBot/Work/**)",
-      "Edit(/Users/macBot/.claude/**)",
       "Read",
       "Bash(git:*)",
       "Bash(brew:*)",
