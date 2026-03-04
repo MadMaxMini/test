@@ -13,19 +13,19 @@ if [ -z "${BAO_TOKEN:-}" ]; then
 fi
 
 echo "==> Enabling Transit secrets engine..."
-curl -s --header "X-Vault-Token: $BAO_TOKEN" \
+TRANSIT_RESP=$(curl -s -w "%{http_code}" --header "X-Vault-Token: $BAO_TOKEN" \
   --request POST \
   --data '{"type":"transit"}' \
-  "$BAO_ADDR/v1/sys/mounts/transit" | python3 -c "
-import sys, json
-r = json.load(sys.stdin)
-if r == {} or 'mount_accessor' in str(r):
-    print('    Transit engine enabled.')
-elif 'already in use' in str(r):
-    print('    Transit engine already enabled.')
-else:
-    print('    Response:', r)
-"
+  "$BAO_ADDR/v1/sys/mounts/transit")
+TRANSIT_CODE="${TRANSIT_RESP: -3}"
+TRANSIT_BODY="${TRANSIT_RESP%???}"
+if [ "$TRANSIT_CODE" = "204" ] || [ "$TRANSIT_CODE" = "200" ]; then
+  echo "    Transit engine enabled."
+elif echo "$TRANSIT_BODY" | grep -q "already in use"; then
+  echo "    Transit engine already enabled."
+else
+  echo "    Warning: HTTP $TRANSIT_CODE — $TRANSIT_BODY"
+fi
 
 echo ""
 echo "==> Enabling KV v2 secrets engine..."

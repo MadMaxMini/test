@@ -2,6 +2,38 @@
 
 ---
 
+## 2026-03-04 (mini session 4)
+
+### Done
+- OpenBao initialized + unsealed — `initialized: true, sealed: false`
+  - Keys stored in macOS Keychain (Option B — no plaintext file)
+  - Root token backed up to KeePass (KDBX format — migrated from KDB)
+- `setup-transit.sh` ran successfully
+  - Transit engine enabled, KV v2 enabled
+  - Keys: mad-max, recruiting, life-coach, shared
+  - Policies: scoped per coach, shared readable by all
+  - Coach tokens created and stored in vault at `secret/data/tokens/<coach>`
+  - Fixed script bug: empty 204 response from mount endpoint was crashing JSON parser
+- `setup-mailbox.sh` — **on hold** pending mailbox architecture decision
+- Mad Max SKILL.md updated: `hostname && date` on session start (note time + machine together)
+- KeePass: migrated from KDB → KDBX (AES256 + Argon2, backed up to Dropbox)
+
+### Decisions Made
+- KDB → KDBX for KeePass database (better encryption, full cross-platform support)
+- Mailbox architecture: **decision pending** (see proposals/mailbox-architecture.md)
+
+### Low Priority Backlog
+- Build MacPass from source (currently using binary release)
+
+### Next — START HERE NEXT SESSION
+1. **Mailbox architecture decision** — read `proposals/mailbox-architecture.md`, pick Option A or B
+2. Rewrite `setup-mailbox.sh` per decision, run it
+3. HuggingFace account + token → store in OpenBao
+4. Pull first Tier 1 model via Ollama, test API
+5. Repo rename: test → madmax + local folder rename
+
+---
+
 ## 2026-03-03 (laptop session — Rod + Mad Max)
 
 ### Done
