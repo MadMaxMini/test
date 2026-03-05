@@ -2,6 +2,29 @@
 
 ---
 
+## 2026-03-05 (laptop session 3)
+
+### Done
+- Pulled latest madmax repo + recruiting-coach repo (madmax had 30 new files from mini)
+- Reorganized coach repos: `~/Work/coaches/` parent folder established
+  - `~/Work/recruiting-coach` → `~/Work/coaches/recruiting`
+  - `~/Work/coaches/health` — new repo initialized
+- Synced recruiting-coach repo: active candidate profiles, attachments, cheat sheets, ARCHIVED.md
+- Initialized health-coach repo (`git@github.com:Roderick-Clemente/health.git`)
+  - Full office ported: session log, weight log, HSA tracker, vegas rules, arm-project (WC medical)
+
+### Decisions Made
+- Coach repos live under `~/Work/coaches/<name>` (not flat `~/Work/<name>`)
+- Health repo includes full arm-project (active WC claim) — it's current, not archive
+- Recruiting repo: closed candidates listed in ARCHIVED.md only (no files) — laptop has full data
+
+### Next
+- Port remaining coaches: work, life, faith, manager (pick next with Rod)
+- Update inventory.md to reflect new coaches/ path
+- OpenBao 4 decisions still pending (see proposals/mad-max-concerns.md)
+
+---
+
 ## 2026-03-04 (mini session 4)
 
 ### Done
