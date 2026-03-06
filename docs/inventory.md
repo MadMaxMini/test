@@ -1,7 +1,7 @@
 # Asset Inventory
 
 Where everything lives and what it does.
-Last updated: 2026-03-02
+Last updated: 2026-03-05
 
 > **Note for Claude:** This file is a reference map only. Do NOT proactively read
 > the files listed here unless explicitly needed for the current task. Know they exist,
@@ -9,7 +9,20 @@ Last updated: 2026-03-02
 
 ---
 
-## Repo (~/Work/test/ → github:MadMaxMini/test)
+## Coach Agent Repos (~/Work/coaches/)
+
+Standalone repos, Roderick-Clemente GitHub account.
+
+| Repo | Local Path | Remote |
+|------|-----------|--------|
+| recruiting | `~/Work/coaches/recruiting` | `git@github.com:Roderick-Clemente/recruiting-coach.git` |
+| health | `~/Work/coaches/health` | `git@github.com:Roderick-Clemente/health.git` |
+
+Each follows the skill/office pattern: skill = portable methodology, office = org-specific context.
+
+---
+
+## Madmax Repo (~/Work/madmax/ → github:MadMaxMini/test)
 
 ```
 .claude/

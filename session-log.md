@@ -5,12 +5,13 @@
 ## 2026-03-06 (mini session 5)
 
 ### Done
-- Pulled both repos: test was current, recruiting-coach had diverged (laptop pipeline snapshot vs mini session 1 commit) → merged clean, pushed
+- Pulled both repos: test was current, recruiting-coach had diverged → merged clean, pushed
 - Apple ID created: `macbotpooterson@gmail.com` (created via iPhone, T-Mobile number for 2FA)
 - iMessage on mini: pending — need to sign Apple ID into System Settings → Messages
-- faith repo (`git@github.com:Roderick-Clemente/faith.git`): not cloned — MadMaxMini needs collaborator access first
+- faith repo: not cloned — MadMaxMini needs collaborator access (note: will live at `~/Work/coaches/faith`)
 - Roadmap reviewed and outlined
 - Messaging channel decision: iMessage chosen
+- Discovered laptop session 3 reorganized coach paths (see below) — mini not yet updated
 
 ### Decisions Made
 - iMessage is the mini → Rod notification channel (AppleScript, native, no third-party)
@@ -23,13 +24,36 @@
 
 ### Next — START HERE NEXT SESSION
 1. **KeePass**: recover password or recreate DB, save Apple ID credentials
-2. **Sign Apple ID into mini**: System Settings → sign in with `macbotpooterson@gmail.com`
-3. **Wire iMessage**: test AppleScript send from mini to Rod's number
-4. **faith repo**: Rod adds MadMaxMini as collaborator on GitHub → clone to `~/Work/faith`
+2. **Reorganize mini coach paths**: move `~/Work/recruiting-coach` → `~/Work/coaches/recruiting`, clone health + faith repos
+3. **Sign Apple ID into mini**: System Settings → sign in with `macbotpooterson@gmail.com`
+4. **Wire iMessage**: test AppleScript send from mini to Rod's number
 5. **Mailbox architecture decision**: read `proposals/mailbox-architecture.md`, pick Option A or B
 6. HuggingFace account + token → vault
 7. Pull first Tier 1 model, test API
 8. Repo rename: test → madmax
+
+---
+
+## 2026-03-05 (laptop session 3)
+
+### Done
+- Pulled latest madmax repo + recruiting-coach repo (madmax had 30 new files from mini)
+- Reorganized coach repos: `~/Work/coaches/` parent folder established
+  - `~/Work/recruiting-coach` → `~/Work/coaches/recruiting`
+  - `~/Work/coaches/health` — new repo initialized
+- Synced recruiting-coach repo: active candidate profiles, attachments, cheat sheets, ARCHIVED.md
+- Initialized health-coach repo (`git@github.com:Roderick-Clemente/health.git`)
+  - Full office ported: session log, weight log, HSA tracker, vegas rules, arm-project (WC medical)
+
+### Decisions Made
+- Coach repos live under `~/Work/coaches/<name>` (not flat `~/Work/<name>`)
+- Health repo includes full arm-project (active WC claim) — it's current, not archive
+- Recruiting repo: closed candidates listed in ARCHIVED.md only (no files) — laptop has full data
+
+### Next
+- Port remaining coaches: work, life, faith, manager (pick next with Rod)
+- Update inventory.md to reflect new coaches/ path
+- OpenBao 4 decisions still pending (see proposals/mad-max-concerns.md)
 
 ---
 
