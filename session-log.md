@@ -2,6 +2,37 @@
 
 ---
 
+## 2026-03-06 (mini session 5)
+
+### Done
+- Pulled both repos: test was current, recruiting-coach had diverged (laptop pipeline snapshot vs mini session 1 commit) → merged clean, pushed
+- Apple ID created: `macbotpooterson@gmail.com` (created via iPhone, T-Mobile number for 2FA)
+- iMessage on mini: pending — need to sign Apple ID into System Settings → Messages
+- faith repo (`git@github.com:Roderick-Clemente/faith.git`): not cloned — MadMaxMini needs collaborator access first
+- Roadmap reviewed and outlined
+- Messaging channel decision: iMessage chosen
+
+### Decisions Made
+- iMessage is the mini → Rod notification channel (AppleScript, native, no third-party)
+- Dedicated Apple ID for mini (`macbotpooterson@gmail.com`) — separate from Rod's personal account
+
+### KeePass Status
+- Password forgotten on new KDBX database
+- Not critical: unseal key safe in Keychain (primary) + paper (fallback)
+- Apple ID credentials not yet saved — resolve before next session
+
+### Next — START HERE NEXT SESSION
+1. **KeePass**: recover password or recreate DB, save Apple ID credentials
+2. **Sign Apple ID into mini**: System Settings → sign in with `macbotpooterson@gmail.com`
+3. **Wire iMessage**: test AppleScript send from mini to Rod's number
+4. **faith repo**: Rod adds MadMaxMini as collaborator on GitHub → clone to `~/Work/faith`
+5. **Mailbox architecture decision**: read `proposals/mailbox-architecture.md`, pick Option A or B
+6. HuggingFace account + token → vault
+7. Pull first Tier 1 model, test API
+8. Repo rename: test → madmax
+
+---
+
 ## 2026-03-04 (mini session 4)
 
 ### Done
