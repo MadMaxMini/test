@@ -2,6 +2,40 @@
 
 ---
 
+## 2026-03-07 (mini session 6)
+
+### Done
+- **bottleMsg inbox discovered** — `~/Library/CloudStorage/Dropbox/bottleMsg/` is Rod's async inbox to mini. Checked contents: remote.txt (CRD guide), faith.txt (faith repo remote), KeePass backups, screenshot (HuggingFace CTO model rec)
+- **Tailscale installed + connected** — `brew install --cask tailscale`, signed in with macbotpooterson account. Mini on Tailscale at `100.99.30.94` / `rodericks-mac-mini`
+- **Chrome Remote Desktop set up** — Chrome installed, CRD host installed, `Mad Max Mini` shows Online. Rod signed in with personal Google account as operator identity.
+- **Power settings locked** — system sleep: never, autorestart on power failure: on. Display sleep left at default (doesn't affect remote access)
+- **laptop-setup.txt dropped in bottleMsg** — instructions for laptop: install Tailscale, SSH command, CRD access
+- **SSH pending** — needs `sudo systemsetup -setremotelogin on` run from Terminal (Full Disk Access granted but interactive sudo required). Can do via CRD from laptop/CO.
+- **faith repo remote captured** — `git@github.com:Roderick-Clemente/faith.git`
+
+### Decisions Made
+- Remote access stack: Tailscale (primary) + CRD (GUI backup) — both running
+- CRD account: Rod's personal Google (operator identity, not mini identity)
+- Tailscale account: macbotpooterson (mini identity, isolation preserved)
+- Display sleep: fine to leave on — system sleep is what matters for remote access
+- bottleMsg = Mad Max's async inbox, check every session start
+
+### What's Pending
+- SSH enable (run from CRD when in CO): `sudo systemsetup -setremotelogin on`
+- Display sleep fix (run same time): `sudo pmset -a displaysleep 10`
+- iPhone remote access: Jump Desktop ($15) once Screen Sharing enabled on mini
+
+### Next — START HERE NEXT SESSION
+1. **Check bottleMsg inbox** (always first)
+2. **OpenBao** — spin back up (`docker compose up -d` + unseal)
+3. **Coach path reorg** — `~/Work/recruiting-coach` → `~/Work/coaches/recruiting`, clone health + faith
+4. **Mailbox architecture** — pick Option B (distributed), rewrite setup-mailbox.sh
+5. **HuggingFace account + token** → vault
+6. **Pull first Tier 1 model** — verify Qwen model name from screenshot, pull via Ollama
+7. Repo rename: test → madmax
+
+---
+
 ## 2026-03-06 (mini session 5)
 
 ### Done
