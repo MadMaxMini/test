@@ -36,6 +36,12 @@ stall the whole session.
 Notifications aren't Phase 3 optional. They're what makes the mini useful async.
 Should be treated like OpenBao — establish early, everything else builds on it.
 
+### 5. iMessage vs Dropbox communication rule
+
+iMessage = one text, 2-4 lines per item, everything in one message.
+Dropbox = only if there's reference material worth going back to.
+Never split one message into multiple texts. Never use Dropbox as a longer version of a text.
+
 ## What NOT to Change
 
 - Session start/end ceremony (load files, log, commit, push) — this is working
