@@ -2,6 +2,35 @@
 
 ---
 
+## 2026-03-17 (mini session 7)
+
+### Done
+- **Big picture reset** — 6 sessions of infrastructure, zero models running. Identified the trap: built scaffolding before getting the payoff. Reset priorities.
+- **iMessage wired** — Apple ID (`macbotpooterson@gmail.com`) signed into mini. `notify.sh` built, sends to Rod's number (+17373288018). Tested and working.
+- **bottleMsg command loop built** — `poll-inbox.sh` + LaunchAgent (`com.madmax.inbox-poller`) running every 60s. Drop `cmd*.txt` in Dropbox/bottleMsg → mini acts → iMessage reply. Commands: ping, status, pull <model>, unseal.
+- **bottleMsg instructions written** — setup guide + suggested iOS Shortcuts in bottleMsg/
+- **Proposals written** — imessage-setup.md (done), elevated-permissions.md, skill-reset.md, reset.md
+
+### Decisions Made
+- iMessage = outbound notifications, bottleMsg = inbound commands (Dropbox as command bus, no FDA needed)
+- Remote access (Tailscale + CRD) to be torn down — security cost with no current value
+- Priority reset: working software before infrastructure. Phase 0 = get a model running.
+
+### What's Pending
+- Remote access cleanup (Tailscale + CRD + Chrome + Keystone) — needs sudo from Rod
+- Elevated permissions — proposal written, awaiting Rod's decision (Option A recommended)
+- Skill tweaks — proposal written, review together next session
+- Pull first Tier 1 model
+
+### Next — START HERE NEXT SESSION
+1. **Check bottleMsg inbox** (always first)
+2. Remote access cleanup — `brew uninstall --cask tailscale-app google-chrome` + run CRD uninstaller + sudo commands (see reset.md)
+3. Elevated permissions — review proposals/elevated-permissions.md, install sudoers if approved
+4. Pull first model: `echo "pull qwen2.5-coder:7b" > ~/Library/CloudStorage/Dropbox/bottleMsg/cmd-pull.txt`
+5. Tweak Mad Max skill (proposals/skill-reset.md)
+
+---
+
 ## 2026-03-07 (mini session 6)
 
 ### Done
