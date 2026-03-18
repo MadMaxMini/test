@@ -2,6 +2,37 @@
 
 ---
 
+## 2026-03-18 (laptop — Rod back from vacation)
+
+### Done
+- Recruiting repo pulled to laptop — 2 new commits from mini (Mar 3 + Mar 5)
+  - `portable-initialization-discoveries.md` added by mini
+  - Full candidate file sync already in: Jennifer, Matthew George, Raph O, Rosane, Zeek, Sonny, Yaseen, Nico, Trevor
+  - ACTIVE.md + ARCHIVED.md updated
+  - Laptop recruiting repo now at `d22c3c0` (up to date with origin/main)
+- Health coach notified: arm improving, nudge sent to check Dr. Rie follow-up
+
+### Next — START HERE NEXT SESSION
+
+#### 🚨 Laptop Evacuation — Files to Move to Mini
+Rod wants to migrate active work off the laptop and onto the mini. These need to be transferred and confirmed before the laptop can be considered non-primary:
+
+| What | Laptop path | Destination | Notes |
+|------|------------|-------------|-------|
+| async-comms videos + transcripts (01–17) | `~/Dropbox/async-comms/` | mini: `~/Work/dakota-ops/inbox/msg-in-a-bottle/` | Large .MOV files — do NOT push to git. Copy directly. Zip+wipe Dropbox after confirmed. |
+| claude-life repo | `~/Work/claude-life/` | mini: run as background service | Rod wants this running automatically. Plan needed. |
+| Recruiting old local files | `~/Work/candidates/` or old flat path | mini: `~/Work/coaches/recruiting/` | ⚠️ NOT fully synced to new repo. Audit before wipe. |
+| async-comms misc (403 HVAC, LinkedIn profiles, HEIC images) | `~/Dropbox/async-comms/` | mini: `~/Work/dakota-ops/inbox/msg-in-a-bottle/` | Non-video files in the folder |
+
+#### Other Next Steps
+- **⚠️ Recruiting repo consolidation:** Audit old local path vs `~/Work/coaches/recruiting` — do NOT assume new repo is source of truth until resolved
+- Mailbox architecture decision still pending (see `proposals/mailbox-architecture.md`)
+- Port remaining coaches to repos: work, life, faith, manager
+- Update `docs/inventory.md` to reflect coaches/ path
+- Review `proposals/2026-03-05-exo-review.md` — exo cluster AI (Rod flagged, evaluate on mini)
+
+---
+
 ## 2026-03-05 (laptop session 3)
 
 ### Done
