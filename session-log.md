@@ -11,10 +11,10 @@
   - ACTIVE.md + ARCHIVED.md updated
   - Laptop recruiting repo now at `d22c3c0` (up to date with origin/main)
 - Health coach notified: arm improving, nudge sent to check Dr. Rie follow-up
+- async-comms context summary written → `dakota-ops/inbox/msg-in-a-bottle/async-comms-context-summary.md`
+- All async-comms files renamed sequentially (01–17)
 
-### Next — START HERE NEXT SESSION
-
-#### 🚨 Laptop Evacuation — Files to Move to Mini
+### 🚨 Laptop Evacuation — Files to Move to Mini
 Rod wants to migrate active work off the laptop and onto the mini. These need to be transferred and confirmed before the laptop can be considered non-primary:
 
 | What | Laptop path | Destination | Notes |
@@ -24,12 +24,152 @@ Rod wants to migrate active work off the laptop and onto the mini. These need to
 | Recruiting old local files | `~/Work/candidates/` or old flat path | mini: `~/Work/coaches/recruiting/` | ⚠️ NOT fully synced to new repo. Audit before wipe. |
 | async-comms misc (403 HVAC, LinkedIn profiles, HEIC images) | `~/Dropbox/async-comms/` | mini: `~/Work/dakota-ops/inbox/msg-in-a-bottle/` | Non-video files in the folder |
 
-#### Other Next Steps
+### Other Next Steps (laptop)
 - **⚠️ Recruiting repo consolidation:** Audit old local path vs `~/Work/coaches/recruiting` — do NOT assume new repo is source of truth until resolved
-- Mailbox architecture decision still pending (see `proposals/mailbox-architecture.md`)
 - Port remaining coaches to repos: work, life, faith, manager
-- Update `docs/inventory.md` to reflect coaches/ path
 - Review `proposals/2026-03-05-exo-review.md` — exo cluster AI (Rod flagged, evaluate on mini)
+
+---
+
+## 2026-03-18 (mini session 8)
+
+### Done
+- **Security audit + Phase 0 hardening** — identified 7 vulnerabilities before building autodakotabot. Closed all live holes:
+  - `poll-inbox.sh`: removed RCE fallback clause (was passing raw Dropbox content to Claude CLI); pinned Claude binary to static path instead of dynamic `find`
+  - `settings.json`: removed `eval`, `source`, `sh`, `bash`, `zsh`, `csrutil`, `fdesetup` from allowed permissions
+  - `notify.sh`: phone number moved to macOS Keychain (`notify-recipient`), no longer hardcoded
+  - `dakota-software/.gitignore`: created — protects secrets, tokens, .mov files from accidental commit
+- **Two new repos found in ~/Work/**: `dakota-software` (family real estate ops, bot TO BUILD) and `faith` (empty, scaffolding needed)
+- **autodakotabot architecture planned** — security-first design: restricted Claude profile, data envelope for prompt injection defense, HMAC auth for bottleMsg (Phase 3), separate git identity for bot commits
+
+### Decisions Made
+- Bot architecture: Claude CLI headless with `--config-dir` to a locked-down settings profile (no eval, no MCP, no network tools)
+- iMessage privacy: Keychain-based recipient, never in git
+- Open/close model: two LaunchAgents (7am open, 8pm close), same `bot-run.sh` script with mode argument
+- Build sequence: Phase 0 (done) → bot profile → bot script → LaunchAgents → HMAC auth (needs OpenBao)
+
+- **iMessage group discovered + wired** — group chat ID found via AppleScript, stored in Keychain as `imessage-group-dakota`. Contacts map at `~/Work/local/scripts/contacts.md`.
+- **Team intro sent** — two messages to Dakota group: security update summary + bot intro asking for GitHub usernames
+- **iMessage receive research** — found OpenClaw/MoltBot uses same approach: poll `chat.db` via sqlite3. Needs Full Disk Access. Decided to build a dedicated messaging gateway (Phase 3.5) rather than bolt it onto the main bot.
+- **Roadmap updated** — Phase 3.5 added: iMessage gateway, high priority, architecture documented in `local-ai.md`
+- **iMessage send wired into dakota bot** — notify.sh sends via AppleScript (no FDA needed, send-only). Pattern: mini-local scripts at `~/Work/local/scripts/`, Keychain for all values, CLAUDE.md documents paths only (no sensitive data). Dakota bot can now text Rod direct or the group without anything sensitive in the shared repo. **Why this pattern:** shared repo has Sharon/Doc/Devon access — phone numbers and chat IDs must never land there. Absolute path + Keychain = safe handoff between repos.
+
+### Decisions Made
+- iMessage receive = dedicated gateway process, sender whitelist, data envelope, rate limiting — not raw pipe to Claude
+- Separate Apple ID already exists (`macbotpooterson`), use it for isolation
+- FDA (Full Disk Access) grant is a one-time toggle Rod does in System Settings — no sudo
+
+### What's Pending
+- Elevated permissions (proposals/elevated-permissions.md) — Option A still recommended, awaiting Rod
+- Remote access cleanup — needs Rod's sudo
+- Pull first model — `ollama pull qwen2.5-coder:7b`
+- Build autodakotabot Phase 1: `bot-claude-config/settings.json`, `bot-run.sh`, LaunchAgents
+- FDA grant for Terminal (System Settings → Privacy & Security → Full Disk Access)
+- Team GitHub usernames — asked via group iMessage, awaiting replies
+- `faith` repo — empty, needs scaffolding
+
+### Next — START HERE NEXT SESSION
+1. Check bottleMsg inbox + group iMessage replies (paste any responses)
+2. Elevated permissions + remote access cleanup — batch sudo session
+3. Grant Terminal Full Disk Access (System Settings, no sudo)
+4. Pull first model: `ollama pull qwen2.5-coder:7b`
+5. Build autodakotabot Phase 1
+
+---
+
+## 2026-03-17 (mini session 7)
+
+### Done
+- **Big picture reset** — 6 sessions of infrastructure, zero models running. Identified the trap: built scaffolding before getting the payoff. Reset priorities.
+- **iMessage wired** — Apple ID (`macbotpooterson@gmail.com`) signed into mini. `notify.sh` built, sends to Rod's number (+17373288018). Tested and working.
+- **bottleMsg command loop built** — `poll-inbox.sh` + LaunchAgent (`com.madmax.inbox-poller`) running every 60s. Drop `cmd*.txt` in Dropbox/bottleMsg → mini acts → iMessage reply. Commands: ping, status, pull <model>, unseal.
+- **bottleMsg instructions written** — setup guide + suggested iOS Shortcuts in bottleMsg/
+- **Proposals written** — imessage-setup.md (done), elevated-permissions.md, skill-reset.md, reset.md
+
+### Decisions Made
+- iMessage = outbound notifications, bottleMsg = inbound commands (Dropbox as command bus, no FDA needed)
+- Remote access (Tailscale + CRD) to be torn down — security cost with no current value
+- Priority reset: working software before infrastructure. Phase 0 = get a model running.
+
+### What's Pending
+- Remote access cleanup (Tailscale + CRD + Chrome + Keystone) — needs sudo from Rod
+- Elevated permissions — proposal written, awaiting Rod's decision (Option A recommended)
+- Skill tweaks — proposal written, review together next session
+- Pull first Tier 1 model
+
+### Next — START HERE NEXT SESSION
+1. **Check bottleMsg inbox** (always first)
+2. Remote access cleanup — `brew uninstall --cask tailscale-app google-chrome` + run CRD uninstaller + sudo commands (see reset.md)
+3. Elevated permissions — review proposals/elevated-permissions.md, install sudoers if approved
+4. Pull first model: `echo "pull qwen2.5-coder:7b" > ~/Library/CloudStorage/Dropbox/bottleMsg/cmd-pull.txt`
+5. Tweak Mad Max skill (proposals/skill-reset.md)
+
+---
+
+## 2026-03-07 (mini session 6)
+
+### Done
+- **bottleMsg inbox discovered** — `~/Library/CloudStorage/Dropbox/bottleMsg/` is Rod's async inbox to mini. Checked contents: remote.txt (CRD guide), faith.txt (faith repo remote), KeePass backups, screenshot (HuggingFace CTO model rec)
+- **Tailscale installed + connected** — `brew install --cask tailscale`, signed in with macbotpooterson account. Mini on Tailscale at `100.99.30.94` / `rodericks-mac-mini`
+- **Chrome Remote Desktop set up** — Chrome installed, CRD host installed, `Mad Max Mini` shows Online. Rod signed in with personal Google account as operator identity.
+- **Power settings locked** — system sleep: never, autorestart on power failure: on. Display sleep left at default (doesn't affect remote access)
+- **laptop-setup.txt dropped in bottleMsg** — instructions for laptop: install Tailscale, SSH command, CRD access
+- **SSH pending** — needs `sudo systemsetup -setremotelogin on` run from Terminal (Full Disk Access granted but interactive sudo required). Can do via CRD from laptop/CO.
+- **faith repo remote captured** — `git@github.com:Roderick-Clemente/faith.git`
+
+### Decisions Made
+- Remote access stack: Tailscale (primary) + CRD (GUI backup) — both running
+- CRD account: Rod's personal Google (operator identity, not mini identity)
+- Tailscale account: macbotpooterson (mini identity, isolation preserved)
+- Display sleep: fine to leave on — system sleep is what matters for remote access
+- bottleMsg = Mad Max's async inbox, check every session start
+
+### What's Pending
+- SSH enable (run from CRD when in CO): `sudo systemsetup -setremotelogin on`
+- Display sleep fix (run same time): `sudo pmset -a displaysleep 10`
+- iPhone remote access: Jump Desktop ($15) once Screen Sharing enabled on mini
+
+### Next — START HERE NEXT SESSION
+1. **Check bottleMsg inbox** (always first)
+2. **OpenBao** — spin back up (`docker compose up -d` + unseal)
+3. **Coach path reorg** — `~/Work/recruiting-coach` → `~/Work/coaches/recruiting`, clone health + faith
+4. **Mailbox architecture** — pick Option B (distributed), rewrite setup-mailbox.sh
+5. **HuggingFace account + token** → vault
+6. **Pull first Tier 1 model** — verify Qwen model name from screenshot, pull via Ollama
+7. Repo rename: test → madmax
+
+---
+
+## 2026-03-06 (mini session 5)
+
+### Done
+- Pulled both repos: test was current, recruiting-coach had diverged → merged clean, pushed
+- Apple ID created: `macbotpooterson@gmail.com` (created via iPhone, T-Mobile number for 2FA)
+- iMessage on mini: pending — need to sign Apple ID into System Settings → Messages
+- faith repo: not cloned — MadMaxMini needs collaborator access (note: will live at `~/Work/coaches/faith`)
+- Roadmap reviewed and outlined
+- Messaging channel decision: iMessage chosen
+- Discovered laptop session 3 reorganized coach paths (see below) — mini not yet updated
+
+### Decisions Made
+- iMessage is the mini → Rod notification channel (AppleScript, native, no third-party)
+- Dedicated Apple ID for mini (`macbotpooterson@gmail.com`) — separate from Rod's personal account
+
+### KeePass Status
+- Password forgotten on new KDBX database
+- Not critical: unseal key safe in Keychain (primary) + paper (fallback)
+- Apple ID credentials not yet saved — resolve before next session
+
+### Next — START HERE NEXT SESSION
+1. **KeePass**: recover password or recreate DB, save Apple ID credentials
+2. **Reorganize mini coach paths**: move `~/Work/recruiting-coach` → `~/Work/coaches/recruiting`, clone health + faith repos
+3. **Sign Apple ID into mini**: System Settings → sign in with `macbotpooterson@gmail.com`
+4. **Wire iMessage**: test AppleScript send from mini to Rod's number
+5. **Mailbox architecture decision**: read `proposals/mailbox-architecture.md`, pick Option A or B
+6. HuggingFace account + token → vault
+7. Pull first Tier 1 model, test API
+8. Repo rename: test → madmax
+>>>>>>> 8b16841ade654e6de44656a4b3d32ac21110980f
 
 ---
 
