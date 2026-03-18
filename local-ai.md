@@ -102,6 +102,37 @@ The tradeoff is worth it for Tier 2 where we're accepting slower speed for isola
 - [ ] Benchmark Tier 2 vs Tier 1 on same prompts
 - [ ] Document behavioral differences and red flags found
 
+### Phase 3.5 — iMessage Gateway (HIGH PRIORITY — do before Phase 4)
+
+**Goal:** Bidirectional iMessage for the bot. Send already works. Receive requires doing this right.
+
+**Why a sub-bot / isolated process:**
+- `chat.db` requires Full Disk Access — that's a big permission, scope it tightly
+- A messaging gateway runs as a separate, minimal process — it does ONLY messaging, nothing else
+- No file system access, no git, no shell commands — just receive → validate → relay → respond
+- If it gets compromised, the blast radius is limited to the messaging channel, not the whole system
+
+**Architecture:**
+```
+iMessage (chat.db)
+  → msggateway.sh (polls chat.db, sender whitelist, rate limit)
+    → validates: known sender? recent? not a duplicate?
+    → sanitizes: strips injection patterns, enforces max length
+    → relays to: bot command dispatcher (same as bottleMsg commands)
+    → response from bot → notify.sh or group send
+```
+
+**What "doing it right" means:**
+- [ ] Dedicated Apple ID already exists: `macbotpooterson@gmail.com` ✓
+- [ ] Sender whitelist in Keychain — only approved numbers can trigger actions
+- [ ] Message content NEVER passed to Claude raw — data envelope pattern (same as transcriptions)
+- [ ] Rate limiting — max N messages per sender per hour
+- [ ] Read-only DB access — the gateway never writes to chat.db
+- [ ] FDA granted to Terminal (System Settings → Privacy & Security → Full Disk Access)
+- [ ] Separate from main bot permissions — messaging gateway has no write access to repos
+
+**FDA grant:** System Settings → Privacy & Security → Full Disk Access → add Terminal. No sudo. Rod does this once at the machine.
+
 ### Phase 4 — Workflow Integration
 - [x] Build scripts in ~/Work/local/ollama/scripts/ for model switching
 - [ ] Create custom Modelfiles for specialized personas/configs
