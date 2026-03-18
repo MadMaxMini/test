@@ -23,6 +23,7 @@
 - **Team intro sent** — two messages to Dakota group: security update summary + bot intro asking for GitHub usernames
 - **iMessage receive research** — found OpenClaw/MoltBot uses same approach: poll `chat.db` via sqlite3. Needs Full Disk Access. Decided to build a dedicated messaging gateway (Phase 3.5) rather than bolt it onto the main bot.
 - **Roadmap updated** — Phase 3.5 added: iMessage gateway, high priority, architecture documented in `local-ai.md`
+- **iMessage send wired into dakota bot** — notify.sh sends via AppleScript (no FDA needed, send-only). Pattern: mini-local scripts at `~/Work/local/scripts/`, Keychain for all values, CLAUDE.md documents paths only (no sensitive data). Dakota bot can now text Rod direct or the group without anything sensitive in the shared repo. **Why this pattern:** shared repo has Sharon/Doc/Devon access — phone numbers and chat IDs must never land there. Absolute path + Keychain = safe handoff between repos.
 
 ### Decisions Made
 - iMessage receive = dedicated gateway process, sender whitelist, data envelope, rate limiting — not raw pipe to Claude
