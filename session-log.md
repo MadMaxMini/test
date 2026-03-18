@@ -19,19 +19,31 @@
 - Open/close model: two LaunchAgents (7am open, 8pm close), same `bot-run.sh` script with mode argument
 - Build sequence: Phase 0 (done) → bot profile → bot script → LaunchAgents → HMAC auth (needs OpenBao)
 
+- **iMessage group discovered + wired** — group chat ID found via AppleScript, stored in Keychain as `imessage-group-dakota`. Contacts map at `~/Work/local/scripts/contacts.md`.
+- **Team intro sent** — two messages to Dakota group: security update summary + bot intro asking for GitHub usernames
+- **iMessage receive research** — found OpenClaw/MoltBot uses same approach: poll `chat.db` via sqlite3. Needs Full Disk Access. Decided to build a dedicated messaging gateway (Phase 3.5) rather than bolt it onto the main bot.
+- **Roadmap updated** — Phase 3.5 added: iMessage gateway, high priority, architecture documented in `local-ai.md`
+
+### Decisions Made
+- iMessage receive = dedicated gateway process, sender whitelist, data envelope, rate limiting — not raw pipe to Claude
+- Separate Apple ID already exists (`macbotpooterson`), use it for isolation
+- FDA (Full Disk Access) grant is a one-time toggle Rod does in System Settings — no sudo
+
 ### What's Pending
-- Permissions proposal (elevated-permissions.md) — still awaiting Rod's decision, Option A still recommended
-- Remote access cleanup — still needs sudo from Rod
-- Pull first model — still Phase 0 priority
-- Build autodakotabot Phase 1: create `bot-claude-config/settings.json`, write `bot-run.sh`, LaunchAgent plists
-- `faith` repo — empty, needs scaffolding (what goes here?)
-- Skill tweaks (proposals/skill-reset.md) — pending review
+- Elevated permissions (proposals/elevated-permissions.md) — Option A still recommended, awaiting Rod
+- Remote access cleanup — needs Rod's sudo
+- Pull first model — `ollama pull qwen2.5-coder:7b`
+- Build autodakotabot Phase 1: `bot-claude-config/settings.json`, `bot-run.sh`, LaunchAgents
+- FDA grant for Terminal (System Settings → Privacy & Security → Full Disk Access)
+- Team GitHub usernames — asked via group iMessage, awaiting replies
+- `faith` repo — empty, needs scaffolding
 
 ### Next — START HERE NEXT SESSION
-1. Check bottleMsg inbox
-2. Decide: elevated permissions (proposals/elevated-permissions.md) + remote access cleanup — both need sudo, batch them
-3. Pull first model: `ollama pull qwen2.5-coder:7b`
-4. Build bot Phase 1: bot-claude-config + bot-run.sh + LaunchAgents
+1. Check bottleMsg inbox + group iMessage replies (paste any responses)
+2. Elevated permissions + remote access cleanup — batch sudo session
+3. Grant Terminal Full Disk Access (System Settings, no sudo)
+4. Pull first model: `ollama pull qwen2.5-coder:7b`
+5. Build autodakotabot Phase 1
 
 ---
 
