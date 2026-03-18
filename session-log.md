@@ -2,6 +2,39 @@
 
 ---
 
+## 2026-03-18 (mini session 8)
+
+### Done
+- **Security audit + Phase 0 hardening** — identified 7 vulnerabilities before building autodakotabot. Closed all live holes:
+  - `poll-inbox.sh`: removed RCE fallback clause (was passing raw Dropbox content to Claude CLI); pinned Claude binary to static path instead of dynamic `find`
+  - `settings.json`: removed `eval`, `source`, `sh`, `bash`, `zsh`, `csrutil`, `fdesetup` from allowed permissions
+  - `notify.sh`: phone number moved to macOS Keychain (`notify-recipient`), no longer hardcoded
+  - `dakota-software/.gitignore`: created — protects secrets, tokens, .mov files from accidental commit
+- **Two new repos found in ~/Work/**: `dakota-software` (family real estate ops, bot TO BUILD) and `faith` (empty, scaffolding needed)
+- **autodakotabot architecture planned** — security-first design: restricted Claude profile, data envelope for prompt injection defense, HMAC auth for bottleMsg (Phase 3), separate git identity for bot commits
+
+### Decisions Made
+- Bot architecture: Claude CLI headless with `--config-dir` to a locked-down settings profile (no eval, no MCP, no network tools)
+- iMessage privacy: Keychain-based recipient, never in git
+- Open/close model: two LaunchAgents (7am open, 8pm close), same `bot-run.sh` script with mode argument
+- Build sequence: Phase 0 (done) → bot profile → bot script → LaunchAgents → HMAC auth (needs OpenBao)
+
+### What's Pending
+- Permissions proposal (elevated-permissions.md) — still awaiting Rod's decision, Option A still recommended
+- Remote access cleanup — still needs sudo from Rod
+- Pull first model — still Phase 0 priority
+- Build autodakotabot Phase 1: create `bot-claude-config/settings.json`, write `bot-run.sh`, LaunchAgent plists
+- `faith` repo — empty, needs scaffolding (what goes here?)
+- Skill tweaks (proposals/skill-reset.md) — pending review
+
+### Next — START HERE NEXT SESSION
+1. Check bottleMsg inbox
+2. Decide: elevated permissions (proposals/elevated-permissions.md) + remote access cleanup — both need sudo, batch them
+3. Pull first model: `ollama pull qwen2.5-coder:7b`
+4. Build bot Phase 1: bot-claude-config + bot-run.sh + LaunchAgents
+
+---
+
 ## 2026-03-17 (mini session 7)
 
 ### Done
