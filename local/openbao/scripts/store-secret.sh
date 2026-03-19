@@ -22,7 +22,10 @@ if [ -z "${BAO_TOKEN:-}" ]; then
   if [ -f "$INIT_FILE" ]; then
     export BAO_TOKEN=$(grep ROOT_TOKEN "$INIT_FILE" | cut -d= -f2)
   else
-    echo "ERROR: BAO_TOKEN not set and $INIT_FILE not found."
+    export BAO_TOKEN=$(security find-generic-password -a macBot -s "openbao-root-token" -w 2>/dev/null)
+  fi
+  if [ -z "${BAO_TOKEN:-}" ]; then
+    echo "ERROR: BAO_TOKEN not set, no init file, and openbao-root-token not in Keychain."
     exit 1
   fi
 fi
