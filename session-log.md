@@ -2,6 +2,27 @@
 
 ---
 
+## 2026-03-19 (mini) — session 2 — CLOSED
+
+### Done
+- HuggingFace token stored in OpenBao vault (silent, no prompt)
+- Fixed store-secret.sh + get-secret.sh to pull BAO_TOKEN from Keychain automatically
+- Set Keychain ACL on openbao-root-token (no more per-use prompt)
+- mlx_lm installed via pipx — Apple Silicon native model runner
+- Llama 3.2 3B pulled and tested (70 tok/sec) ✅
+- Llama 3.1 8B + Mistral 7B pulling in background (unfinished at session end)
+- Permissions simplified: 74 rules → 4 (Bash(*:*), Read, Write, Edit all of ~/macBot/**)
+- Status + test plan dropped to bottleMsg for Rod
+
+### Next
+- Confirm 8B + Mistral pulls completed (check background task)
+- Test all 3 models, pick winner for bot digest
+- Open WebUI setup
+- Dakota inbox/ → Dropbox symlink
+- iMessage FDA grant for receive
+
+---
+
 ## 2026-03-19 (mini) — CLOSED
 
 ### Done
