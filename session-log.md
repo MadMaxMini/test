@@ -2,6 +2,29 @@
 
 ---
 
+## 2026-03-19 (mini) — session 3 — CLOSED
+
+### Done
+- Wrote `bot/benchmark.py` — 4-task suite using real repo data
+  - Tasks: digest, qa, draft, structured output
+  - Measures: gen time, tokens/sec, tokens generated, CPU%, peak RAM
+  - Output: markdown report saved to bot/benchmark-YYYY-MM-DD.md
+- psutil injected into mlx-lm venv for resource sampling
+- Committed to dakota-software repo
+
+### How to run
+```zsh
+python3 ~/Work/dakota-software/bot/benchmark.py           # all models, all tasks
+python3 ~/Work/dakota-software/bot/benchmark.py --tasks digest qa  # subset
+```
+
+### Next
+- Wait for 8B + Mistral pulls to finish (running in background)
+- Run benchmark, read the report, pick model per task
+- Wire winning model into bot/scan.py digest
+
+---
+
 ## 2026-03-19 (mini) — session 2 — CLOSED
 
 ### Done
