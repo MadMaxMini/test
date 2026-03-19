@@ -2,6 +2,29 @@
 
 ---
 
+## 2026-03-19 (mini) — session 4 — CLOSED
+
+### Done
+- Ran full model benchmark: 3 models × 4 tasks, real repo data
+- Results: 3B wins digest+draft, 8B wins Q&A+structured, Mistral dropped
+- Wrote benchmark explainer + pretty diagram → bottleMsg/session-2026-03-19/
+- Wrote full benchmark summary → bottleMsg/session-2026-03-19/
+- Key insight: "AutoDakota" system prompt — bot gets its own voice, not Rod's
+
+### Decisions
+- 3B for bot digest (fast, accurate enough)
+- 8B for reasoning/Q&A on demand
+- Mistral: no clear wins, benched for now
+
+### Next Session — START HERE
+1. Add AutoDakota system prompt to scan.py
+2. Round 2 benchmark — richer context (session log + all tasks + properties)
+3. Bump max_tokens on structured task so 3B can finish
+4. Open WebUI setup
+5. Dakota inbox/ → Dropbox symlink
+
+---
+
 ## 2026-03-19 (mini) — session 3 — CLOSED
 
 ### Done
