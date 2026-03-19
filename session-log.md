@@ -2,6 +2,24 @@
 
 ---
 
+## 2026-03-19 (mini) — CLOSED
+
+### Done
+- OpenBao unsealed (was already initialized from prior session, just needed Docker up)
+- Auto-unseal wired: `com.madmax.autounseal.plist` → runs on login, unseals silently via Keychain
+- Keychain ACL set on `openbao-unseal-key` — scripts can read silently, no more per-use prompt
+- llama3.2:3b pulled via Ollama — bot now has a local model for digests
+- Cleared shell history after password leak incident (my fault — `-k` flag suggestion)
+- Saved feedback memory: never pass passwords as CLI flags
+
+### What's Next
+- HuggingFace account + token → store in OpenBao (right way to pull models)
+- Wire `inbox/` to Dropbox for Sharon's drops
+- Recruiting-coach SSH deploy key (Rod adds MadMaxMini key in GitHub UI)
+- Run bot again once llama3.2:3b is wired (will produce better digest)
+
+---
+
 ## 2026-03-19 (mini)
 
 ### Done
