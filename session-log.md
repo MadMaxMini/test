@@ -2,6 +2,33 @@
 
 ---
 
+## 2026-03-19 (mini)
+
+### Done
+- Built `autodakotabot` — `bot/scan.py` in dakota-software repo
+  - Scans people/*/tasks.md for open items, writes inbox/overdue.md
+  - Notes .MOV files as pending transcription (Whisper deferred, not blocking)
+  - Tries Ollama llama3.2:3b for digest, falls back to template if unavailable
+  - Commits + pushes digest, texts Rod via notify.sh
+  - Updates bot/session-log.md Bot row
+- Wired launchd job: `com.dakotaops.bot.plist` → 7am daily, loaded into LaunchAgents
+- Dry run passed: 39 open items, committed + pushed to dakota-software, Rod notified
+- Updated docs/inventory.md — all 3 coach repos now tracked with correct paths (recruiting-coach, dakota-software, faith)
+- Archived att-mad-max from 2026-03-02 (recruiting-coach noted, no SSH key action taken yet)
+
+### Decisions
+- Bot uses local Ollama model (no cloud dependency) — fallback template if model not installed
+- Text to Rod only (work context), not group
+- Whisper deferred — bot notes videos as "pending transcription" instead of blocking
+
+### Next
+- Pull llama3.2:3b for better digest quality: `ollama pull llama3.2:3b`
+- Wire inbox/ to Dropbox so Sharon's drops land there (symlink decision needed)
+- Recruiting-coach SSH key: add MadMaxMini key as deploy key on Roderick-Clemente/recruiting-coach (needs Rod to do in GitHub UI)
+- OpenBao init still pending (4 proposals from 2026-03-02 still open)
+
+---
+
 ## 2026-03-18 (laptop — Rod back from vacation)
 
 ### Done
