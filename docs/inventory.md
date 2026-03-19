@@ -1,7 +1,7 @@
 # Asset Inventory
 
 Where everything lives and what it does.
-Last updated: 2026-03-05
+Last updated: 2026-03-19
 
 > **Note for Claude:** This file is a reference map only. Do NOT proactively read
 > the files listed here unless explicitly needed for the current task. Know they exist,
@@ -9,16 +9,18 @@ Last updated: 2026-03-05
 
 ---
 
-## Coach Agent Repos (~/Work/coaches/)
+## Agent / Coach Repos
 
-Standalone repos, Roderick-Clemente GitHub account.
+Standalone repos, Roderick-Clemente GitHub account unless noted.
 
-| Repo | Local Path | Remote |
-|------|-----------|--------|
-| recruiting | `~/Work/coaches/recruiting` | `git@github.com:Roderick-Clemente/recruiting-coach.git` |
-| health | `~/Work/coaches/health` | `git@github.com:Roderick-Clemente/health.git` |
+| Repo | Local Path | Remote | Purpose |
+|------|-----------|--------|---------|
+| recruiting-coach | `~/Work/recruiting-coach` | `git@github.com:Roderick-Clemente/recruiting-coach.git` | SE recruiting methodology + Harness pipeline |
+| dakota-software | `~/Work/dakota-software` | `git@github.com:Roderick-Clemente/dakota-software.git` | Real estate ops — team tasks, properties, bot |
+| faith | `~/Work/faith` | `git@github.com:Roderick-Clemente/faith.git` | Personal faith coaching context |
 
-Each follows the skill/office pattern: skill = portable methodology, office = org-specific context.
+Coach repos follow the skill/office pattern: skill = portable methodology, office = org-specific context.
+`dakota-software` runs `bot/scan.py` daily at 7am via launchd.
 
 ---
 
