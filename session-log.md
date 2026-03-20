@@ -2,6 +2,26 @@
 
 ---
 
+## 2026-03-20 (mini) — session 6 — CLOSED
+
+### Done
+- Standup pipeline fully wired: 7pm draft → Rod text → 7am group text (weekdays)
+- Friday generates Monday's draft; Sunday sends reminder
+- scan.py reads team-standup/YYYY-MM-DD.md — Rod's edits go out, not the raw AI
+- Team agenda updated: weekend call ask (Sat), AI personality feedback section + samples
+- team-standup/samples/ — 3 model comparison files for the team meeting
+- Image assets copied to bot/assets/ (standup photo, logo, mad-max, salutes)
+- Image sending via iMessage needs FDA grant or restart — tabled
+
+### Next Session — START HERE
+1. FDA grant for Messages (System Settings → Privacy → Full Disk Access → Terminal)
+   - Unlocks: image sending + iMessage receive (Phase 3.5)
+2. Wire image to standup send (round-robin bot/assets/)
+3. Open WebUI setup (localhost:3000)
+4. Dakota inbox/ → Dropbox symlink
+
+---
+
 ## 2026-03-19 (mini) — session 5 — CLOSED
 
 ### Done
