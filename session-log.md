@@ -2,7 +2,7 @@
 
 ---
 
-## 2026-03-20 (mini) — session 7 — IN PROGRESS
+## 2026-03-20 (mini) — session 7 — CLOSED
 
 ### Done
 - Fixed global permissions — `Bash(*:*)` doesn't match commands without colons, replaced with `Bash(*)`
@@ -23,21 +23,20 @@
 - Public benchmark script — `llm-benchmark-public.py`, clean, no Dakota data, Devon's first GitHub repo
 - Both dropped into `people/devon/` in dakota-software, committed and pushed with message to him
 - Faith coach AutoFaith pipeline built and live:
-  - prep-faith.py: fetches USCCB Sunday readings → Claude CLI reflection + kid angle → texts Rod
-  - Friday 3pm delivery (weekend wind-down signal), Wednesday 7am nudge
-  - LaunchAgent loaded: com.faithcoach.prepfaith
-  - benchmark-faith.py: Claude CLI vs 3B on faith tasks — Claude wins on tone/specificity
-  - faith repo pushed: Roderick-Clemente/faith
-
-### In Progress
-- Devstral pull — 12GB/14GB done, ~2-3 min remaining
-- Full benchmark (all 4 models) fires the moment it lands
+  - prep-faith.py: fetches USCCB Sunday readings → Claude CLI primary / Ollama fallback → texts Rod only
+  - Friday 3pm delivery (weekend wind-down signal), Wednesday 7am Lenten nudge
+  - weekly-intention.md: editable context file for the Wed nudge
+  - LaunchAgent loaded: com.faithcoach.prepfaith (faith repo: Roderick-Clemente/faith)
+  - benchmark-faith.py ran: Claude wins on reflection, nudge, saint — 3B off-prompt on nudge task
+  - Mailbox brief written for faith coach session context
+- Reviewed DE standup pipeline commits — all clean, pipeline confirmed live
 
 ### Next Session — START HERE
 1. FDA grant for Messages (System Settings → Privacy → Full Disk Access → Terminal)
    - Unlocks: image sending + iMessage receive (Phase 3.5)
 2. Wire image to standup send (round-robin bot/assets/)
 3. Open WebUI setup (localhost:3000)
+4. Full benchmark with Devstral once pull confirms complete
 
 ---
 
