@@ -31,6 +31,27 @@
   - Mailbox brief written for faith coach session context
 - Reviewed DE standup pipeline commits — all clean, pipeline confirmed live
 
+### Session 8 (2026-03-20 morning) — CLOSED
+
+### Done
+- standup failed at 7am — AppleEvent timeout from launchd, Messages not accessible
+- Root cause: launchd can't control Messages via AppleScript without Aqua session permission
+- Fix: switched notify.sh to `shortcuts run "AutoDakota_Notify"` — bypasses all TCC issues
+- Rod created `AutoDakota_Notify` shortcut in Shortcuts.app (Rod-only recipient)
+- scan.py honest logging — `notify()` now checks return code, logs ✓/✗ accurately
+- TEST_MODE flag added — `AUTODAKOTA_TEST=1` routes Rod-only, skips group send
+- prep-standup.py: "no progress" default — unchanged people get "No updates since last standup"
+- Permission deny list simplified — only `pip install`, `npm install`, `npx` prompt
+- Gemma 3 + Mistral Small pulls died overnight — need relaunch
+- Open WebUI confirmed live at localhost:3000
+
+### Blockers / Next Session
+- `notify-group.sh` still broken — create `AutoDakota_Group` shortcut in Shortcuts.app
+  - Same setup as `AutoDakota_Notify` but recipient = Dakota group chat
+  - Then I wire notify-group.sh the same way
+- Gemma 3 27B + Mistral Small 3.1 pulls need restart
+- Round 4 benchmark (6 models) once those land
+
 ### Session 7 continuation (same night, late)
 - Devstral 24B pulled and confirmed (14GB, Ollama native, ~7 tok/s steady)
 - Full Round 3 benchmark ran — all 4 models: Claude, Llama 3.2 3B, Llama 3.1 8B, Devstral 24B
