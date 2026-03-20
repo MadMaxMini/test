@@ -2,6 +2,34 @@
 
 ---
 
+## 2026-03-19 (mini) — session 5 — CLOSED
+
+### Done
+- Round 2 benchmark: Claude CLI vs 3B vs 8B, 5 tasks, AutoDakota system prompt
+- scan.py rewritten: Claude CLI primary → 8B → 3B → template fallback chain
+- benchmark.py upgraded: richer context, priorities task, structured bumped to 300 tokens
+- Committed + pushed dakota-software
+
+### Key findings
+- Claude wins on digest and priorities — caught Zelle account error, knew to text SA PM
+- 3B got HVAC status wrong (said "confirmed" when it was "unconfirmed") — dangerous for ops
+- 8B > 3B on accuracy for tasks that matter; 3B only wins on speed
+- Fallback order confirmed: Claude → 8B → 3B → template
+
+### Decisions
+- Claude CLI as primary (free on plan, best quality)
+- Anthropic API on roadmap — Bedrock or direct, decide later
+- claude binary found via glob (VSCode extension) — version-agnostic
+
+### Next Session — START HERE
+1. AutoDakota system prompt → add to scan.py digest (already in benchmark, wire to scan)
+2. Open WebUI setup (localhost:3000 browser chat)
+3. Dakota inbox/ → Dropbox symlink
+4. iMessage receive — FDA grant in System Settings (one toggle)
+5. Bigger models: Llama 3.3 70B, Devstral 24B — discuss use cases first
+
+---
+
 ## 2026-03-19 (mini) — session 4 — CLOSED
 
 ### Done
