@@ -31,16 +31,29 @@
   - Mailbox brief written for faith coach session context
 - Reviewed DE standup pipeline commits — all clean, pipeline confirmed live
 
+### Session 7 continuation (same night, late)
+- Devstral 24B pulled and confirmed (14GB, Ollama native, ~7 tok/s steady)
+- Full Round 3 benchmark ran — all 4 models: Claude, Llama 3.2 3B, Llama 3.1 8B, Devstral 24B
+  - Report: dakota-software/bot/benchmark-2026-03-20.md, pushed
+  - Devstral: consistent 7 tok/s, structured task took 40s (completeness trade-off)
+- Qwen flagged as Chinese (Alibaba) — moved to Tier 2 / Docker queue, NOT pulled
+- Pulling now (background, will be ready morning):
+  - Gemma 3 27B (~17GB, Google, reputable) — PID 3002
+  - Mistral Small 3.1 22B (~13GB, French, reputable) — PID 3005
+- Open WebUI spinning up — image pulling, will be at localhost:3000 on wake
+- Devon: article-brainstorm.md (12 angles) + llm-benchmark-public.py dropped to people/devon/, pushed
+  - Commit message addresses him directly — his first GitHub repo asset
+
 ### Next Session — START HERE
-1. FDA grant for Messages (System Settings → Privacy → Full Disk Access → Terminal)
+1. Check Gemma 3 + Mistral Small landed: `ollama list`
+2. Run full benchmark Round 4 — all 6 models (add Gemma 3 27B, Mistral Small 22B)
+3. Open WebUI at localhost:3000 — first real chat UI session
+4. FDA grant for Messages (System Settings → Privacy → Full Disk Access → Terminal)
    - Unlocks: image sending + iMessage receive (Phase 3.5)
-2. Wire image to standup send (round-robin bot/assets/)
-3. Open WebUI setup (localhost:3000)
-4. Full benchmark with Devstral once pull confirms complete
-5. Faith benchmark rerun — port our report format into benchmark-faith.py, add Devstral
+5. Wire image to standup send (round-robin bot/assets/)
+6. Faith benchmark rerun — port our report format into benchmark-faith.py, add Devstral
    - Context: faith/bot/benchmark-faith-2026-03-20.md has the original run (Claude + 3B only)
    - Goal: same professionalized format as Dakota benchmark, add Devstral as 3rd model
-   - Interesting question: does a 24B coding model outperform 3B on spiritual reflection?
 
 ---
 
