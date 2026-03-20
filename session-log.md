@@ -2,6 +2,45 @@
 
 ---
 
+## 2026-03-20 (mini) — session 7 — IN PROGRESS
+
+### Done
+- Fixed global permissions — `Bash(*:*)` doesn't match commands without colons, replaced with `Bash(*)`
+- Added deny list for Python/Node execution — security policy, prompts before any script runs
+- Added `hf *` and `ollama*` to global allow (both were hitting permission walls)
+- Started Devstral 24B pull (PID 1701) — 14GB, Tier 1, Ollama native
+- Started OpenBao + unsealed — was down at session start, now running
+- HF CLI authed — binary is `hf` (not `huggingface-cli`), `hf auth login`, account `madmaxmini`
+- Benchmark script overhauled:
+  - Added Ollama runner (calls localhost:11434 REST API, no extra deps)
+  - Removed all max_tokens caps — models run to natural stop
+  - Rewrote report format — human-readable, Doc-friendly, explains WHY each stat matters
+  - Task labels updated to explain purpose (daily digest, email drafting, JSON for automation)
+- Ran Round 3 preview benchmark — Claude + Llama 3.2 3B + Llama 3.1 8B on current data
+  - Report: `bot/benchmark-2026-03-20.md` in dakota-software
+  - Full run (all 4 models incl. Devstral) pending pull completion
+- Article brainstorm — 12 angles for Devon's AI automation job search
+- Public benchmark script — `llm-benchmark-public.py`, clean, no Dakota data, Devon's first GitHub repo
+- Both dropped into `people/devon/` in dakota-software, committed and pushed with message to him
+- Faith coach AutoFaith pipeline built and live:
+  - prep-faith.py: fetches USCCB Sunday readings → Claude CLI reflection + kid angle → texts Rod
+  - Friday 3pm delivery (weekend wind-down signal), Wednesday 7am nudge
+  - LaunchAgent loaded: com.faithcoach.prepfaith
+  - benchmark-faith.py: Claude CLI vs 3B on faith tasks — Claude wins on tone/specificity
+  - faith repo pushed: Roderick-Clemente/faith
+
+### In Progress
+- Devstral pull — 12GB/14GB done, ~2-3 min remaining
+- Full benchmark (all 4 models) fires the moment it lands
+
+### Next Session — START HERE
+1. FDA grant for Messages (System Settings → Privacy → Full Disk Access → Terminal)
+   - Unlocks: image sending + iMessage receive (Phase 3.5)
+2. Wire image to standup send (round-robin bot/assets/)
+3. Open WebUI setup (localhost:3000)
+
+---
+
 ## 2026-03-20 (mini) — session 6 — CLOSED
 
 ### Done
