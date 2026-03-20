@@ -37,6 +37,10 @@
 2. Wire image to standup send (round-robin bot/assets/)
 3. Open WebUI setup (localhost:3000)
 4. Full benchmark with Devstral once pull confirms complete
+5. Faith benchmark rerun — port our report format into benchmark-faith.py, add Devstral
+   - Context: faith/bot/benchmark-faith-2026-03-20.md has the original run (Claude + 3B only)
+   - Goal: same professionalized format as Dakota benchmark, add Devstral as 3rd model
+   - Interesting question: does a 24B coding model outperform 3B on spiritual reflection?
 
 ---
 
