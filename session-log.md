@@ -54,17 +54,20 @@
 
 ### Late Session (with Rod)
 - Quantization explained (Q4 vs Q2) — Q4 is standard, Q2 degrades quality, Llama 70B not viable at 32GB
-- Mixtral 8x7B pull started (~26GB, MoE architecture) — pulling in background, ~2hrs
-- Benchmark queued to run automatically on completion — report to push to dakota-software
+- Mixtral 8x7B pulled (26GB) — MoE architecture, 767s/0.4 tok/s on simple test — RAM ceiling hit
+  - MoE loads multiple expert subnetworks simultaneously, too heavy for 32GB
+  - Verdict: chat/WebUI only, not ops pipeline. Remove from OLLAMA_MODELS next session.
+  - Next viable size-up requires 64GB upgrade or different architecture
+- benchmark.py fixed: timeout 300s, timestamped filenames (no more overwrites)
 - Benchmark reporting style baked into Mad Max skill (ASCII charts, star ratings, failure taxonomy)
 - backlog.md updated: pipeline architecture added as P2
 
 ### Next Session — START HERE
 1. Update scan.py fallback chain: Claude → Mistral Small → Devstral → 3B template
-2. Review `backlog.md` P0 items — classify and promote
-3. Per-agent OpenBao tokens (P1 — real secrets coming)
-4. Faith benchmark rerun (add Devstral + Mistral Small + Mixtral, professionalize format)
-5. Check Mixtral benchmark results (auto-run, report in dakota-software/bot/)
+2. Remove Mixtral from benchmark OLLAMA_MODELS (too slow for ops)
+3. Review `backlog.md` P0 items — classify and promote
+4. Per-agent OpenBao tokens (P1 — real secrets coming)
+5. Faith benchmark rerun (add Devstral + Mistral Small, professionalize format)
 
 ---
 
