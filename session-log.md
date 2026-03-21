@@ -2,6 +2,20 @@
 
 ---
 
+## 2026-03-21 (mini) — session 10
+
+### Done
+- Wrote `WHO-AM-I.md` — full self-portrait of Mad Max: persona, hardware, stack, what's been built, roadmap, open decisions, principles
+- Filed under repo root for easy reference
+
+### Next
+- Per-agent OpenBao tokens (P1)
+- notify-group.sh live test confirmation (P1)
+- scan.py fallback chain update to Mistral Small (P2)
+- Bot pipeline architecture: per-person micro-bots + stitcher (P2)
+
+---
+
 ## 2026-03-21 (mini) — session 9 — CLOSED
 
 ### Done
