@@ -38,12 +38,19 @@
   - Report: dakota-software/bot/benchmark-2026-03-21.md
 - Committed + pushed dakota-software
 
+### Late Session (with Rod)
+- Quantization explained (Q4 vs Q2) — Q4 is standard, Q2 degrades quality, Llama 70B not viable at 32GB
+- Mixtral 8x7B pull started (~26GB, MoE architecture) — pulling in background, ~2hrs
+- Benchmark queued to run automatically on completion — report to push to dakota-software
+- Benchmark reporting style baked into Mad Max skill (ASCII charts, star ratings, failure taxonomy)
+- backlog.md updated: pipeline architecture added as P2
+
 ### Next Session — START HERE
 1. Update scan.py fallback chain: Claude → Mistral Small → Devstral → 3B template
 2. Review `backlog.md` P0 items — classify and promote
 3. Per-agent OpenBao tokens (P1 — real secrets coming)
-4. Faith benchmark rerun (add Devstral + Mistral Small, professionalize format)
-5. Discuss next model to pull — Mixtral 8x7B or stay at this tier
+4. Faith benchmark rerun (add Devstral + Mistral Small + Mixtral, professionalize format)
+5. Check Mixtral benchmark results (auto-run, report in dakota-software/bot/)
 
 ---
 
