@@ -18,12 +18,21 @@
 - OpenBao confirmed: `tokens/huggingface` is stored, Transit keys set up per agent, nothing reading from vault yet
 - Created `backlog.md` — P0/P1/P2/P3 priority system, all open work classified
 
+### Post-Session (autonomous)
+- Gemma 3 27B (17GB) + Mistral Small (14GB) + Llama 3.1 8B (4.9GB) all pulled ✅
+- Round 4 benchmark ran — Claude, Devstral, Gemma 3 27B, Mistral Small (MLX dropped, not installed)
+  - Key findings: Claude fastest (5s, 20+ tok/s). Mistral Small best local (10s, punches above weight).
+  - Devstral solid but slow on long tasks (27s digest, 32s structured).
+  - Gemma 3 27B slowest (62s structured, 375 words JSON), hallucinated on email draft task — wrote standup digest with fake addresses instead. Not reliable for ops.
+  - Fallback chain recommendation: Claude → Mistral Small → Devstral → 3B template
+  - Report: dakota-software/bot/benchmark-2026-03-21.md
+- Committed + pushed dakota-software
+
 ### Next Session — START HERE
 1. Review `backlog.md` P0 items — classify and promote
-2. Check Gemma 3 27B + Mistral Small landed: `ollama list`
-3. Round 4 benchmark — 6 models
-4. Per-agent OpenBao tokens (P1 — real secrets coming)
-5. Faith benchmark rerun (add Devstral, professionalize format)
+2. Update scan.py fallback chain: Claude → Mistral Small → Devstral → 3B template (Gemma 3 pulled from rotation)
+3. Per-agent OpenBao tokens (P1 — real secrets coming)
+4. Faith benchmark rerun (add Devstral + Mistral Small, professionalize format)
 
 ---
 
