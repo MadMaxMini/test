@@ -7,12 +7,20 @@
 ### Done
 - Wrote `WHO-AM-I.md` — full self-portrait of Mad Max: persona, hardware, stack, what's been built, roadmap, open decisions, principles
 - Filed under repo root for easy reference
+- GPU expansion research — eGPU, distributed inference, upgrade path (triggered by Mixtral 8x7B hitting 32GB ceiling at 0.4 tok/s)
+  - **eGPU: dead end.** Apple Silicon dropped Metal eGPU support entirely. No path via Ollama/llama.cpp.
+  - **Distributed (exo): technically works, practically slow.** Two base M4 32GB nodes over TCP/IP = 2–5 t/s on 70B. Network is the bottleneck, not compute. RDMA over Thunderbolt 5 is the real fix but M4 base has TB4 only.
+  - **Daisy-chain (TB cluster): future-capable, not now.** exo supports this. Need M4 Pro minis (TB5) + macOS Tahoe 26.2 for RDMA — then it becomes fast. Today on base M4 with TB4 it falls back to TCP/IP.
+  - **Best path: single 64GB M4 Pro mini (~$1,799).** Runs 70B Q4 at ~5 t/s on one node, TB5 for future clustering, 273 GB/s memory bandwidth. Beats two 32GB base M4s distributed over ethernet.
+  - Sweet spot at 32GB: up to ~34B Q4 (Devstral 24B, Mistral Small 22B, Qwen2.5-32B, Gemma 3 27B) — all working well
+  - 70B models require 64GB+ to run at Q4 quality with usable speed
 
 ### Next
 - Per-agent OpenBao tokens (P1)
 - notify-group.sh live test confirmation (P1)
 - scan.py fallback chain update to Mistral Small (P2)
 - Bot pipeline architecture: per-person micro-bots + stitcher (P2)
+- Decision needed: upgrade to 64GB M4 Pro mini? (research complete, Rod's call)
 
 ---
 
