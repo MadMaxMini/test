@@ -45,6 +45,7 @@ Last reviewed: 2026-03-21
 
 | Item | Notes |
 |------|-------|
+| Bot pipeline architecture — per-person micro-bots + stitcher | Fix conflation failure mode. Each person bot gets tasks + role context, stitcher combines. Not a model capability issue — structural fix. See benchmark-2026-03-21.md. |
 | Open WebUI first real use | Live at localhost:3000 |
 | n8n setup | Phase 4 — workflow automation, docker-compose ready |
 | OpenBao store HF token properly | Path confirmed: tokens/huggingface |
