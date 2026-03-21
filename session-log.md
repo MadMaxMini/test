@@ -18,6 +18,16 @@
 - OpenBao confirmed: `tokens/huggingface` is stored, Transit keys set up per agent, nothing reading from vault yet
 - Created `backlog.md` — P0/P1/P2/P3 priority system, all open work classified
 
+### Additional (with Rod)
+- Round 4 benchmark reviewed in full — ratings, charts, failure mode taxonomy added to skill
+- Conflation identified as prompt architecture issue, not model capability — affects all frontier models
+- Bot pipeline architecture added to backlog P2 — per-person micro-bots + stitcher
+- benchmark-2026-03-21.md updated with key finding
+- Devon article dropped: `people/devon/article-idea-prompt-pipeline.md` — prompt pipelines, real example, title hooks
+- Gemma 3 27B pulled from ops rotation (hallucination on email task) — chat/WebUI only
+- New fallback chain confirmed: Claude → Mistral Small → Devstral → 3B template
+- scan.py fallback chain update queued for next session
+
 ### Post-Session (autonomous)
 - Gemma 3 27B (17GB) + Mistral Small (14GB) + Llama 3.1 8B (4.9GB) all pulled ✅
 - Round 4 benchmark ran — Claude, Devstral, Gemma 3 27B, Mistral Small (MLX dropped, not installed)
@@ -29,10 +39,11 @@
 - Committed + pushed dakota-software
 
 ### Next Session — START HERE
-1. Review `backlog.md` P0 items — classify and promote
-2. Update scan.py fallback chain: Claude → Mistral Small → Devstral → 3B template (Gemma 3 pulled from rotation)
+1. Update scan.py fallback chain: Claude → Mistral Small → Devstral → 3B template
+2. Review `backlog.md` P0 items — classify and promote
 3. Per-agent OpenBao tokens (P1 — real secrets coming)
 4. Faith benchmark rerun (add Devstral + Mistral Small, professionalize format)
+5. Discuss next model to pull — Mixtral 8x7B or stay at this tier
 
 ---
 
