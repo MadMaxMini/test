@@ -2,6 +2,26 @@
 
 ---
 
+## 2026-03-21 (mini) — session 9 — IN PROGRESS
+
+### Done
+- Gemma 3 27B + Mistral Small pulls relaunched (died overnight) — running in background
+- Mistral Small correct tag found: `mistral-small` (was `mistral-small3.1:22b` — bad tag)
+- scan.py: standup dedup guard added — state file `team-standup/standup-state.log`
+  - One line per fire, append-only: `2026-03-21 0700 sent claude-cli` / `blocked`
+  - `FORCE_NOTIFY=1` env var to override
+  - Dropped JSON for plain text — human readable, token tight
+  - Committed + pushed dakota-software
+- Messaged Dakota group — acknowledged standup spam, solicited feedback
+
+### Blockers / Next Session
+- `AutoDakota_Group` shortcut still needed — notify-group.sh uses raw AppleScript (works interactive, not launchd)
+- Round 4 benchmark pending model pulls
+- FDA grant for Messages (Phase 3.5)
+- Faith benchmark rerun (add Devstral, professionalize format)
+
+---
+
 ## 2026-03-20 (mini) — session 7 — CLOSED
 
 ### Done
