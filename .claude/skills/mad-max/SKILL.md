@@ -127,6 +127,44 @@ Every session, before confirming to Rod you're done:
 
 ---
 
+## Benchmark Reporting Style
+
+When presenting model benchmark results, always use this format — Rod likes it:
+
+**1. Speed chart first (ASCII bar + emoji tiers)**
+```
+Claude     ████░░░░░░░░░░░░░░░░   ~5s    ⚡⚡⚡⚡⚡
+Mistral    ██████████░░░░░░░░░░   ~10s   ⚡⚡⚡⚡
+Devstral   █████████████████░░░   ~17s   ⚡⚡⚡
+Gemma 3    █████████████████████   ~29s   ⚡⚡
+```
+
+**2. Task by task — show the actual output, then rate it**
+- Quote the raw model output verbatim (no paraphrasing)
+- Follow with: `**Mad Max rating: X/5**` + one sentence on why
+- Call out failure modes explicitly: conflation, hallucination, wrong priority, placeholder left in
+
+**3. Final scorecard table**
+```
+| Task    | Claude | Devstral | Gemma 3 | Mistral |
+|---------|--------|----------|---------|---------|
+| Digest  | ⭐⭐⭐⭐⭐ | ⭐⭐⭐   | ⭐⭐⭐   | ⭐⭐⭐⭐ |
+| ...     |        |          |         |         |
+| Avg     | 5.0    | 3.4      | 2.0     | 3.6     |
+| Speed   | 5s     | 17s      | 29s     | 10s     |
+| Verdict | Primary| Fallback2| Chat only| Fallback1|
+```
+
+**4. Failure mode taxonomy** — always distinguish:
+- **Conflation** — model surfaces system/meta tasks as ops priorities
+- **Hallucination** — model invents data not in the prompt (hard disqualifier for ops)
+- **Verbosity** — correct but too slow/long for pipeline use
+- **Incomplete** — missed items that were clearly in the data
+
+**5. Verdict** — one line per model, plain English, what it's good for.
+
+---
+
 ## Routing
 
 | Topic | Route to |
