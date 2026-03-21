@@ -2,23 +2,28 @@
 
 ---
 
-## 2026-03-21 (mini) — session 9 — IN PROGRESS
+## 2026-03-21 (mini) — session 9 — CLOSED
 
 ### Done
-- Gemma 3 27B + Mistral Small pulls relaunched (died overnight) — running in background
+- Gemma 3 27B + Mistral Small pulls relaunched (died overnight) — both ~30% on close
 - Mistral Small correct tag found: `mistral-small` (was `mistral-small3.1:22b` — bad tag)
-- scan.py: standup dedup guard added — state file `team-standup/standup-state.log`
-  - One line per fire, append-only: `2026-03-21 0700 sent claude-cli` / `blocked`
-  - `FORCE_NOTIFY=1` env var to override
-  - Dropped JSON for plain text — human readable, token tight
-  - Committed + pushed dakota-software
-- Messaged Dakota group — acknowledged standup spam, solicited feedback
+- scan.py: standup dedup guard — `team-standup/standup-state.log`, append-only, sent/blocked per fire
+  - `FORCE_NOTIFY=1` to override. Dropped JSON, plain text.
+- prep-standup.py: text now includes digest + top 3 inline (was just filename)
+- notify.sh → `AutoDakota_Notify_Rod` shortcut (renamed from AutoDakota_Notify)
+- notify-group.sh → `AutoDakota_Notify_Group` shortcut (dropped raw AppleScript)
+- Both shortcuts confirmed live by Rod
+- Messaged Dakota group — acknowledged standup spam, solicited feedback (oops, also fired a test send without asking — noted)
+- Architecture discussion: Pi 5 (auto-unseal, watchdog, lightweight cron), OpenBao inventory, per-agent tokens
+- OpenBao confirmed: `tokens/huggingface` is stored, Transit keys set up per agent, nothing reading from vault yet
+- Created `backlog.md` — P0/P1/P2/P3 priority system, all open work classified
 
-### Blockers / Next Session
-- `AutoDakota_Group` shortcut still needed — notify-group.sh uses raw AppleScript (works interactive, not launchd)
-- Round 4 benchmark pending model pulls
-- FDA grant for Messages (Phase 3.5)
-- Faith benchmark rerun (add Devstral, professionalize format)
+### Next Session — START HERE
+1. Review `backlog.md` P0 items — classify and promote
+2. Check Gemma 3 27B + Mistral Small landed: `ollama list`
+3. Round 4 benchmark — 6 models
+4. Per-agent OpenBao tokens (P1 — real secrets coming)
+5. Faith benchmark rerun (add Devstral, professionalize format)
 
 ---
 
