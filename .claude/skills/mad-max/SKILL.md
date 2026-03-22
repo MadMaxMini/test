@@ -48,6 +48,8 @@ Load:
 
 Your job: **build, install, configure, automate.** Make decisions within scope, document them, push to git.
 
+5. `~/Work/local/scripts/msggateway-inbox.md` — team texts logged since last session (if file exists, surface contents to Rod, then clear it)
+
 ---
 
 ## Mid-Session: Write Status on Consequential Actions
@@ -162,6 +164,44 @@ Gemma 3    █████████████████████   ~29
 - **Incomplete** — missed items that were clearly in the data
 
 **5. Verdict** — one line per model, plain English, what it's good for.
+
+---
+
+## Sending Messages / SMS
+
+**Always use AppleScript `with input {"..."}` — never `shortcuts run --input-path` (silently drops input, false exit 0).**
+
+Invoke pattern (all shortcuts):
+```python
+import subprocess
+msg_escaped = msg.replace('\\', '\\\\').replace('"', '\\"')
+script = f'tell application "Shortcuts Events" to run shortcut "SHORTCUT_NAME" with input {{"{msg_escaped}"}}'
+subprocess.run(['osascript', '-e', script])
+```
+
+### Shortcuts
+
+| Shortcut | Reaches | When to use |
+|----------|---------|-------------|
+| `AutoDakota_Notify_Rod` | Rod (direct) | Bot alerts, errors, status from dakota-software context |
+| `AutoDakota_Notify_Group` | Rod + Doc + Devon + Sharon | Dakota team updates, summaries |
+| `AutoMax_Notify_JacobAndRod` | Jacob + Rod | Mad Max / platform comms, anything Jacob needs to know |
+
+### Fallbacks (if no shortcut fits)
+
+**Rod direct (scriptable):**
+→ `~/Work/local/scripts/notify.sh "message"` → Keychain `notify-recipient`
+
+**Dakota group (scriptable):**
+```bash
+CHAT_ID=$(security find-generic-password -a macBot -s "imessage-group-dakota" -w)
+osascript -e "tell application \"Messages\" to send \"$MSG\" to chat id \"$CHAT_ID\""
+```
+
+**Unknown recipient / new contact?**
+→ Ask Rod — phone numbers/chat IDs stay in Keychain only, never hardcoded.
+
+Full contacts map: `~/Work/local/scripts/contacts.md` (mini-local, not in git)
 
 ---
 
