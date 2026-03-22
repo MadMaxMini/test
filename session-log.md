@@ -2,45 +2,35 @@
 
 ---
 
-## 2026-03-22 (mini) — session 14 — IN PROGRESS
+## 2026-03-22 (mini) — session 15 — CLOSED
 
 ### Done
-- Reviewed P0/P1 backlog at session start (new habit, per Rod's request — baked into session startup memory)
-- bottleMsg inbox: found Screenshot 03-22 (Rod's FDA proof), 2 old screenshots (03-06, 03-17), bkUp.kdbx + bkup2bkup.kdbx (KeePass backups — need Rod to say what to do with them), mini-control-guide.md (reference doc from prior session)
-- Devon's GitHub username confirmed: `devonclemente` (GitHub API validated) — stored in contacts.md, backlog updated
-- Doc onboarding elevated to P0 (was implied, now explicit)
-- Devon confirmed for screen share with Sharon + Doc today (2026-03-22)
-- Built `MsgGateway.app` bundle at `~/Applications/MsgGateway.app/` — minimal .app wrapper around msggateway.sh so FDA can be granted to a specific app, not /bin/bash
-- Updated launchd plist (`com.dakotaops.msggateway.plist`) to launch app binary instead of /bin/bash
-- Removed Terminal + VS Code from Full Disk Access (Rod) — principle of least privilege
-- Rod granted FDA to MsgGateway.app AND the `msggateway` binary inside it
-
-### Blocker — Gateway still failing after reboot
-- Root cause fully diagnosed (session 15): TCC checks the code signature of the process that opens chat.db
-- MsgGateway.app is **unsigned** — TCC has no stable identity to track. FDA grant doesn't propagate.
-- All approaches tested: AppleScript (Messages.app doesn't expose received content), Python sqlite3, compiled C binary — ALL fail at TCC/kernel layer if the binary isn't in FDA list itself
-- AppleScript: chat enumeration works, but `messages of chat` returns error -1700 — not scriptable on current macOS
-- **Fix chosen: Option A** — grant FDA to `/usr/bin/sqlite3` directly. sqlite3 is targeted (query-only binary), works regardless of who calls it.
+- Gateway FDA root cause fully diagnosed: TCC checks the responsible process. MsgGateway.app is unsigned so FDA doesn't propagate. Terminal (as responsible process) works; launchd doesn't.
+- All alternatives tested: AppleScript (-1700, Messages doesn't expose received content), compiled C binary, Python sqlite3 — all blocked at TCC layer without proper responsible process
+- Gateway now working from Terminal: Terminal + sqlite3 + VS Code + claude all in FDA
+- Fixed "itself: unbound variable" bug — multi-line message bodies (from Devon's email) caused `while IFS='|' read` to feed continuation lines as fake records; integer check added
+- Jacob (+15122399285) texted asking "Which MacOS firewall options should be enabled?" — answered via AutoMax_Notify_JacobAndRod ✓
+- ROBOT SHUTDOWN command added to both msggateway.sh and msggateway.py — creates /tmp/msggateway_shutdown flag, silences responses until flag deleted
+- Gateway rewritten in Python (msggateway.py) — uses Python's sqlite3 module in-process, no sqlite3 subprocess
+- Launchd plist updated to run python3 directly — when python3 has FDA, TCC attributes access correctly without Terminal
+- FDA current state: Terminal ✓, VS Code ✓, sqlite3 ✓, MsgGateway.app ✓, msggateway ✓, claude ✓, python3 ✗ (needed for launchd fix)
+- Rod wants to downgrade privileges eventually — plan: compile C binary with FDA once stable, remove broad grants
+- Dropbox Screenshots folder confirmed at ~/Library/CloudStorage/Dropbox/Screenshots/ — checking mid-session now ✓
 
 ### Decisions
-- FDA scope: MsgGateway.app + binary (belt and suspenders) — not Terminal, not VS Code
-- Session startup: P0/P1 summary now standard — baked into memory
-- Gateway fix: grant FDA to `/usr/bin/sqlite3` (Rod action needed — instructions texted + below)
-- Dropbox/bottleMsg: Rod wants real-time monitoring during sessions — cron watch to be added
+- launchd gateway: use python3 directly (not bash wrapper) — python3 + FDA = headless operation without Terminal
+- ROBOT SHUTDOWN: flag file at /tmp/msggateway_shutdown, deleted manually (requires physical presence by design)
+- Jacob is an active contact — should be added to monitor tier or given a proper role
+- Dropbox Screenshots: I now monitor this folder during sessions (Rod drops screenshots there to communicate)
 
-### Fix Instructions — Option A (Rod action)
-1. System Settings → Privacy & Security → Full Disk Access
-2. Click `+` → press `Cmd+Shift+G` → type `/usr/bin` → Open
-3. Find `sqlite3` → Open → toggle ON
-4. Test: `cd ~/Work/local/scripts && ./msggateway.sh --once` (no error = working)
-5. Ping test: text "ping" from Rod's number → expect "pong — mini is alive"
-
-### Next Session — START HERE
-1. **Rod grants FDA to `/usr/bin/sqlite3`** (see fix instructions above) — then `./msggateway.sh --once`
-2. **Ping test**: text "ping" from Rod's number → expect "pong — mini is alive"
-3. **Team onboarding**: Devon screen share with Sharon + Doc — get GitHub usernames
-4. **KeePass backups in bottleMsg**: ask Rod what to do with bkUp.kdbx + bkup2bkup.kdbx
-5. **bottleMsg real-time watch**: set up cron/fswatch to surface new drops mid-session
+### Next Session — START HERE (one action needed)
+1. **Grant FDA to python3**: System Settings → Full Disk Access → + → `/opt/homebrew/bin/python3`
+2. **Reload gateway**: `launchctl unload ~/Library/LaunchAgents/com.dakotaops.msggateway.plist && launchctl load ~/Library/LaunchAgents/com.dakotaops.msggateway.plist`
+3. **Verify**: `launchctl list | grep msggateway` → should show PID (not `-`)
+4. **Ping test**: text "ping" → expect "pong — mini is alive"
+5. **Jacob**: decide his tier (monitor or admin?) — he's actively texting the mini
+6. **Team onboarding**: Sharon + Doc GitHub usernames still needed
+7. **KeePass backups in bottleMsg**: what to do with bkUp.kdbx + bkup2bkup.kdbx?
 
 ---
 
