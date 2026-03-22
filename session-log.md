@@ -2,25 +2,33 @@
 
 ---
 
-## 2026-03-21 (mini) — session 10
+## 2026-03-21 (mini) — session 10 — CLOSED
 
 ### Done
 - Wrote `WHO-AM-I.md` — full self-portrait of Mad Max: persona, hardware, stack, what's been built, roadmap, open decisions, principles
 - Filed under repo root for easy reference
 - GPU expansion research — eGPU, distributed inference, upgrade path (triggered by Mixtral 8x7B hitting 32GB ceiling at 0.4 tok/s)
   - **eGPU: dead end.** Apple Silicon dropped Metal eGPU support entirely. No path via Ollama/llama.cpp.
-  - **Distributed (exo): technically works, practically slow.** Two base M4 32GB nodes over TCP/IP = 2–5 t/s on 70B. Network is the bottleneck, not compute. RDMA over Thunderbolt 5 is the real fix but M4 base has TB4 only.
-  - **Daisy-chain (TB cluster): future-capable, not now.** exo supports this. Need M4 Pro minis (TB5) + macOS Tahoe 26.2 for RDMA — then it becomes fast. Today on base M4 with TB4 it falls back to TCP/IP.
-  - **Best path: single 64GB M4 Pro mini (~$1,799).** Runs 70B Q4 at ~5 t/s on one node, TB5 for future clustering, 273 GB/s memory bandwidth. Beats two 32GB base M4s distributed over ethernet.
-  - Sweet spot at 32GB: up to ~34B Q4 (Devstral 24B, Mistral Small 22B, Qwen2.5-32B, Gemma 3 27B) — all working well
-  - 70B models require 64GB+ to run at Q4 quality with usable speed
+  - **Distributed / TB cluster (exo): technically works, practically slow on base M4.** Two 32GB nodes over TCP/IP = 2–5 t/s on 70B. RDMA requires TB5 (M4 Pro) + macOS Tahoe 26.2 — not available on base M4.
+  - **Best path: single 64GB M4 Pro mini (~$1,799).** Runs 70B Q4 at ~5 t/s solo, TB5 for future clustering.
+  - Sweet spot at 32GB: up to ~34B Q4. 70B needs 64GB+.
+- Mixtral MoE deep-dive: no config fixes it at 32GB. All 8 expert tensors must be resident (router selects per token). Expert offloading exists in llama.cpp but is slower at 32GB, not faster. Mistral Small 22B (dense, 14GB) is strictly better on this hardware.
+- Open WebUI confirmed running at localhost:3000 — all models available in dropdown
+- Community model rankings research (HuggingFace leaderboards, LocalLLaMA, Chatbot Arena):
+  - Gemma 3 27B: actually top-tier globally (Elo 1339, competes with o1-preview). Best general-purpose model on the mini. Hallucination was task-fit issue, not a dumb model — use for chat/reasoning, not structured ops output.
+  - Mistral Small 3.1: community pick for "one model on 32GB hardware." Best balance of quality + speed + Apache 2.0 license. Best ops pipeline model.
+  - Devstral 24B: coding specialist only. #1 open-source coding agent at this size (46.8% SWE-Bench). Degrades on general chat.
+  - Mixtral 8x7B: obsolete in 2026. Llama 3.1 8B beats it on most tasks at 1/3 the RAM.
+  - Llama 3.2 3B: best in 3B class, only useful for ultra-low-RAM/edge scenarios.
+- Pi + Llama discussion: Llama 3.2 3B runs on Pi 5 (8GB) at ~1-2 tok/s CPU-only. Larger models don't work well. Pi stays earmarked for OpenBao/watchdog — not inference.
 
-### Next
-- Per-agent OpenBao tokens (P1)
-- notify-group.sh live test confirmation (P1)
-- scan.py fallback chain update to Mistral Small (P2)
-- Bot pipeline architecture: per-person micro-bots + stitcher (P2)
-- Decision needed: upgrade to 64GB M4 Pro mini? (research complete, Rod's call)
+### Next Session — START HERE
+1. Update scan.py fallback chain: Claude → Mistral Small → Devstral → 3B template
+2. Remove Mixtral from benchmark OLLAMA_MODELS (too slow for ops)
+3. Per-agent OpenBao tokens (P1)
+4. notify-group.sh live test confirmation (P1)
+5. Bot pipeline architecture: per-person micro-bots + stitcher (P2)
+6. Decision pending: upgrade to 64GB M4 Pro mini? (research done, Rod's call)
 
 ---
 
