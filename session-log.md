@@ -2,6 +2,27 @@
 
 ---
 
+## 2026-03-22 (mini) — session 13 — CLOSED
+
+### Done
+- Sent Jacob a Mac hardening guide via `AutoMax_Notify_JacobAndRod` (iMessage)
+- Debugged shortcut invocation: `shortcuts run --input-path /dev/stdin` silently drops input (false exit 0). Correct pattern: AppleScript `with input {"..."}` via osascript
+- Updated SKILL.md: added Sending Messages section with all 3 shortcuts (`AutoDakota_Notify_Rod`, `AutoDakota_Notify_Group`, `AutoMax_Notify_JacobAndRod`), invoke pattern, and fallbacks
+- Updated memory: `feedback_automax_notify_shortcut.md` — AppleScript pattern documented for future sessions
+- Discussed RAG vs skill file for reference data — current scale (3 shortcuts) doesn't justify RAG; revisit at Phase 4+
+
+### Decisions
+- Shortcut invocation: always AppleScript `with input {"..."}`, never CLI flags
+- Skill file is the right home for shortcut reference at current scale (not RAG)
+
+### Next Session — START HERE
+1. **Gateway `.app` bundle** — wrap msggateway.sh in Automator shell script app → grant FDA to that app → restart gateway → ping test
+2. **Team onboarding** — Devon screen share with Sharon (P0), get GitHub usernames for Sharon + Doc + Devon
+3. **notify-group.sh live test** — confirm Rod+group actually receives (P1)
+4. **Per-agent OpenBao tokens** (P1)
+
+---
+
 ## 2026-03-22 (mini) — session 12 — CLOSED
 
 ### Done
