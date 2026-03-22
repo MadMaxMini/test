@@ -2,6 +2,37 @@
 
 ---
 
+## 2026-03-22 (mini) — session 11 — IN PROGRESS
+
+### Done
+- Triaged bottleMsg inbox: processed 3 docs + 3 screenshots, archived all
+- Screenshots: Devon confirmed 3 tasks/person in standup, plaintext for iMessage / markdown for repo
+- Fixed bot `scan.py`: added `strip_markdown()` — iMessage sends are now plaintext, repo files stay markdown
+- Backlog updated: team onboarding (Sharon/Doc/Devon) elevated to P0, iMessage receive promoted from P3 → P0, Mixtral moved to P2 consideration
+- iMessage gateway (Phase 3.5) pre-work complete:
+  - `msggateway.sh` written — polls chat.db, whitelist, rate limit, sanitize, dispatch
+  - `com.dakotaops.msggateway.plist` written — NOT installed yet, awaiting FDA grant
+  - Commands wired: ping → pong, status → Ollama + Docker state, help, unknown → logged
+- Texted Dakota group (good luck Devon, shared Google Doc)
+
+### Decisions from bottleMsg screenshots
+- Standup format: 3 tasks per person in priority order (Devon confirmed)
+- iMessage: plaintext only. Repo/standup MD files: keep markdown.
+
+### One-time Rod action needed to unlock iMessage receive
+- System Settings → Privacy & Security → Full Disk Access → add Terminal
+- Then: `cp ~/Work/local/scripts/com.dakotaops.msggateway.plist ~/Library/LaunchAgents/ && launchctl load ~/Library/LaunchAgents/com.dakotaops.msggateway.plist`
+- Then add whitelist to Keychain: `security add-generic-password -a macBot -s "msggateway-whitelist" -w "+1XXXXXXXXXX,+1XXXXXXXXXX"`
+
+### Next Session — START HERE
+1. Rod does FDA grant → load msggateway → test with "ping"
+2. Add sender numbers to Keychain whitelist (`msggateway-whitelist`)
+3. notify-group.sh live test confirmation (P1)
+4. Update scan.py fallback chain: Claude → Mistral Small → Devstral → 3B template
+5. Per-agent OpenBao tokens (P1)
+
+---
+
 ## 2026-03-21 (mini) — session 10 — CLOSED
 
 ### Done

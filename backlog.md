@@ -6,7 +6,7 @@ Priority scale:
 - **P2** — meaningful improvement, do soon
 - **P3** — good idea, back burner
 
-Last reviewed: 2026-03-21
+Last reviewed: 2026-03-22
 
 ---
 
@@ -20,13 +20,14 @@ Last reviewed: 2026-03-21
 | Llama 3.3 70B pull | Large model, not pulled yet |
 | Llama 3.1 8B pull | Was pulled, now missing from `ollama list` |
 | Faith benchmark rerun | Add Devstral, professionalize format to match Dakota |
-| FDA grant for Messages | Unlocks image sending + iMessage receive (Phase 3.5) |
+| **iMessage receive + respond** | **P0/P1 — FDA grant in System Settings unlocks this. Mini reads incoming texts, routes to Claude, replies. Rod texts mini from anywhere, gets a real answer. See `memory/imessage_architecture.md`.** |
 | Wire image to standup send | Round-robin bot/assets/ on group text |
 | Dakota inbox/ → Dropbox symlink | Sharon's drops need to land in repo inbox/ |
 | Google Sheets CSV export | Feed bot financial context via Apps Script |
 | Email bot (DE@DakotaAndLLC.com) | Apps Script → markdown log → bot picks up |
-| Sharon terminal unblock | Devon screen share, one-time setup |
-| GitHub invites | Sharon + Doc + Devon — usernames needed |
+| **Sharon terminal unblock** | **P0 — Devon screen share, one-time setup. Nothing moves until team is in the repo.** |
+| **GitHub invites** | **P0 — Sharon + Doc + Devon usernames needed. Blocks repo access for everyone.** |
+| Team onboarding — VS Code + clone | P0 — bot standups are useless until they're reading them. This is the unlock. |
 
 ---
 
@@ -51,6 +52,7 @@ Last reviewed: 2026-03-21
 | OpenBao store HF token properly | Path confirmed: tokens/huggingface |
 | Agent encryption — office/ folders | Transit keys set up, not yet wired to any agent |
 | Recruit-coach agent | Repo exists, skill/office pattern, not active |
+| Mixtral:8x7b keep vs remove | Useful for chat, times out on all benchmark tasks (26GB). Consider removing if disk needed. |
 | Repo rename test → madmax | Proposal written, pending approval |
 | Move local/ scripts into madmax repo | Already done 2026-03-02 per session log |
 
@@ -66,7 +68,7 @@ Last reviewed: 2026-03-21
 | Lease expiration alerts | Bot reads properties/ for dates |
 | Tier 2 model evaluation | DeepSeek/MiniMax Docker isolated |
 | Anthropic API (Bedrock or direct) | Claude CLI is free and working, revisit later |
-| iMessage receive (Phase 3.5) | FDA grant + code changes |
+| iMessage receive (Phase 3.5) | Promoted to P0 — see P0 section |
 
 ---
 
