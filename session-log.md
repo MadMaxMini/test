@@ -15,23 +15,32 @@
 - Removed Terminal + VS Code from Full Disk Access (Rod) — principle of least privilege
 - Rod granted FDA to MsgGateway.app AND the `msggateway` binary inside it
 
-### Blocker — Gateway NOT yet working
-- launchd running the binary but `check_fda()` still failing (exit code 1)
-- Root cause: macOS TCC may not apply .app bundle FDA grant to launchd-spawned processes without a reboot
-- FDA screenshot in bottleMsg confirms both MsgGateway.app + msggateway binary are in FDA list with toggles on
-- **Fix: reboot** — TCC changes sometimes don't propagate to running launchd until restart
-- After reboot: check `launchctl list | grep msggateway` (should show PID, not `-`) and tail the log
+### Blocker — Gateway still failing after reboot
+- Root cause fully diagnosed (session 15): TCC checks the code signature of the process that opens chat.db
+- MsgGateway.app is **unsigned** — TCC has no stable identity to track. FDA grant doesn't propagate.
+- All approaches tested: AppleScript (Messages.app doesn't expose received content), Python sqlite3, compiled C binary — ALL fail at TCC/kernel layer if the binary isn't in FDA list itself
+- AppleScript: chat enumeration works, but `messages of chat` returns error -1700 — not scriptable on current macOS
+- **Fix chosen: Option A** — grant FDA to `/usr/bin/sqlite3` directly. sqlite3 is targeted (query-only binary), works regardless of who calls it.
 
 ### Decisions
 - FDA scope: MsgGateway.app + binary (belt and suspenders) — not Terminal, not VS Code
 - Session startup: P0/P1 summary now standard — baked into memory
+- Gateway fix: grant FDA to `/usr/bin/sqlite3` (Rod action needed — instructions texted + below)
+- Dropbox/bottleMsg: Rod wants real-time monitoring during sessions — cron watch to be added
+
+### Fix Instructions — Option A (Rod action)
+1. System Settings → Privacy & Security → Full Disk Access
+2. Click `+` → press `Cmd+Shift+G` → type `/usr/bin` → Open
+3. Find `sqlite3` → Open → toggle ON
+4. Test: `cd ~/Work/local/scripts && ./msggateway.sh --once` (no error = working)
+5. Ping test: text "ping" from Rod's number → expect "pong — mini is alive"
 
 ### Next Session — START HERE
-1. **After reboot**: `launchctl list | grep msggateway` — confirm PID present (not `-`)
-2. **Ping test**: Rod texts mini admin number "ping" → expect "pong — mini is alive" back
-3. **If still broken**: try Automator .app approach (Apple-signed, TCC handles differently)
-4. **Team onboarding**: Devon screen share with Sharon + Doc today — get GitHub usernames
-5. **KeePass backups in bottleMsg**: ask Rod what to do with bkUp.kdbx + bkup2bkup.kdbx
+1. **Rod grants FDA to `/usr/bin/sqlite3`** (see fix instructions above) — then `./msggateway.sh --once`
+2. **Ping test**: text "ping" from Rod's number → expect "pong — mini is alive"
+3. **Team onboarding**: Devon screen share with Sharon + Doc — get GitHub usernames
+4. **KeePass backups in bottleMsg**: ask Rod what to do with bkUp.kdbx + bkup2bkup.kdbx
+5. **bottleMsg real-time watch**: set up cron/fswatch to surface new drops mid-session
 
 ---
 
