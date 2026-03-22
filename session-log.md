@@ -2,6 +2,39 @@
 
 ---
 
+## 2026-03-22 (mini) — session 14 — IN PROGRESS
+
+### Done
+- Reviewed P0/P1 backlog at session start (new habit, per Rod's request — baked into session startup memory)
+- bottleMsg inbox: found Screenshot 03-22 (Rod's FDA proof), 2 old screenshots (03-06, 03-17), bkUp.kdbx + bkup2bkup.kdbx (KeePass backups — need Rod to say what to do with them), mini-control-guide.md (reference doc from prior session)
+- Devon's GitHub username confirmed: `devonclemente` (GitHub API validated) — stored in contacts.md, backlog updated
+- Doc onboarding elevated to P0 (was implied, now explicit)
+- Devon confirmed for screen share with Sharon + Doc today (2026-03-22)
+- Built `MsgGateway.app` bundle at `~/Applications/MsgGateway.app/` — minimal .app wrapper around msggateway.sh so FDA can be granted to a specific app, not /bin/bash
+- Updated launchd plist (`com.dakotaops.msggateway.plist`) to launch app binary instead of /bin/bash
+- Removed Terminal + VS Code from Full Disk Access (Rod) — principle of least privilege
+- Rod granted FDA to MsgGateway.app AND the `msggateway` binary inside it
+
+### Blocker — Gateway NOT yet working
+- launchd running the binary but `check_fda()` still failing (exit code 1)
+- Root cause: macOS TCC may not apply .app bundle FDA grant to launchd-spawned processes without a reboot
+- FDA screenshot in bottleMsg confirms both MsgGateway.app + msggateway binary are in FDA list with toggles on
+- **Fix: reboot** — TCC changes sometimes don't propagate to running launchd until restart
+- After reboot: check `launchctl list | grep msggateway` (should show PID, not `-`) and tail the log
+
+### Decisions
+- FDA scope: MsgGateway.app + binary (belt and suspenders) — not Terminal, not VS Code
+- Session startup: P0/P1 summary now standard — baked into memory
+
+### Next Session — START HERE
+1. **After reboot**: `launchctl list | grep msggateway` — confirm PID present (not `-`)
+2. **Ping test**: Rod texts mini admin number "ping" → expect "pong — mini is alive" back
+3. **If still broken**: try Automator .app approach (Apple-signed, TCC handles differently)
+4. **Team onboarding**: Devon screen share with Sharon + Doc today — get GitHub usernames
+5. **KeePass backups in bottleMsg**: ask Rod what to do with bkUp.kdbx + bkup2bkup.kdbx
+
+---
+
 ## 2026-03-22 (mini) — session 13 — CLOSED
 
 ### Done

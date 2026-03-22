@@ -26,8 +26,9 @@ Last reviewed: 2026-03-22
 | Dakota inbox/ → Dropbox symlink | Sharon's drops need to land in repo inbox/ |
 | Google Sheets CSV export | Feed bot financial context via Apps Script |
 | Email bot (DE@DakotaAndLLC.com) | Apps Script → markdown log → bot picks up |
-| **Sharon terminal unblock** | **P0 — Devon screen share, one-time setup. Nothing moves until team is in the repo.** |
-| **GitHub invites** | **P0 — Sharon + Doc + Devon usernames needed. Blocks repo access for everyone.** |
+| **Sharon terminal unblock** | **P0 — Devon screen share today (2026-03-22). One-time setup. Nothing moves until team is in the repo.** |
+| **Doc terminal/access unblock** | **P0 — Devon screen share today (2026-03-22). Need his GitHub username + confirm he can clone + run VS Code.** |
+| **GitHub invites** | **P0 — Devon: devonclemente ✅. Sharon + Doc usernames still needed (get today). Blocks repo access for everyone.** |
 | Team onboarding — VS Code + clone | P0 — bot standups are useless until they're reading them. This is the unlock. |
 
 ---
