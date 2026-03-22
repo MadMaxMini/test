@@ -20,7 +20,7 @@ Last reviewed: 2026-03-22
 | Llama 3.3 70B pull | Large model, not pulled yet |
 | Llama 3.1 8B pull | Was pulled, now missing from `ollama list` |
 | Faith benchmark rerun | Add Devstral, professionalize format to match Dakota |
-| **iMessage gateway — activate** | **P0/P1 — FDA grant → load plist → add Rod to msggateway-admin Keychain → smoke test ping. Script ready at `~/Work/local/scripts/msggateway.sh`.** |
+| **iMessage gateway — activate** | **P1 — Script + whitelist + plist all ready. Blocked on FDA: launchd can't read chat.db. Fix: wrap gateway in Automator `.app` bundle → grant FDA to that app only (not /bin/bash). One session to build.** |
 | **iMessage permission model — decide** | **P1 — Option C (Rod admin only) active now. Monitor mode built: team texts logged to msggateway-inbox.md, surfaced at session start. Upgrade path to Option A (queue+approve) when team is stable.** |
 | Wire image to standup send | Round-robin bot/assets/ on group text |
 | Dakota inbox/ → Dropbox symlink | Sharon's drops need to land in repo inbox/ |
