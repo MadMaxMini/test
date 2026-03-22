@@ -2,34 +2,28 @@
 
 ---
 
-## 2026-03-22 (mini) — session 11 — IN PROGRESS
+## 2026-03-22 (mini) — session 12 — CLOSED
 
 ### Done
-- Triaged bottleMsg inbox: processed 3 docs + 3 screenshots, archived all
-- Screenshots: Devon confirmed 3 tasks/person in standup, plaintext for iMessage / markdown for repo
-- Fixed bot `scan.py`: added `strip_markdown()` — iMessage sends are now plaintext, repo files stay markdown
-- Backlog updated: team onboarding (Sharon/Doc/Devon) elevated to P0, iMessage receive promoted from P3 → P0, Mixtral moved to P2 consideration
-- iMessage gateway (Phase 3.5) pre-work complete:
-  - `msggateway.sh` written — polls chat.db, whitelist, rate limit, sanitize, dispatch
-  - `com.dakotaops.msggateway.plist` written — NOT installed yet, awaiting FDA grant
-  - Commands wired: ping → pong, status → Ollama + Docker state, help, unknown → logged
-- Texted Dakota group (good luck Devon, shared Google Doc)
+- Triaged bottleMsg inbox: processed REVIEW-2026-03-18, mini-status-2026-03-19, Honda.txt — all archived
+- Backlog overhauled: team onboarding P0, Mixtral → P2, inbox/Dropbox deprioritized (laptop handles), iMessage receive elevated
+- iMessage gateway: whitelist wired (admin = Rod only, monitor = empty for now), plist installed + running (PID confirmed)
+- Gateway BLOCKED: launchd can't read chat.db — FDA not flowing to launchd process. Fix: wrap in Automator .app bundle → grant FDA to that app. Added to P1 backlog.
+- Security posture locked: paranoid by default, unknown senders flagged + Rod notified. Rod tells me to calm down, not the other way.
+- Permission model decided: Option C (Rod admin only) now. Monitor mode built (team texts logged to inbox). Upgrade path to Option A (queue+approve) when team is stable.
+- Noon text scheduled to Dakota group (Devon good luck + Google Doc link)
+- Noon text script: `~/Work/local/scripts/noon-devon-2026-03-22.sh` + `at` job
 
-### Decisions from bottleMsg screenshots
-- Standup format: 3 tasks per person in priority order (Devon confirmed)
-- iMessage: plaintext only. Repo/standup MD files: keep markdown.
-
-### One-time Rod action needed to unlock iMessage receive
-- System Settings → Privacy & Security → Full Disk Access → add Terminal
-- Then: `cp ~/Work/local/scripts/com.dakotaops.msggateway.plist ~/Library/LaunchAgents/ && launchctl load ~/Library/LaunchAgents/com.dakotaops.msggateway.plist`
-- Then add whitelist to Keychain: `security add-generic-password -a macBot -s "msggateway-whitelist" -w "+1XXXXXXXXXX,+1XXXXXXXXXX"`
+### Decisions
+- iMessage permission tiers: Rod = admin (full commands), team = monitor (logged, not executed), unknown = SUSPICIOUS → notify Rod immediately
+- Gateway FDA fix: `.app` bundle approach, not `/bin/bash` FDA (too broad)
+- Backlog is canonical roadmap — not ad-hoc TODO lists
 
 ### Next Session — START HERE
-1. Rod does FDA grant → load msggateway → test with "ping"
-2. Add sender numbers to Keychain whitelist (`msggateway-whitelist`)
-3. notify-group.sh live test confirmation (P1)
-4. Update scan.py fallback chain: Claude → Mistral Small → Devstral → 3B template
-5. Per-agent OpenBao tokens (P1)
+1. **Gateway `.app` bundle** — wrap msggateway.sh in Automator shell script app → grant FDA to that app → restart gateway → ping test
+2. **Team onboarding** — Devon screen share with Sharon (P0), get GitHub usernames for Sharon + Doc + Devon
+3. **notify-group.sh live test** — confirm Rod+group actually receives (P1)
+4. **Per-agent OpenBao tokens** (P1)
 
 ---
 
