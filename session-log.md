@@ -2,6 +2,36 @@
 
 ---
 
+## 2026-03-23 (mini) — session 18 — CLOSED
+
+### Done
+- SMS thread full audit — reviewed every thread in chat.db
+- Deleted: macbotpooterson self-test, Rod+Devon ghost group, Devon 1:1 (Rod deleted), Doc 1:1 (Rod deleted), Rod 1:1 history (Rod cleared), Jacob 1:1 (Rod deleted)
+- Identified all contacts: Rod, Devon (brother, primary tech partner), Doc (+19739704525, Rod's father Roderick J Clemente), Sharon (+639451631830, Philippines), Jacob (+15122399285, friend, low priority for bot)
+- Rules locked: Devon/Doc/Jacob solo texts = rare, Rod's explicit word only; Jacob group only
+- Sent apology to Rod+Jacob group for accidental 1:1 send
+- Rod created Rod+Sharon group (f0641ba091334238a03126835280dc23) — primary Sharon channel going forward
+- Sharon warm message sent — mission: get her plugged in and liking the system
+- Dakota software structure redesign flagged as P1 — logged in Rod's tasks.md (inbox trigger, contact tracking, property tracking)
+- Devon content strategy notes recovered from deleted thread — saved to people/devon/notes.md. 4 open questions blocking Devon, needs Rod's green light
+- attributed_body gap fixed in msggateway.py — was missing messages stored as typedstream; now decodes via regex fallback
+- Pins not visible in chat.db (stored in separate Apple system DB)
+
+### Decisions
+- Jacob: bot never texts 1:1, group only, low priority
+- Devon/Doc: solo texts allowed but rare, Rod's word only
+- Sharon primary channel: f0641ba091334238a03126835280dc23 (Rod+Sharon group)
+- attributed_body decode: typedstream regex, not plistlib (it's not a plist)
+
+### Next Session — START HERE
+- Continue SMS cleanup: ba8715bc ghost duplicate group still needs deletion
+- Reload gateway with attributed_body fix: `launchctl unload/load com.dakotaops.msggateway.plist`
+- Sharon follow-up if no response yet
+- Dakota software structure design conversation with Rod
+- Fix AppleScript group creation limitation (can't create new groups programmatically)
+
+---
+
 ## 2026-03-23 (mini) — session 17 — CLOSED
 
 ### Done
