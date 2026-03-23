@@ -2,7 +2,7 @@
 
 ---
 
-## 2026-03-23 (mini) — session 18 — CLOSED
+## 2026-03-23 (mini) — session 18+19 — CLOSED
 
 ### Done
 - SMS thread full audit — reviewed every thread in chat.db
@@ -23,12 +23,24 @@
 - Sharon primary channel: f0641ba091334238a03126835280dc23 (Rod+Sharon group)
 - attributed_body decode: typedstream regex, not plistlib (it's not a plist)
 
+### Additional work (post-shutdown)
+- C gateway: attributed_body decode + whitespace trim bug fixed, recompiled + signed
+- ~/Work/local/ initialized as git repo — gateway source now tracked
+- Backlog overhauled — stale items cleaned, current P0/P1 accurate
+- gh CLI installed + authed by Rod
+- Dakota-software collaborators confirmed: Rjclemente ✅ devonclemente ✅ MadMaxMini ✅ faithsv79-tech (Sharon?) ✅
+- **DO NOT TEXT ANYONE until Rod returns** — explicit instruction
+
+### Blocked — needs Rod
+- **Gateway receive is DOWN** — FDA wiped by recompile. Fix: System Settings → Full Disk Access → remove msggateway_bin → re-add it. Rod will do when back.
+- Ghost group cleanup (ba8715bc) — Rod wants to think about it first
+
 ### Next Session — START HERE
-- Continue SMS cleanup: ba8715bc ghost duplicate group still needs deletion
-- Reload gateway with attributed_body fix: `launchctl unload/load com.dakotaops.msggateway.plist`
-- Sharon follow-up if no response yet
-- Dakota software structure design conversation with Rod
-- Fix AppleScript group creation limitation (can't create new groups programmatically)
+1. **FDA re-grant** for msggateway_bin (remove + re-add, toggle not enough)
+2. Ghost group decision — Rod has a preference, needs to decide which to keep
+3. Sharon response — check Rod+Sharon group for reply
+4. Dakota software structure design conversation
+5. `gh auth login` done ✅ — now can manage collaborators autonomously
 
 ---
 
