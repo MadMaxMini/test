@@ -37,6 +37,7 @@ Last reviewed: 2026-03-22
 
 | Item | Notes |
 |------|-------|
+| Outbound network monitoring | Jacob flagged — log/alert on unexpected outbound connections. macOS built-in (pf/lulu) or lightweight script. Pairs with existing firewall hardening. |
 | Per-agent OpenBao tokens | Narrow policies per agent — real secrets incoming, contains blast radius |
 | AutoDakota_MultiTool shortcut | Weigh vs keeping dedicated Rod/Group shortcuts |
 | Round 4 benchmark | 6 models — pending Gemma 3 27B + Mistral Small pulls |

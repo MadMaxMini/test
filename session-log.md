@@ -2,6 +2,31 @@
 
 ---
 
+## 2026-03-23 (mini) — session 17 — CLOSED
+
+### Done
+- iMessage gateway: plist reloaded to run C binary, FDA granted by Rod — gateway LIVE, polling every 30s ✅
+- Standup bot: wins section added (scan recent [x] tasks, emoji by person, bottom of standup + iMessage)
+- Doc tasks updated: VS Code + GitHub marked done (Devon set up 2026-03-22)
+- Team directory created: `~/Work/dakota-software/team/directory.md` — contacts, GitHub usernames, gateway tiers
+- Backlog: outbound monitoring added as P1 (Jacob flagged)
+- Monitor whitelist: Jacob + Devon + Sharon + Doc added to msggateway-monitor keychain
+- send_msg.py: outbound rate limiter built — 2/recipient/hr, 5 global/hr, --live mode (20/40), auto-expires 60min
+- Sharon's duplicate group chat root cause found: +63 number registered without + prefix in one thread
+- Corrected Doc commit identity: "Roderick J Clemente" = Doc (Devon configured), GitHub = Rjclemente
+
+### Decisions
+- No outbound messages without Rod's explicit authorization during SMS review sessions
+- Default bot limits: 2/recipient/hr, 5 global/hr. Live mode: 20/recipient, 40/hr, 60min TTL
+
+### Next Session — START HERE
+- SMS review: pull all active threads, review together, Rod decides what to clean up / adjust
+- Adjust messaging tone + primary channels + what triggers a message vs staying silent
+- Add Rjclemente as collaborator to dakota-software (needs browser or token)
+- 6am standup check script (review gate before group send)
+
+---
+
 ## 2026-03-22 (mini) — session 16 — CLOSED
 
 ### Done
