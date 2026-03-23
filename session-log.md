@@ -2,7 +2,7 @@
 
 ---
 
-## 2026-03-22 (mini) — session 15 — CLOSED
+## 2026-03-22 (mini) — session 16 — CLOSED
 
 ### Done
 - Gateway FDA root cause fully diagnosed: TCC checks the responsible process. MsgGateway.app is unsigned so FDA doesn't propagate. Terminal (as responsible process) works; launchd doesn't.
@@ -23,14 +23,23 @@
 - Jacob is an active contact — should be added to monitor tier or given a proper role
 - Dropbox Screenshots: I now monitor this folder during sessions (Rod drops screenshots there to communicate)
 
-### Next Session — START HERE (one action needed)
-1. **Grant FDA to python3**: System Settings → Full Disk Access → + → `/opt/homebrew/bin/python3`
+### Next Session — START HERE (one action needed from Rod)
+1. **Grant FDA to compiled binary**: System Settings → Full Disk Access → `+` → `Cmd+Shift+G` → paste `/Users/macBot/Work/local/scripts/msggateway_bin` → Open → toggle ON
 2. **Reload gateway**: `launchctl unload ~/Library/LaunchAgents/com.dakotaops.msggateway.plist && launchctl load ~/Library/LaunchAgents/com.dakotaops.msggateway.plist`
 3. **Verify**: `launchctl list | grep msggateway` → should show PID (not `-`)
 4. **Ping test**: text "ping" → expect "pong — mini is alive"
-5. **Jacob**: decide his tier (monitor or admin?) — he's actively texting the mini
-6. **Team onboarding**: Sharon + Doc GitHub usernames still needed
-7. **KeePass backups in bottleMsg**: what to do with bkUp.kdbx + bkup2bkup.kdbx?
+5. **After confirmed working**: remove Terminal, VS Code, sqlite3, python3 from FDA — only `msggateway_bin` needs it
+6. **Jacob**: decide his tier (monitor or admin?) — he's actively texting the mini
+7. **Team onboarding**: Sharon + Doc GitHub usernames still needed
+8. **KeePass backups in bottleMsg**: what to do with bkUp.kdbx + bkup2bkup.kdbx?
+
+### What was built this session
+- `msggateway.py` — Python port (backup, works from Terminal)
+- `msggateway.c` + `msggateway_bin` — compiled C binary, ad-hoc signed as `com.dakotaops.msggateway`
+- ROBOT SHUTDOWN command in both .sh and .py versions
+- launchd plist updated to run `msggateway_bin` directly
+- Jacob answered re: macOS firewall options
+- Dropbox Screenshots folder confirmed as real-time comms channel
 
 ---
 
