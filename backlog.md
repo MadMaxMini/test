@@ -34,6 +34,7 @@ Last reviewed: 2026-03-23
 | Item | Notes |
 |------|-------|
 | **Dakota software repo structure redesign** | Inbox, contact tracking, property tracking all need rethinking. Rod to define vision, Mad Max builds. Early idea: inbox/ file drops trigger group texts. Flagged 2026-03-23. |
+| **Standup redesign — two-part message** | iMessage (plain text): business top priority, each person's #1 task only, celebrations, blockers, + link to full standup in GitHub. Repo (markdown): top 3 per person, full detail, renders via GitHub app. Rod's design, waiting for group feedback before building. 2026-03-24. |
 | **Sharon engagement** | She hasn't responded yet. Mission: get her plugged in and liking the system. Low spam. Warm messaging only at Rod's word. |
 | **ba8715bc ghost group deletion** | Rod+Devon+Sharon+Doc duplicate, Sharon number without +. Rod deletes in Messages. |
 | **iMessage group creation via AppleScript** | Currently blocked (-1700 error). Workaround: Rod creates group, I use the chat ID. Need a better path — investigate alternatives. |

@@ -2,6 +2,31 @@
 
 ---
 
+## 2026-03-24 (mini) — session 20 — IN PROGRESS
+
+### Done
+- FDA re-granted for `msggateway_bin` (remove + re-add, toggle alone doesn't work) — gateway live, PID confirmed, ping/pong verified ✅
+- SMS audit: mapped all 12 chat threads, identified ghost groups and active chats
+- Root cause found: `AutoDakota_Notify_Group` shortcut was configured to `ba8715bc` (ghost group) — standups were going there instead of Dakota Enterprises chat (`223693c9`)
+- Rod fixed shortcut — re-added Sharon with correct number, manually verified send hits correct group ✅
+- Sent warning message to ghost group (`ba8715bc`): "WRONG GHOST GROUP - DO NOT SEND MESSAGES HERE PLEASE"
+- Ghost group `ba8715bc` NOT deleted yet — Rod wants to keep for now
+- Standup redesign vision logged as P1: two-part message — plain text iMessage (top priority, each person's #1 task, celebrations, blockers, GitHub link) + full markdown standup in repo. GitHub deep-link approach already proven in prep-standup.py. Waiting on group feedback before building.
+- notify-group.sh live test: ✅ confirmed — standup hit correct group after shortcut fix
+- Rjclemente collaborator: ✅ already confirmed added (session 18+19)
+
+### Decisions
+- Ghost group `ba8715bc`: keep for now, label only, delete later
+- Standup redesign: Rod's design validated, build after group feedback
+
+### Next Session — START HERE
+1. Email bot — new conversation started (DE@DakotaAndLLC.com, P0 in backlog)
+2. Tomorrow 7am standup — verify it hits correct group (first live test of fixed shortcut)
+3. Ghost group `ba8715bc` — revisit deletion when Rod is ready
+4. Sharon — check Rod+Sharon group for any reply
+
+---
+
 ## 2026-03-23 (mini) — session 18+19 — CLOSED
 
 ### Done
