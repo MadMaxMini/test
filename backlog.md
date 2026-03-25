@@ -6,7 +6,7 @@ Priority scale:
 - **P2** — meaningful improvement, do soon
 - **P3** — good idea, back burner
 
-Last reviewed: 2026-03-23
+Last reviewed: 2026-03-25
 
 ---
 
@@ -33,6 +33,9 @@ Last reviewed: 2026-03-23
 
 | Item | Notes |
 |------|-------|
+| **Multi-channel bot notifications** | All bots hitting one SMS thread sucks. Each bot (faith, health, recruit, dakota) needs its own feel/channel. Evaluate: Telegram (bots are first-class, per-bot handle), Pushover/Ntfy (named channels), Signal. Security concern: Telegram goes through their servers — Rod to decide tradeoff. SMS stays for critical/urgent only. 2026-03-25. |
+| **Standup quality — catch everything** | Standups only scan tasks.md + git commits. Miss: work done outside tasks.md, verbal agreements, email/text activity, deals in progress. Need richer data sources. On Dakota bot's plate. 2026-03-25. |
+| **Dakota folder refactor** | Rod wants to rethink the dakota-software repo structure. Inbox, contact tracking, property tracking, bot layout. Rod to define vision, Mad Max builds. 2026-03-25. |
 | **Dakota software repo structure redesign** | Inbox, contact tracking, property tracking all need rethinking. Rod to define vision, Mad Max builds. Early idea: inbox/ file drops trigger group texts. Flagged 2026-03-23. |
 | **Standup redesign — two-part message** | iMessage (plain text): business top priority, each person's #1 task only, celebrations, blockers, + link to full standup in GitHub. Repo (markdown): top 3 per person, full detail, renders via GitHub app. Rod's design, waiting for group feedback before building. 2026-03-24. |
 | **Sharon engagement** | She hasn't responded yet. Mission: get her plugged in and liking the system. Low spam. Warm messaging only at Rod's word. |

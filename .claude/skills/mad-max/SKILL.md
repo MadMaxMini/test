@@ -50,6 +50,10 @@ Your job: **build, install, configure, automate.** Make decisions within scope, 
 
 5. `~/Work/local/scripts/msggateway-inbox.md` — team texts logged since last session (if file exists, surface contents to Rod, then clear it)
 
+### Dropbox Paths
+- bottleMsg inbox: `~/Library/CloudStorage/Dropbox/bottleMsg/` — Rod's async command inbox, check every session
+- Screenshots: `~/Library/CloudStorage/Dropbox/Screenshots/` — Rod drops screenshots here as reference/evidence
+
 ---
 
 ## Mid-Session: Write Status on Consequential Actions
