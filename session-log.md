@@ -2,6 +2,38 @@
 
 ---
 
+## 2026-03-25 (mini) — session 21
+
+### Done
+- **dispatcher.py** — channel-agnostic freeform → Claude CLI. Rod texts anything, mini replies. Context-aware (knows the stack, repos, team).
+- **log-watcher.py** — tails msggateway.log, catches Rod's texts in real-time, routes unknown commands to dispatcher, replies via Messages.app direct. Live as `com.dakotaops.logwatcher`.
+- **notify.sh fixed** — was using broken pipe→Shortcuts pattern (dropped message body). Now Messages.app direct with explicit iMessage service. Rod-direct texts working.
+- **notify-group.sh fixed** — was using Shortcuts participant-match (non-deterministic, hit ghost group). Now uses chat ID from Keychain directly. Confirmed hitting `223693c9` (Dakota Enterprises). **Currently disabled** — Rod said no group texts until further notice.
+- **Ghost group (`ba8715bc`) confirmed** — was getting 7am standups instead of correct group. Rod deleted it. notify-group.sh now immune to this bug via chat ID routing.
+- **email-poller.py** — Rod's emails now dispatched to Claude, not just logged.
+- **Shortcuts wrong-group bug confirmed** — Apple-confirmed bug: Shortcuts can't target group by ID, only participant list. Non-deterministic when multiple matching groups exist. Documented in backlog.
+- **Dropbox Screenshots path** saved to SKILL.md (`~/Library/CloudStorage/Dropbox/Screenshots/`)
+- **Backlog updated** — 3 new P1s: multi-channel bot notifications, standup quality, Dakota folder refactor
+
+### Decisions
+- notify.sh/notify-group.sh: bypass Shortcuts entirely, Messages.app osascript direct — more reliable, no Shortcuts dependency
+- Group sends disabled until Rod says go — bot works solo, texts Rod only
+- log-watcher pattern: C binary keeps FDA, Python watcher reads log — no System Settings change needed
+
+### Next
+- Re-enable group send when Rod is ready (one line change in notify-group.sh)
+- Fix ba8715bc in chat.db — still there (iOS delete doesn't remove from Mac DB), but irrelevant now that we use chat ID
+- standup quality improvement — catch work outside tasks.md (P1)
+- Multi-channel notifications design — Telegram vs Pushover vs other (P1)
+- Dakota folder refactor — Rod to define vision
+- model-lab/ setup — open model fine-tuning kickoff (from bottleMsg)
+- Rod's email address for dispatcher — confirm `roderick.clemente@protonmail.com` is right
+
+### Blocked
+- Group send disabled by Rod
+
+---
+
 ## 2026-03-24 (mini) — session 20
 
 ### Done
