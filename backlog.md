@@ -50,6 +50,9 @@ Last reviewed: 2026-03-23
 
 | Item | Notes |
 |------|-------|
+| **GitLab mirror backup** | Add GitLab as second remote for all repos — independent of GitHub, free, protects against GH loss. Scripts ready, just needs GitLab account + remotes added. |
+| **Email poller — wire credentials** | email-poller.py built. Needs: (1) decide on email address (Max@dakotaentllc.com?), (2) app password → Keychain, (3) test with --check, (4) install launchd plist. |
+| **Pi rsync backup** | backup-repos.sh + plist written. Nightly mirror of ~/Work/ including .git dirs. Activate after Pi SSH is set up. |
 | Bot pipeline architecture — per-person micro-bots + stitcher | Fix conflation failure mode. Each person bot gets tasks + role context, stitcher combines. Structural fix. |
 | Open WebUI first real use | Live at localhost:3000 |
 | n8n setup | Phase 4 — workflow automation, docker-compose ready |

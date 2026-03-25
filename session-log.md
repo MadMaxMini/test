@@ -2,7 +2,27 @@
 
 ---
 
-## 2026-03-24 (mini) — session 20 — IN PROGRESS
+## 2026-03-24 (mini) — session 20
+
+### Done
+- Built email-poller.py — Gmail IMAP, polls every 5 min, batch notify, readonly
+- Credentials stored in OpenBao (secret/email/gmail) — username + app password
+- Filter: only logs/notifies for emails addressed to @dakotaentllc.com
+- Daemon installed and live — com.dakotaops.emailpoller launchd agent
+- State set to uid=38, inbox clean, watching for new mail only
+- Added to backlog: GitLab mirror backup (P2), Pi rsync backup (P2), email wiring (P2 → done)
+- backup-repos.sh + plist written (Pi rsync, ready when Pi SSH is set up)
+
+### Decisions
+- Email account: macbotpooterson@gmail.com (bot account), forward @dakotaentllc.com there when ready
+- Credentials in OpenBao (not Keychain) for email — sets the pattern for future integrations
+- Filter on To: header (not From:) — right call, catches forwarded mail too
+
+### Next
+- Set up mail forwarding from Max@dakotaentllc.com → macbotpooterson@gmail.com
+- GitLab account + mirror remotes for all repos
+- Pi SSH setup → activate backup-repos.sh daemon
+- Rotate the app password that was sent in plaintext in chat (Google → App Passwords → delete mini-poller → recreate)
 
 ### Done
 - FDA re-granted for `msggateway_bin` (remove + re-add, toggle alone doesn't work) — gateway live, PID confirmed, ping/pong verified ✅
