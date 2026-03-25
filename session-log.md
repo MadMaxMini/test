@@ -25,11 +25,18 @@
 - Sharon: email-forwarding-setup.md + task added, email triage discussion added as low-priority group task
 - Test invite sent to roderick.clemente@protonmail.com ✅
 
+### Also Done (end of session)
+- Sharon's direct number pulled from chat.db, stored in Keychain as imessage-sharon (+639451631830)
+- Group text sent to Dakota — Sharon notified of repo updates + email ask
+- contacts.md lives at ~/Work/local/scripts/contacts.md (mini-local, not in git)
+
 ### Next
 - Set up mail forwarding from Max@dakotaentllc.com → macbotpooterson@gmail.com
 - GitLab account + mirror remotes for all repos
 - Pi SSH setup → activate backup-repos.sh daemon
 - Rotate the app password that was sent in plaintext in chat (Google → App Passwords → delete mini-poller → recreate)
+- Fill in Devon + Doc + Sharon emails in send_email.py CONTACTS once Sharon responds
+- Update contacts.md to document imessage-sharon keychain key
 
 ### Done
 - FDA re-granted for `msggateway_bin` (remove + re-add, toggle alone doesn't work) — gateway live, PID confirmed, ping/pong verified ✅
