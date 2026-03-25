@@ -18,6 +18,13 @@
 - Credentials in OpenBao (not Keychain) for email — sets the pattern for future integrations
 - Filter on To: header (not From:) — right call, catches forwarded mail too
 
+### Also Done (continued)
+- Built send_email.py — SMTP from macbotpooterson@gmail.com, creds from OpenBao
+- Calendar invites via .ics attachment — works with any email client (Proton, Gmail, Apple Mail)
+- Contact shorthand: rod, devon, doc, sharon, dakota (team emails TBD, fill in contacts dict)
+- Sharon: email-forwarding-setup.md + task added, email triage discussion added as low-priority group task
+- Test invite sent to roderick.clemente@protonmail.com ✅
+
 ### Next
 - Set up mail forwarding from Max@dakotaentllc.com → macbotpooterson@gmail.com
 - GitLab account + mirror remotes for all repos
