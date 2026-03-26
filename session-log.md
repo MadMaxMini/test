@@ -2,27 +2,31 @@
 
 ---
 
-## 2026-03-26 (mini) — session 22
+## 2026-03-26 (mini) — session 23
 
 ### Done
-- **Scripts moved into repo** — all platform scripts now live in `~/Work/test/local/scripts/`. Was in `~/Work/local/scripts/` with no remote. Now version-controlled, backed up, canonical.
-- **Path references updated** — all scripts, dakota-software bot, launchd plists updated to new paths. Daemons reloaded.
-- **msggateway_bin stays at old path** — FDA is path-based. Binary at `~/Work/local/scripts/msggateway_bin` until Rod re-grants FDA at new path.
-- **WHO-AM-I.md updated** — reflects current stack: iMessage receive live, SMS dispatcher live, Shortcuts bypassed, Mixtral benched, model routing documented.
-- **Mixtral removed from model table** — benched (too heavy for this system per session benchmarks).
+- **Dakota overhaul grokked** — 20+ commits from last night understood: skill rewrite, contacts scaffold, mortgage-view loaded, La Estancia added, inbox killed, Codex compat (AGENTS.md + .codex/), VS Code tasks, scripts/coach launcher
+- **Rod #1 task set** — give Devon the PDF automator today (added to rod/tasks.md)
+- **Sharon terminal check** — note in repo + direct iMessage sent to +639451631830
+- **overdue.md fixed** — moved from inbox/ to bot/ (bot was writing there, inbox is dead)
+- **dakota-software permissions fixed** — was narrow per-path list, now `Edit(**)` + `Write(**)` across the board
+- **AGENTS.md fixed** — hardcoded laptop paths → relative paths
+- **auto-commit.sh built** — idle-aware, 15min interval, 10min idle guard, `auto:` tag, `git add -u`
+- **install-autocommit.sh built** — one command to wire up on Sharon/Doc's machines
+- **Notify path confirmed fixed** (8am this morning) — bot will text group correctly tomorrow
 
 ### Decisions
-- Canonical home for all scripts: `~/Work/test/local/scripts/` (this repo)
-- msggateway_bin exception: stays at old FDA-granted path until re-grant
+- Auto-commit: 15min run, skip if staged or files touched in last 10min, `git add -u` only, `auto:` prefix
+- Sharon/Doc = auto-commit when terminal is unblocked. Devon = manual. Rod = separate flow.
+- bottleMsg `2026-03-24-open-model-tuning-kickoff.md` — P1 next session, build better inbox processing system then
 
 ### Next Session — START HERE
-1. Text the mini to confirm dispatcher still works after path migration
-2. Re-enable group send when Rod approves (one line change in notify-group.sh)
-3. Multi-channel notifications design (P1) — Telegram vs other
-4. Standup quality improvement (P1)
-5. Dakota folder refactor — Rod defines vision
-6. model-lab/ kickoff (from bottleMsg brief)
-7. FDA re-grant for msggateway_bin at new path (when Rod is at machine)
+1. **bottleMsg processing** — read open-model-tuning-kickoff.md + screenshots, build better inbox system
+2. **Devon PDF automator handoff** — confirm Rod gave Devon the code
+3. **Sharon terminal status** — check if she replied, install auto-commit if unblocked
+4. **Standup format review** — sparse format is live, bot output now matches it
+5. Multi-channel notifications design (P1)
+6. model-lab/ kickoff
 
 ---
 
