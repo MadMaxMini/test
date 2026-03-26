@@ -1,0 +1,19 @@
+# Sensitive — never commit
+contacts.md
+
+# Compiled binaries
+msggateway_bin
+__pycache__/
+*.pyc
+
+# Runtime state
+*.log
+*.err
+*.state
+inbox.log
+
+# Runtime inbox files
+msggateway-inbox.md
+email-inbox.md
+
+# Plists (installed copies live in ~/Library/LaunchAgents — source copies go in local/plists/)
