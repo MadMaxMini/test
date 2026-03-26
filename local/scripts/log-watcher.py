@@ -15,10 +15,10 @@ import logging
 from pathlib import Path
 
 HOME        = Path.home()
-WATCH_FILE  = HOME / "Work/test/local/scripts/msggateway.log"
-STATE_FILE  = HOME / "Work/test/local/scripts/log-watcher.state"
-LOG_FILE    = HOME / "Work/test/local/scripts/log-watcher.log"
-NOTIFY_SCRIPT = HOME / "Work/test/local/scripts/notify.sh"
+WATCH_FILE  = HOME / "Work/local/scripts/msggateway.log"
+STATE_FILE  = HOME / "Work/local/scripts/log-watcher.state"
+LOG_FILE    = HOME / "Work/local/scripts/log-watcher.log"
+NOTIFY_SCRIPT = HOME / "Work/local/scripts/notify.sh"
 
 logging.basicConfig(
     filename=str(LOG_FILE), level=logging.INFO,
@@ -60,7 +60,7 @@ def save_offset(n):
     STATE_FILE.write_text(str(n))
 
 def poll_once():
-    sys.path.insert(0, str(HOME / "Work/test/local/scripts"))
+    sys.path.insert(0, str(HOME / "Work/local/scripts"))
     from dispatcher import dispatch
 
     if not WATCH_FILE.exists():

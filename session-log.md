@@ -2,6 +2,28 @@
 
 ---
 
+## 2026-03-26 (mini) — session 24
+
+### Done
+- **iMessage receive pipeline restored** — msggateway_bin lost FDA (likely after binary recompile on Mar 23). Re-granted FDA, restarted service. Incoming texts flowing again.
+- **log-watcher path mismatch fixed** — test/log-watcher.py was watching `test/local/scripts/msggateway.log` (empty) instead of `local/scripts/msggateway.log` (actual). Fixed paths, reset state offset, restarted watcher. Free-form dispatch working.
+- **Backlog updated** — P2: msggateway_bin surface area reduction. P3: dispatcher model feature flag.
+
+### Decisions
+- FDA root cause unclear (no reboot since Mar 22, TCC log shows nothing) — watch for recurrence
+- msggateway_bin surface area reduction is right call long-term, P2 for now
+- Model feature flag (Claude vs Ollama) added to P3
+
+### Next Session — START HERE
+1. **bottleMsg processing** — read open-model-tuning-kickoff.md + screenshots, build better inbox system
+2. **Devon PDF automator handoff** — confirm Rod gave Devon the code
+3. **Sharon terminal status** — check if she replied, install auto-commit if unblocked
+4. **Standup format review** — sparse format is live, bot output now matches it
+5. Multi-channel notifications design (P1)
+6. model-lab/ kickoff
+
+---
+
 ## 2026-03-26 (mini) — session 23
 
 ### Done

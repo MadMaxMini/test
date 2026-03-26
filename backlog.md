@@ -63,6 +63,7 @@ Last reviewed: 2026-03-25
 | Agent encryption — office/ folders | Transit keys set up, not yet wired to any agent |
 | Recruit-coach agent | Repo exists, skill/office pattern, not active |
 | Mixtral:8x7b keep vs remove | Times out on all benchmark tasks (26GB). Remove if disk needed. |
+| **msggateway_bin surface area reduction** | Strip C binary to read-only chat.db sensor only. Move keychain lookups, notify calls, inbox writes to Python. Recompiles become rare → FDA stays stable. 2026-03-26. |
 | Repo rename test → madmax | Proposal written, pending Rod approval |
 | AutoDakota_MultiTool shortcut | Weigh vs keeping dedicated Rod/Group shortcuts |
 | 6am standup review gate | Review before group send — flagged S17 |
@@ -80,6 +81,7 @@ Last reviewed: 2026-03-25
 | Tier 2 model evaluation | DeepSeek/MiniMax Docker isolated |
 | Anthropic API (Bedrock or direct) | Claude CLI free and working, revisit later |
 | Session timeout — skip blocked prompts | If Claude Code prompt gets no answer, move on. UX improvement. |
+| **Dispatcher model feature flag** | Env var in launchd plist to switch Claude CLI vs Ollama default. One-line flip, no code change. 2026-03-26. |
 
 ---
 
