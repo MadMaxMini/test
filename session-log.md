@@ -2,6 +2,30 @@
 
 ---
 
+## 2026-03-26 (mini) — session 22
+
+### Done
+- **Scripts moved into repo** — all platform scripts now live in `~/Work/test/local/scripts/`. Was in `~/Work/local/scripts/` with no remote. Now version-controlled, backed up, canonical.
+- **Path references updated** — all scripts, dakota-software bot, launchd plists updated to new paths. Daemons reloaded.
+- **msggateway_bin stays at old path** — FDA is path-based. Binary at `~/Work/local/scripts/msggateway_bin` until Rod re-grants FDA at new path.
+- **WHO-AM-I.md updated** — reflects current stack: iMessage receive live, SMS dispatcher live, Shortcuts bypassed, Mixtral benched, model routing documented.
+- **Mixtral removed from model table** — benched (too heavy for this system per session benchmarks).
+
+### Decisions
+- Canonical home for all scripts: `~/Work/test/local/scripts/` (this repo)
+- msggateway_bin exception: stays at old FDA-granted path until re-grant
+
+### Next Session — START HERE
+1. Text the mini to confirm dispatcher still works after path migration
+2. Re-enable group send when Rod approves (one line change in notify-group.sh)
+3. Multi-channel notifications design (P1) — Telegram vs other
+4. Standup quality improvement (P1)
+5. Dakota folder refactor — Rod defines vision
+6. model-lab/ kickoff (from bottleMsg brief)
+7. FDA re-grant for msggateway_bin at new path (when Rod is at machine)
+
+---
+
 ## 2026-03-25 (mini) — session 21
 
 ### Done

@@ -41,8 +41,9 @@ This machine is dedicated to Claude. It stays on. It runs things at 7am. It text
 | Secrets manager | OpenBao (Docker, localhost:8200) | ✅ Up, initialized |
 | Chat UI | Open WebUI (localhost:3000) | ✅ Live |
 | Automation | launchd (cron replacement) | ✅ Active |
-| iMessage (send) | notify.sh → Shortcuts | ✅ Working |
-| iMessage (receive) | Phase 3.5 — needs FDA grant | ⏳ Pending |
+| iMessage (send) | notify.sh → Messages.app direct | ✅ Working |
+| iMessage (receive) | msggateway_bin (C, FDA granted) | ✅ Live |
+| SMS dispatcher | log-watcher → dispatcher → local AI | ✅ Live |
 | Workflow engine | n8n (Phase 4) | ⏳ Not started |
 | Package manager | Homebrew + pipx | ✅ |
 | Git auth | SSH ed25519 (MadMaxMini) | ✅ |
@@ -55,14 +56,24 @@ This machine is dedicated to Claude. It stays on. It runs things at 7am. It text
 ### Tier 1 — Native Ollama (trusted, full Metal GPU)
 | Model | Size | Role |
 |-------|------|------|
-| Mistral Small | 14GB | Primary local fallback for ops |
-| Devstral 24B | ~14GB | Code + agentic tasks, fallback 2 |
-| Gemma 3 27B | 17GB | Chat / Open WebUI only (hallucinated on email task — removed from ops) |
-| Llama 3.1 8B | 4.9GB | Fast template fallback (fallback 3) |
+| Mistral Small | 14GB | Ops fallback |
+| Devstral | 14GB | Code + agentic tasks |
+| Gemma 3 27B | 17GB | Chat / WebUI (hallucinated on ops — not in bot chain) |
+| Llama 3.1 8B | 4.9GB | **SMS dispatcher default** — fast, good enough |
+| Llama 3.2 3B | 2GB | Fastest — "use small" escalation path |
 
-### Fallback chain for bot ops
+### SMS dispatcher model routing
 ```
-Claude CLI → Mistral Small → Devstral → Llama 3.1 8B (template)
+Default: llama3.1:8b (local, free, ~5-10s)
+"use small"  → llama3.2:3b  (fastest)
+"use gemma"  → gemma3:27b
+"use claude" → Claude CLI (smartest, costs tokens)
+Fallback:    Claude CLI if Ollama is down
+```
+
+### Standup digest fallback chain
+```
+Draft (Rod's reviewed file) → Claude CLI → mlx_lm 8B → mlx_lm 3B → template
 ```
 
 ### Tier 2 — Docker-isolated (exploratory, --network none)
@@ -87,10 +98,10 @@ The main running automation. Daily operations bot for Rod's real estate team (Da
 2. Scans `inbox/` for new files, flags `.MOV` pending transcription
 3. Scans `people/*/tasks.md` — collects all open (unchecked) tasks
 4. Writes `inbox/overdue.md`
-5. Generates AI digest (Claude → Mistral Small → Devstral → 3B template fallback chain)
+5. Generates AI digest (draft → Claude CLI → mlx fallback → template)
 6. `git commit && git push` — logs the run
-7. Texts Rod a summary via `notify.sh → AutoDakota_Notify_Rod` shortcut
-8. Texts the Dakota group (Rod + Doc + Devon + Sharon) via `notify-group.sh → AutoDakota_Notify_Group`
+7. Texts Rod via `notify.sh` → Messages.app direct
+8. Group send via `notify-group.sh` — **disabled**, re-enable when Rod approves
 9. Updates `bot/session-log.md`
 
 **Dedup guard:** `team-standup/standup-state.log` — won't double-send. Override: `FORCE_NOTIFY=1`.
@@ -98,9 +109,16 @@ The main running automation. Daily operations bot for Rod's real estate team (Da
 **Team tracked:** Rod, Sharon, Doc, Devon — each has `people/<name>/tasks.md`
 
 ### iMessage Channels
-- Rod direct: `notify.sh` → Keychain `notify-recipient` → AutoDakota_Notify_Rod shortcut
-- Dakota group: `notify-group.sh` → Keychain `imessage-group-dakota` → AutoDakota_Notify_Group shortcut
-- Both shortcuts confirmed live
+- Rod direct: `notify.sh` → Keychain `notify-recipient` → Messages.app osascript (explicit iMessage service)
+- Dakota group: `notify-group.sh` → Keychain `imessage-group-dakota` → Messages.app `chat id` direct — **currently disabled, Rod's call**
+- Shortcuts bypassed entirely — confirmed more reliable, no ambiguity bugs
+
+### SMS Dispatcher (new — session 21)
+- `msggateway_bin` (C, FDA granted) reads chat.db every 30s
+- `log-watcher.py` tails msggateway.log, catches Rod's texts
+- `dispatcher.py` routes: fast commands direct, everything else → local AI with live context
+- Live context injected per call: backlog P0/P1, running services, last session log entry
+- Rod texts anything → mini replies within ~15s
 
 ### Faith Pipeline (`~/Work/faith/`)
 Coach repo for Rod's personal faith context. Runs Friday 3pm + Wednesday 7am (Lenten nudge).
@@ -138,37 +156,27 @@ Four rounds of model benchmarking done. Current taxonomy:
 
 ## What's Next — Roadmap
 
-### Now (P1 — do next session)
-1. **Per-agent OpenBao tokens** — narrow policies per agent. Real secrets are incoming. Blast radius containment.
-2. **notify-group.sh live test** — updated in session 9, Rod to confirm group fires correctly.
-3. **Round 4 benchmark complete** — done. scan.py fallback chain update still queued.
+### Now (P1 — next session)
+1. **Re-enable group send** — notify-group.sh is fixed (chat ID), ghost group deleted. Rod says when.
+2. **Multi-channel bot notifications** — SMS is one flat channel. Each bot (faith, health, recruit, dakota) needs its own feel. Evaluate Telegram (first-class bots, per-bot handle) vs Pushover/Ntfy. Security tradeoff to discuss.
+3. **Standup quality** — only catches git commits + tasks.md. Misses real work. Needs richer data sources.
+4. **Dakota folder refactor** — Rod to define new structure, Mad Max builds.
+5. **msggateway_bin FDA re-grant** — move binary to `~/Work/test/local/scripts/` once FDA re-granted.
+6. **model-lab/ kickoff** — open model fine-tuning. Brief in bottleMsg: LoRA/SFT, mac mini for data/evals, rented GPU for training runs.
 
-### Soon (P2 — meaningful improvements)
-4. **Bot pipeline architecture: per-person micro-bots + stitcher**
-   - Current: one prompt gets all tasks for all people → conflation failure mode
-   - Fix: separate bot per person (gets their tasks + role context), stitcher combines outputs
-   - This is a structural fix, not a model fix. Affects all frontier models equally.
-5. **Agent encryption** — Transit keys exist in OpenBao, not yet wired to any agent's office/ folder
-6. **scan.py fallback chain update** — wire Mistral Small as primary local fallback (replacing Llama 3.1 8B)
-7. **Open WebUI first real use** — it's live, Rod hasn't really driven it yet
-8. **FDA grant for Messages** — unlocks iMessage receive (Phase 3.5)
-9. **Wire image to standup send** — round-robin from `bot/assets/` on group texts
-
-### When Ready (P2/P3)
-10. **Pi 5 as OpenBao auto-unseal node** — currently Rod has to unseal manually after reboots
-11. **n8n setup** — Phase 4 workflow automation
-12. **Tier 2 model pulls** — DeepSeek + MiniMax in Docker-isolated environment
-13. **Llama 3.3 70B pull** — biggest local model, not pulled yet (needs 40GB+ free)
-14. **Plaid integration (Devon)** — financial data into repo
-15. **iMessage receive (Phase 3.5)** — FDA grant + gateway process
+### Soon (P2)
+- **Per-agent OpenBao tokens** — narrow policies, blast radius containment
+- **Pi 5 setup** — auto-unseal, watchdog, cron offload
+- **GitLab mirror backup** — second remote for all repos
+- **Bot pipeline: per-person micro-bots + stitcher** — fix conflation failure mode
+- **n8n setup** — Phase 4 workflow automation
+- **Tier 2 model pulls** — DeepSeek + MiniMax in Docker isolated
 
 ### Open Decisions (Needs Rod)
-- **Repo rename: `test` → `madmax`** — proposal written, pending approval
-- **AutoDakota_MultiTool shortcut** — weigh vs keeping dedicated Rod/Group shortcuts
-- **Pi 5 setup plan** — what to offload: auto-unseal, watchdog, lightweight cron
-- **Tier 2 evaluation priority** — DeepSeek vs MiniMax, when to start
-- **Sharon terminal unblock** — Devon screen share, one-time setup needed
-- **GitHub invites** — Sharon + Doc + Devon usernames needed for repo access
+- **Group send re-enable** — when Rod is ready
+- **Notification channel** — Telegram vs SMS vs other for per-bot identity
+- **Pi 5 plan** — what to offload
+- **Sharon terminal unblock** — Devon screen share needed
 
 ---
 
@@ -183,5 +191,5 @@ Four rounds of model benchmarking done. Current taxonomy:
 
 ---
 
-*Last updated: 2026-03-21 (session 10)*
+*Last updated: 2026-03-26 (session 22)*
 *Written by Mad Max — platform builder for Rod's system*
