@@ -2,6 +2,28 @@
 
 ---
 
+## 2026-03-27 (mini) — session 25
+
+### Done
+- **Dispatcher overhauled** — default switched to `mistral-small:latest`, dropped `llama3.1:8b` from rotation
+- **Persistent model switching** — text `model claude|gemma|fast|local` to switch, sticks until changed. `model?` to check current. One-off overrides (`use claude` etc.) still work per-message.
+- **Model self-awareness** — active model name injected into system prompt. Tested: "what model are you?" → "Mistral Small 3" ✅
+- **Backlog updated** — P1: dispatcher conversation history. P0: dispatcher model self-awareness (done, can mark closed).
+
+### Decisions
+- mistral-small over llama3.1:8b as default — better quality, ~10s, already benchmarked well
+- No auto-reset on model switch — Rod controls it explicitly
+- Conversation history deferred to P1 (token cost tradeoff needs Rod's input on N)
+
+### Next Session — START HERE
+1. **bottleMsg processing** — read open-model-tuning-kickoff.md + screenshots, build better inbox system
+2. **Devon PDF automator handoff** — confirm Rod gave Devon the code
+3. **Sharon terminal status** — check if she replied, install auto-commit if unblocked
+4. **Dispatcher conversation history** — P1, Rod to decide how many messages back
+5. Multi-channel notifications design (P1)
+
+---
+
 ## 2026-03-26 (mini) — session 24
 
 ### Done
