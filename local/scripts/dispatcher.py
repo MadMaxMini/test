@@ -1,10 +1,9 @@
 #!/usr/bin/env python3
 # dispatcher.py — channel-agnostic command dispatcher
 #
-# Default model: llama3.1:8b (local Ollama — fast, free)
-# Escalate:  "use claude" in message → Claude CLI
-#            "use gemma"  in message → gemma3:27b (Ollama)
-#            "use small"  in message → llama3.2:3b (fastest)
+# Default model: mistral-small:latest (local Ollama)
+# Persistent switch: text "model claude|gemma|fast|local"
+# One-off override: say "use claude", "use gemma", "use fast" in any message
 #
 # Called by log-watcher.py (SMS) and email-poller.py (email).
 # dispatch(body, reply_fn, context="text")
@@ -26,10 +25,26 @@ logging.basicConfig(
 )
 def log(msg): logging.info(msg)
 
-OLLAMA_URL   = "http://127.0.0.1:11434/api/generate"
-MODEL_DEFAULT = "llama3.1:8b"
+OLLAMA_URL    = "http://127.0.0.1:11434/api/generate"
+MODEL_DEFAULT = "mistral-small:latest"
 MODEL_FAST    = "llama3.2:3b"
 MODEL_GEMMA   = "gemma3:27b"
+
+MODEL_STATE_FILE = HOME / "Work/test/local/scripts/dispatcher-model.state"
+
+MODEL_NAMES = {
+    "claude":  "Claude (Anthropic CLI)",
+    "gemma":   "gemma3:27b (Ollama local)",
+    "fast":    "llama3.2:3b (Ollama local)",
+    "default": "mistral-small:latest (Ollama local)",
+}
+
+def get_persistent_model():
+    try:    return MODEL_STATE_FILE.read_text().strip()
+    except: return "default"
+
+def set_persistent_model(label):
+    MODEL_STATE_FILE.write_text(label)
 
 SYSTEM_STATIC = """You are Mad Max — the automation bot on Rod Clemente's Mac mini (M4, 32GB, macOS).
 
@@ -153,18 +168,18 @@ def call_claude(prompt):
 def run_model(body, context="text"):
     cmd_lower = body.lower()
 
-    # Model routing
+    # One-off override keywords take priority over persistent state
     if "use claude" in cmd_lower or "ask claude" in cmd_lower:
         model_label = "claude"
     elif "use gemma" in cmd_lower or "ask gemma" in cmd_lower:
         model_label = "gemma"
-    elif "use small" in cmd_lower or "use fast" in cmd_lower:
-        model_label = "small"
+    elif "use fast" in cmd_lower or "use small" in cmd_lower:
+        model_label = "fast"
     else:
-        model_label = "default"
+        model_label = get_persistent_model()
 
     live_ctx = build_live_context()
-    full_prompt = f"{SYSTEM_STATIC}\n\n{live_ctx}\n\nChannel: {context}\nRod says: {body}"
+    full_prompt = f"{SYSTEM_STATIC}\n\nActive model: {MODEL_NAMES.get(model_label, model_label)}\n\n{live_ctx}\n\nChannel: {context}\nRod says: {body}"
 
     if model_label == "claude":
         log(f"[dispatcher] → claude")
@@ -178,14 +193,14 @@ def run_model(body, context="text"):
         if result:
             return result
 
-    if model_label == "small":
+    if model_label == "fast":
         log(f"[dispatcher] → llama3.2:3b")
         result = call_ollama(MODEL_FAST, full_prompt)
         if result:
             return result
 
-    # Default: llama3.1:8b
-    log(f"[dispatcher] → llama3.1:8b")
+    # Default: mistral-small
+    log(f"[dispatcher] → mistral-small:latest")
     result = call_ollama(MODEL_DEFAULT, full_prompt)
     if result:
         return result
@@ -251,7 +266,22 @@ def dispatch(body, reply_fn, context="text"):
         return
 
     if cmd in ("help", "commands"):
-        reply_fn("commands: ping, status, pull <model>. Anything else I'll figure out. Say 'use claude' or 'use gemma' to pick a model.")
+        reply_fn("commands: ping, status, pull <model>, model <claude|gemma|fast|local>. One-off: prefix any message with 'use claude', 'use gemma', 'use fast'.")
+        return
+
+    m = re.match(r"model\s*\??\s*$", cmd)
+    if m:
+        current = get_persistent_model()
+        reply_fn(f"Active model: {MODEL_NAMES.get(current, current)}")
+        return
+
+    m = re.match(r"model\s+(claude|gemma|fast|local|default)", cmd)
+    if m:
+        label = m.group(1)
+        if label in ("local", "default"):
+            label = "default"
+        set_persistent_model(label)
+        reply_fn(f"Switched to {MODEL_NAMES.get(label, label)}. Sticks until you change it.")
         return
 
     m = re.match(r"pull\s+(.+)", cmd)
