@@ -24,6 +24,7 @@ Last reviewed: 2026-03-25
 | Dakota inbox/ → Dropbox symlink | Sharon's drops need to land in repo inbox/ — deprioritized, laptop handles for now |
 | Google Sheets CSV export | Feed bot financial context via Apps Script |
 | Email bot (DE@DakotaAndLLC.com) | Apps Script → markdown log → bot picks up |
+| **Dispatcher execution capability design** | Bot claims it can act but can't — system prompt patched to be honest for now. Need to decide: what *should* it actually be able to do? (read files? run safe commands? write?) Design guardrails before giving real execution power. 2026-03-27. |
 | ~~**Dispatcher model self-awareness**~~ | ✅ Done 2026-03-27 — model name injected into prompt, tested. |
 | **Sharon terminal unblock** | **Status unknown — Devon screen share was 2026-03-22. Follow up.** |
 | Team onboarding — VS Code + clone | Bot standups useless until team reads them |
@@ -34,7 +35,7 @@ Last reviewed: 2026-03-25
 
 | Item | Notes |
 |------|-------|
-| **Dispatcher conversation history** | Each SMS is stateless — no memory of prior messages. Add rolling buffer (last N msgs) injected into prompt. Tradeoff: richer convo vs token cost on local models. Rod to decide N. 2026-03-27. |
+| **Dispatcher conversation history + session model** | Each SMS is stateless — no memory of prior messages. Add rolling buffer (last N msgs) injected into prompt. Also: "use claude" should start a session (lasts N minutes or X messages), not just one-shot. Rod to decide N for both. Tradeoff: richer convo vs token cost on local models. 2026-03-27. |
 | **Multi-channel bot notifications** | All bots hitting one SMS thread sucks. Each bot (faith, health, recruit, dakota) needs its own feel/channel. Evaluate: Telegram (bots are first-class, per-bot handle), Pushover/Ntfy (named channels), Signal. Security concern: Telegram goes through their servers — Rod to decide tradeoff. SMS stays for critical/urgent only. 2026-03-25. |
 | **Standup quality — catch everything** | Standups only scan tasks.md + git commits. Miss: work done outside tasks.md, verbal agreements, email/text activity, deals in progress. Need richer data sources. On Dakota bot's plate. 2026-03-25. |
 | **Dakota folder refactor** | Rod wants to rethink the dakota-software repo structure. Inbox, contact tracking, property tracking, bot layout. Rod to define vision, Mad Max builds. 2026-03-25. |
