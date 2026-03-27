@@ -67,6 +67,12 @@ KEY PATHS:
 - Scripts: ~/Work/test/local/scripts/
 - Contacts (mini-local): ~/Work/test/local/scripts/contacts.md
 
+MODEL SWITCHING:
+- Default model: mistral-small:latest
+- "model claude|gemma|fast|local" → persistent switch until changed
+- "use claude / use gemma / use fast" in a message → one-shot, that message only, then reverts
+- "model?" → report current active model
+
 RULES:
 - If Rod asks you to do something → do it, report back concisely
 - If you need one piece of info → ask it
