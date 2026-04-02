@@ -1,7 +1,7 @@
 # Asset Inventory
 
 Where everything lives and what it does.
-Last updated: 2026-03-19
+Last updated: 2026-04-02
 
 > **Note for Claude:** This file is a reference map only. Do NOT proactively read
 > the files listed here unless explicitly needed for the current task. Know they exist,
@@ -15,9 +15,11 @@ Standalone repos, Roderick-Clemente GitHub account unless noted.
 
 | Repo | Local Path | Remote | Purpose |
 |------|-----------|--------|---------|
-| recruiting-coach | `~/Work/recruiting-coach` | `git@github.com:Roderick-Clemente/recruiting-coach.git` | SE recruiting methodology + Harness pipeline |
+| recruiting-coach | `~/Work/coaches/recruiting-coach` | `git@github.com:Roderick-Clemente/recruiting-coach.git` | SE recruiting methodology + Harness pipeline |
+| elite-hh-bot | `~/Work/coaches/elite-hh-bot` | `git@github.com:Roderick-Clemente/elite-hh-bot.git` | Rod's job hunting + career management coach. Daily 6:30am nudge. |
+| health-coach | `~/Work/coaches/health-coach` | `git@github.com:Roderick-Clemente/health-coach.git` | Health accountability + tracking. Daily 6:30pm nudge. Content from laptop pending. |
 | dakota-software | `~/Work/dakota-software` | `git@github.com:Roderick-Clemente/dakota-software.git` | Real estate ops — team tasks, properties, bot |
-| faith | `~/Work/faith` | `git@github.com:Roderick-Clemente/faith.git` | Personal faith coaching context |
+| faith | `~/Work/coaches/faith` | `git@github.com:Roderick-Clemente/faith.git` | Personal faith coaching context |
 
 Coach repos follow the skill/office pattern: skill = portable methodology, office = org-specific context.
 `dakota-software` runs `bot/scan.py` daily at 7am via launchd.
