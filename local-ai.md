@@ -27,6 +27,7 @@ Run natively for full Apple Silicon / Metal GPU performance.
 | Mistral / Devstral 24B | Mistral AI / HuggingFace | Coding, agents |
 | Gemma 3 | Google / HuggingFace | Lightweight, fast |
 | Qwen2.5-Coder 14B | Alibaba / HuggingFace | Code (widely audited) |
+| Qwen3.5-35B-A3B | Alibaba / HuggingFace | **Strong agentic candidate** — MoE, only 3B active params, fits 32GB, reliable tool calling. HF CTO-endorsed 2026-03-06. |
 
 ### Tier 2 — Exploratory (Docker-gated)
 Less transparent training, geopolitical considerations, or limited independent audits.
@@ -68,6 +69,16 @@ The tradeoff is worth it for Tier 2 where we're accepting slower speed for isola
   community scrutiny provide more signal than pulling blindly from Ollama registry
 - Verify SHA checksums when published by model authors
 - Ollama registry is fine for Tier 1 convenience pulls
+
+---
+
+## Model Selection Tooling
+
+| Tool | What it does | How to use |
+|------|-------------|-----------|
+| **LLMFit** | Terminal TUI — 497 models, 133 providers. Detects RAM/GPU, scores by quality/speed/context, tells you what will actually run on your hardware. TUI + CLI mode. | `pip install llmfit` or check lnkd.in/gfy4tmSG |
+| **GGUF model chart** | HuggingFace LLM size chart for Apple M1 Max 32GB — shows quant level vs model size vs RAM fit | Reference screenshot 2026-03-06 in bottleMsg/archive |
+| **llmfit (HuggingFace CLI ext)** | One command: detects hardware, picks best llama.cpp model, launches Pi agent. | HuggingFace extension — see screenshot 2026-03-17 in bottleMsg/archive |
 
 ---
 

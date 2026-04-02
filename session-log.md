@@ -4,6 +4,15 @@
 
 ## 2026-04-02 (mini) — session 26
 
+### Done (continued)
+- **bottleMsg inbox processed** — 9 items, GTD loop: routed model intel → local-ai.md, model-lab → backlog P2 + folder created, screenshots archived
+- **GTD inbox loop built into mad-max skill** — collect→clarify→organize→table→archive. Runs every session start.
+- **Weekly review cron** — Friday 4pm, texts Rod backlog counts + bottleMsg status + HH pipeline + GitHub links. `com.madmax.weeklyreview` loaded.
+- **Qwen3.5-35B-A3B added to local-ai.md** — strong agentic candidate, 3B active params, fits 32GB, HF CTO-endorsed
+- **LLMFit + GGUF tooling section added to local-ai.md**
+- **model-lab/ folder created** at `~/Work/model-lab/` per Rod's kickoff doc
+- **Decision log updated** in mad-max SKILL.md — 3 new entries
+
 ### Done
 - **elite-hh-bot repo live** — migrated `~/Work/coaches/job/` into skill/office structure, pushed to `git@github.com:Roderick-Clemente/elite-hh-bot.git`, local at `~/Work/coaches/elite-hh-bot`
 - **health-coach repo live** — skeleton scaffolded and pushed to `git@github.com:Roderick-Clemente/health-coach.git`, local at `~/Work/coaches/health-coach`. Content to port from Rod's laptop.

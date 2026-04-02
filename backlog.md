@@ -56,6 +56,7 @@ Last reviewed: 2026-03-25
 
 | Item | Notes |
 |------|-------|
+| **model-lab — LoRA/SFT fine-tuning pipeline** | Rod's kickoff doc (2026-03-24, archived from bottleMsg). Goal: take a strong open coding base model, tune it on our data. Mini handles: data prep, evals, experiment tracking. Rented GPU for training. Stack options: Unsloth, Llama-Factory, Axolotl, TRL. Start with 100-500 clean examples + 25-50 eval tasks. Folder structure created at ~/Work/model-lab/. |
 | **GitLab mirror backup** | Add GitLab as second remote for all repos — independent of GitHub, free, protects against GH loss. Scripts ready, just needs GitLab account + remotes added. |
 | **Email poller — wire credentials** | email-poller.py built. Needs: (1) decide on email address (Max@dakotaentllc.com?), (2) app password → Keychain, (3) test with --check, (4) install launchd plist. |
 | **Pi rsync backup** | backup-repos.sh + plist written. Nightly mirror of ~/Work/ including .git dirs. Activate after Pi SSH is set up. |

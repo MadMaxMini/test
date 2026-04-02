@@ -51,8 +51,49 @@ Your job: **build, install, configure, automate.** Make decisions within scope, 
 5. `~/Work/local/scripts/msggateway-inbox.md` — team texts logged since last session (if file exists, surface contents to Rod, then clear it)
 
 ### Dropbox Paths
-- bottleMsg inbox: `~/Library/CloudStorage/Dropbox/bottleMsg/` — Rod's async command inbox, check every session
+- bottleMsg inbox: `~/Library/CloudStorage/Dropbox/bottleMsg/` — Rod's async command inbox, **run GTD sweep every session**
 - Screenshots: `~/Library/CloudStorage/Dropbox/Screenshots/` — Rod drops screenshots here as reference/evidence
+
+---
+
+## Inbox Processing — GTD Loop
+
+Run this on every session start (mini mode). bottleMsg is the capture inbox. Don't leave things sitting in it.
+
+### The Loop
+
+**1. Collect** — list everything in `~/Library/CloudStorage/Dropbox/bottleMsg/` (skip `archive/` and `mini-control-guide.md`)
+
+**2. Clarify** — for each item, ask: what is it? is it actionable?
+
+**3. Organize** — route to exactly one destination:
+
+| Type | Route |
+|------|-------|
+| Project plan / new work | `backlog.md` — add as P2 or P3 with one-line summary |
+| Model / tool intel | `local-ai.md` — appropriate section |
+| Architecture decision needed | `proposals/` — create a proposal file |
+| Screenshot: confirmation / done | `archive/` — no action needed |
+| Screenshot: inspiration / someday | `archive/` — note the idea in a comment |
+| Unknown / ambiguous | Surface to Rod, don't guess |
+
+**4. Print table** — after processing, show Rod:
+
+```
+| Item | Routed to | Action taken |
+|------|-----------|--------------|
+| ... | backlog.md P2 | Added model-lab entry |
+| ... | archive | Calendar invite confirmed |
+```
+
+**5. Archive** — move each processed file to `bottleMsg/archive/` using `mv`
+
+### Rules
+- **Never leave items in the inbox unprocessed.** If you can't route it, surface it.
+- **One item, one destination.** Don't split or duplicate.
+- **Screenshots are read first** — use the Read tool to view the image before deciding.
+- `mini-control-guide.md` is permanent reference — never archive it.
+- If bottleMsg is empty: say so in one line and move on.
 
 ---
 
@@ -113,6 +154,9 @@ claude-life repo (laptop, v1 — stays alive during transition)
 | 2026-03-01 | Skill deployment | Canonical in madmax repo, symlinked into claude-life |
 | 2026-03-02 | Agent repo pattern | Skill/office split — skill portable, office org-specific |
 | 2026-03-02 | First agent | recruiting-coach — standalone repo, Roderick-Clemente GitHub |
+| 2026-04-02 | bottleMsg processing | GTD collect→clarify→organize loop built into mad-max skill |
+| 2026-04-02 | New coach repos | elite-hh-bot (job hunting) + health-coach — both live, daily crons wired |
+| 2026-04-02 | Standup text format | Top task per person + wins + GitHub link (not digest+top3) |
 
 ---
 
