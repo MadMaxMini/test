@@ -2,6 +2,35 @@
 
 ---
 
+## 2026-04-02 (mini) — session 26
+
+### Done
+- **elite-hh-bot repo live** — migrated `~/Work/coaches/job/` into skill/office structure, pushed to `git@github.com:Roderick-Clemente/elite-hh-bot.git`, local at `~/Work/coaches/elite-hh-bot`
+- **health-coach repo live** — skeleton scaffolded and pushed to `git@github.com:Roderick-Clemente/health-coach.git`, local at `~/Work/coaches/health-coach`. Content to port from Rod's laptop.
+- **Daily crons wired (launchd)**:
+  - `com.elitehhbot.daily` — 6:30am, runs `office/bot/daily.py`, texts Rod pipeline + homework
+  - `com.healthcoach.daily` — 6:30pm, texts "still empty, port from laptop" until GOALS.md is populated
+- **Dakota standup format updated** — text message now shows top task per person + quick wins + GitHub link instead of digest+top3
+- **Inventory updated** — both new repos added, local paths corrected
+
+### Decisions
+- elite-hh-bot uses skill/office split (matches recruiting-coach pattern)
+- health-coach daily bot is "port reminder" until content arrives — auto-upgrades to real check-in after GOALS.md populated
+- Full autonomy by default in both new repos — ask only on deletes
+
+### Waiting on Rod
+- Port health coach content from laptop to `~/Work/coaches/health-coach/office/`
+- Scale AI job URL for pipeline.md
+
+### Next Session — START HERE
+1. **bottleMsg processing** — read open-model-tuning-kickoff.md + screenshots, build better inbox system
+2. **Devon PDF automator handoff** — confirm Rod gave Devon the code
+3. **Sharon terminal status** — check if she replied, install auto-commit if unblocked
+4. **Dispatcher conversation history** — P1, Rod to decide how many messages back
+5. Multi-channel notifications design (P1)
+
+---
+
 ## 2026-03-27 (mini) — session 25
 
 ### Done
