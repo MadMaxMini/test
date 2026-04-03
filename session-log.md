@@ -4,6 +4,13 @@
 
 ## 2026-04-02 (mini) — session 26
 
+### Done (continued pt2)
+- **notify-group.sh re-enabled** — was deliberately disabled, Rod approved turning back on
+- **scan.py group text fixed** — was sending old digest format; now sends agreed format: top 1 per person + wins + GH link
+- **Wins dedup fixed** — one win per person, 55-char truncation, no duplicates
+- **Standup manually sent** to Dakota group with `FORCE_NOTIFY=1`
+- **standup-system-deets.md** dropped in bottleMsg — full architecture writeup, Rod texted
+
 ### Done (continued)
 - **bottleMsg inbox processed** — 9 items, GTD loop: routed model intel → local-ai.md, model-lab → backlog P2 + folder created, screenshots archived
 - **GTD inbox loop built into mad-max skill** — collect→clarify→organize→table→archive. Runs every session start.
