@@ -58,15 +58,17 @@ THE SETUP:
 - Rod runs Dakota Enterprises LLC — real estate team: Rod, Devon (brother, dclemen87@gmail.com), Doc (father, +19739704525), Sharon (Philippines, +639451631830)
 - iMessage gateway reads incoming texts from Rod, routes to you
 - Email poller watches macbotpooterson@gmail.com for @dakotaentllc.com mail
-- Daily standup fires 7am weekdays — currently texts Rod only (group send disabled)
+- Daily standup fires 7am weekdays — sends to Dakota group
+- Night planner fires 10pm — picks tasks, texts Rod for approval
 - Secrets in OpenBao (http://127.0.0.1:8200), local AI via Ollama (http://127.0.0.1:11434)
 
 KEY PATHS:
 - Backlog: ~/Work/test/backlog.md
 - Session log: ~/Work/test/session-log.md
 - Dakota team tasks: ~/Work/dakota-software/people/*/tasks.md
-- Scripts: ~/Work/test/local/scripts/
-- Contacts (mini-local): ~/Work/test/local/scripts/contacts.md
+- Scripts: ~/Work/local/scripts/
+- Agent queue: ~/Work/local/scripts/agent-queue.json
+- Contacts (mini-local): ~/Work/local/scripts/contacts.md
 
 MODEL SWITCHING:
 - Default model: mistral-small:latest
@@ -74,11 +76,22 @@ MODEL SWITCHING:
 - "use claude / use gemma / use fast" in a message → one-shot, that message only, then reverts
 - "model?" → report current active model
 
+NIGHT AGENT COMMANDS (when Rod replies to AutoMax task proposals):
+- "go 1" / "go 2" → approve and run that task
+- "go all" → approve and run all pending tasks
+- "skip 1" / "skip 2" → skip that task
+- "stop" → cancel all pending tasks
+
 RULES:
 - If Rod asks you to do something → do it, report back concisely
 - If you need one piece of info → ask it
 - Never claim you can't access files or run commands — you can
 - Don't pad replies"""
+
+
+QUEUE_FILE    = HOME / "Work/local/scripts/agent-queue.json"
+AUTO_AGENT    = HOME / "Work/local/scripts/auto-agent.py"
+NIGHT_PLANNER = HOME / "Work/local/scripts/night-planner.py"
 
 
 def build_live_context():
@@ -254,6 +267,125 @@ def cmd_pull(model):
         return f"pull error: {e}"
 
 
+# ── Night agent queue commands ─────────────────────────────────────────────────
+
+def load_agent_queue():
+    try:
+        return json.loads(QUEUE_FILE.read_text()) if QUEUE_FILE.exists() else None
+    except Exception:
+        return None
+
+
+def save_agent_queue(q):
+    QUEUE_FILE.write_text(json.dumps(q, indent=2))
+
+
+def cmd_agent_go(task_id_or_all):
+    """Approve and launch auto-agent for one task or all."""
+    q = load_agent_queue()
+    if not q:
+        return "No task queue found. Night planner runs at 10pm."
+
+    from datetime import datetime as _dt
+    if _dt.fromisoformat(q["expires"]) < _dt.now():
+        return "Queue expired. Night planner will queue new tasks at 10pm."
+
+    if task_id_or_all == "all":
+        pending = [t for t in q["tasks"] if t["status"] == "pending"]
+    else:
+        try:
+            tid = int(task_id_or_all)
+            pending = [t for t in q["tasks"] if t["id"] == tid and t["status"] == "pending"]
+        except ValueError:
+            return f"Invalid task ID: {task_id_or_all}"
+
+    if not pending:
+        return "No pending tasks for that ID."
+
+    ids = [str(t["id"]) for t in pending]
+    arg = "all" if task_id_or_all == "all" else ids[0]
+
+    # Mark as in-progress before launching
+    for t in pending:
+        t["status"] = "running"
+    save_agent_queue(q)
+
+    # Launch auto-agent in background
+    subprocess.Popen(
+        ["/usr/bin/python3", str(AUTO_AGENT), arg],
+        stdout=open(str(HOME / "Work/local/scripts/auto-agent.log"), "a"),
+        stderr=subprocess.STDOUT,
+        start_new_session=True
+    )
+    names = [t["description"][:40] for t in pending]
+    return f"AutoMax launched: {', '.join(names)}. I'll text you when done."
+
+
+def cmd_agent_skip(task_id_or_all):
+    """Skip one task or all pending."""
+    q = load_agent_queue()
+    if not q:
+        return "No queue."
+
+    if task_id_or_all == "all":
+        skipped = 0
+        for t in q["tasks"]:
+            if t["status"] == "pending":
+                t["status"] = "skipped"
+                skipped += 1
+        save_agent_queue(q)
+        return f"Skipped {skipped} task(s)."
+    else:
+        try:
+            tid = int(task_id_or_all)
+        except ValueError:
+            return f"Invalid ID: {task_id_or_all}"
+        for t in q["tasks"]:
+            if t["id"] == tid:
+                t["status"] = "skipped"
+                save_agent_queue(q)
+                return f"Skipped task {tid}."
+        return f"Task {tid} not found."
+
+
+def cmd_agent_stop():
+    """Cancel all pending tasks."""
+    q = load_agent_queue()
+    if not q:
+        return "No active queue."
+    count = 0
+    for t in q["tasks"]:
+        if t["status"] == "pending":
+            t["status"] = "cancelled"
+            count += 1
+    save_agent_queue(q)
+    return f"Cancelled {count} pending task(s). Queue cleared."
+
+
+def cmd_agent_queue():
+    """Show current queue status."""
+    q = load_agent_queue()
+    if not q:
+        return "No queue. Night planner runs at 10pm."
+    lines = [f"Queue ({q['date']}):"]
+    for t in q["tasks"]:
+        icon = {"pending": "⏳", "running": "🔄", "done": "✓", "failed": "✗",
+                "skipped": "—", "cancelled": "✕", "expired": "💀"}.get(t["status"], "?")
+        lines.append(f"  [{t['id']}] {icon} {t['description'][:50]}")
+    return "\n".join(lines)
+
+
+def cmd_agent_plan():
+    """Manually trigger night planner."""
+    subprocess.Popen(
+        ["/usr/bin/python3", str(NIGHT_PLANNER)],
+        stdout=open(str(HOME / "Work/local/scripts/night-planner.log"), "a"),
+        stderr=subprocess.STDOUT,
+        start_new_session=True
+    )
+    return "Night planner running — I'll text you the plan in a minute."
+
+
 # ── Main entry point ──────────────────────────────────────────────────────────
 
 def dispatch(body, reply_fn, context="text"):
@@ -307,6 +439,30 @@ def dispatch(body, reply_fn, context="text"):
         if p.exists():
             p.unlink()
         reply_fn("Back online.")
+        return
+
+    # ── Night agent approval commands ──────────────────────────────────────────
+
+    m = re.match(r"go\s+(all|\d+)$", cmd)
+    if m:
+        reply_fn(cmd_agent_go(m.group(1)))
+        return
+
+    m = re.match(r"skip\s+(all|\d+)$", cmd)
+    if m:
+        reply_fn(cmd_agent_skip(m.group(1)))
+        return
+
+    if cmd in ("stop", "stop all", "cancel", "cancel all"):
+        reply_fn(cmd_agent_stop())
+        return
+
+    if cmd in ("queue", "tasks", "agent queue", "what's queued", "whats queued"):
+        reply_fn(cmd_agent_queue())
+        return
+
+    if cmd in ("plan", "plan tonight", "run planner", "night plan"):
+        reply_fn(cmd_agent_plan())
         return
 
     reply_fn(run_model(body, context))
