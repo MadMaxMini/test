@@ -2,6 +2,24 @@
 
 ---
 
+## 2026-04-13 (mini) — Telegram context architecture + bottleMsg cleanup design
+
+### Done
+- **Telegram context architecture** — full project plan written. Core: Channel = identity + context + session. `sessions/` JSONL per channel, default 3-msg history, cap 20, inline `+context N` / `+model X` / `+reset` controls.
+- **OpenClaw / MoltBot researched** — same project (MoltBot → Clawdbot → OpenClaw). Stealable patterns: sessions/ dir, SOUL.md per agent, supergroup-with-topics, litellm. Decision: use as reference, don't deploy their code.
+- **Current system audited** — dispatcher, msggateway, model routing all exist. Only missing piece: conversation history buffer. Build is smaller than it looked.
+- **bottleMsg cleanup bot designed** — human-in-the-loop SMS approval loop, same pattern as night-planner. Daily scan → text Rod → go/skip → archive.
+- **mad-max skill updated** — bottleMsg output rule baked in permanently.
+- **Backlog updated** — Telegram context layer + bottleMsg cleanup bot added as P2.
+- **Plan dropped to bottleMsg** — `2026-04-11-telegram-context-architecture.md`
+
+### Waiting on Rod
+- Webhook exposure decision (ngrok / Cloudflare / static IP) before Telegram build starts
+- iMessage deprecation timeline
+- Model defaults per bot channel
+
+---
+
 ## 2026-04-13 (mini) — health-coach consolidation
 
 ### Done

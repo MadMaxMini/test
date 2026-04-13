@@ -42,6 +42,8 @@ Last reviewed: 2026-04-08
 | **Standup redesign — two-part message** | iMessage (plain text): 1 priority per person + link to GitHub. Repo (markdown): full detail. Rod's design, waiting on group feedback before building |
 | **Email poller — wire credentials** | email-poller.py built. Needs: email address (Max@dakotaentllc.com?), app password → Keychain, launchd plist installed |
 | **Migrate coaches to Telegram channels** | Once Telegram bot is live (P1), migrate health/job/automax notifications off SMS. SMS stays for Dakota group only |
+| **Telegram context layer** | Add `sessions/` JSONL per channel to dispatcher. Default 3-msg history, cap 20. Inline: `+context N`, `+reset`, `+model X Ym`. See bottleMsg/2026-04-11-telegram-context-architecture.md |
+| **bottleMsg cleanup bot** | Daily scan → classify items → text Rod proposed action list → Rod replies go/skip → archive. Human-in-the-loop via SMS until trusted. Same approval-gate pattern as night-planner |
 | **Per-agent OpenBao tokens** | Real secrets in vault now. Narrow each agent's policy before something bleeds. Contains blast radius |
 | **GitLab mirror backup** | Second remote for all repos. Scripts ready, needs GitLab account + remotes added |
 | **Standup quality — richer sources** | Currently only tasks.md + git commits. Misses deals, calls, texts, email, verbal agreements |
