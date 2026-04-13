@@ -2,6 +2,21 @@
 
 ---
 
+## 2026-04-13 (mini) — health-coach consolidation
+
+### Done
+- **health-coach repo consolidated** — discovered `~/Work/coaches/health/` had real content from laptop (Apr 8) that was never git-tracked; `health-coach/` git repo was still empty scaffold
+- **Merged `health/` → `health-coach/office/`** — ported CLAUDE.md, GOALS.md, log.md, roadmap.md, session-log.md, bot/daily-nudge.py
+- **Deleted orphaned `~/Work/coaches/health/`** — nothing points to it anymore
+- **Fixed launchd plists** — `com.dakotaops.healthnudge` updated to point to new path in `health-coach/office/bot/`; both plists reloaded and confirmed running
+- **Added `git pull` to `daily-nudge.py`** — 6am script now pulls latest from origin before reading GOALS.md, so laptop pushes auto-update the morning texts
+- **Pushed all changes** to `git@github.com:Roderick-Clemente/health-coach.git`
+
+### Waiting on Rod
+- Fill in `office/GOALS.md` — weight target, workout routine, diet protocol, sleep. Until then, 6am nudges are generic fallbacks.
+
+---
+
 ## 2026-04-02 (mini) — session 26
 
 ### Done (continued pt2)
