@@ -2,6 +2,33 @@
 
 ---
 
+## 2026-04-14 (mini) — Telegram bot live + context layer built
+
+### Done
+- **@madmax_mini_bot created** via BotFather — name "Mad Max", commands set, description set
+- **Bot token + chat_id stored** — Keychain (`telegram-max-bot-token`, `telegram-max-chat-id`) + OpenBao (`secret/telegram/max`)
+- **OpenBao unsealed** — container was running, unsealed via keychain script
+- **`telegram-poller.py` built** — long-polls Bot API, whitelist (Rod only), routes to dispatcher, LaunchAgent `com.madmax.telegrampoller` (KeepAlive)
+- **`sessions.py` built** — per-chat JSONL history, default 10 messages, cap 50, `+context N` / `+context full` / `+reset` inline commands
+- **`dispatcher.py` updated** — `run_model()` and `dispatch()` accept `history=` param, injects into prompt as "Recent conversation:" block
+- **Claude set as default model** — `dispatcher-model.state` = claude. Was mistral (iMessage-era default). Fixed hardcoded "mistral" reference in SYSTEM_STATIC.
+- **Memory architecture designed** — 3-tier: working (session-log 3 days) / episodic (archive, distilled on rolloff) / semantic (Mem0 + Qdrant, not built yet). Design doc in bottleMsg.
+- **Session log rolling design** — 3-day window, distill-on-rolloff, monthly archive review via SMS approval loop.
+- **Backlog updated** — added: Telegram context layer (P2, now done), bottleMsg cleanup bot (P2), session-log rolling + Mem0 (P3)
+
+### Waiting on Rod
+- Test the full loop: send a message to @madmax_mini_bot, confirm Claude responds with context
+- OpenBao: stays unsealed until container stops (auto-reseals on restart)
+- Google Voice number for dedicated bot account (separate from personal Telegram) — later
+- Secret chats: need user account (Telethon + Google Voice), not bot API — Phase later
+
+### Next session priorities
+1. Session log rolling cron (3-day window → distill → archive)
+2. Mem0 + Qdrant install for semantic memory layer
+3. SOUL.md per agent (clean persona separation)
+
+---
+
 ## 2026-04-13 (mini) — Telegram context architecture + bottleMsg cleanup design
 
 ### Done

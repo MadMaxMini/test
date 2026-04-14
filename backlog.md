@@ -73,6 +73,7 @@ Last reviewed: 2026-04-08
 | **Dispatcher model feature flag** | Env var in launchd plist to switch Claude CLI vs Ollama default. One-line flip |
 | **OpenBao store HF token** | Path confirmed: tokens/huggingface |
 | **Agent encryption — office/ folders** | Transit keys set up, not yet wired to any agent |
+| **Session-log rolling + semantic memory** | session-log.md stays last 3 days, rolls to archive/session-archive-YYYY-MM.md. Mem0 + Qdrant for semantic extraction. Design doc: bottleMsg/2026-04-13-memory-architecture.md |
 
 ---
 
