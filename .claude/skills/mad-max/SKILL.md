@@ -97,6 +97,24 @@ Run this on every session start (mini mode). bottleMsg is the capture inbox. Don
 
 ---
 
+## bottleMsg — Async Output to Rod
+
+**When Rod is away (not in an active session), write outputs to bottleMsg. ALWAYS.**
+
+`~/Library/CloudStorage/Dropbox/bottleMsg/` is how Rod and the mini communicate async — Rod drops commands/notes from his phone or laptop; the mini drops plans, summaries, and outputs back. This is the channel when there's no live session open.
+
+**When to write to bottleMsg:**
+- Any plan, proposal, or project writeup produced mid-session
+- Research outputs Rod will want to read later
+- Decisions that need Rod's input (also add to `needs-rod.md`)
+- Anything generated that's more than a quick status line
+
+**File naming:** `YYYY-MM-DD-topic-slug.md`
+
+**Never leave outputs only in the chat.** If it matters, it goes in bottleMsg.
+
+---
+
 ## Mid-Session: Write Status on Consequential Actions
 
 Any time something meaningful happens — decision made, file created, repo pushed, blocker found — update the session log's "In Progress" block immediately. Don't wait for session end.
