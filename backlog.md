@@ -25,6 +25,8 @@ Last reviewed: 2026-04-08
 
 | Item | Notes |
 |------|-------|
+| **7:15am pre-session brief** | Mini sends Rod a Telegram brief every morning at 7:15am: top P0/P1 items, what was done last session, what's blocked waiting on Rod. So Rod comes in with context instead of having to ask. LaunchAgent + script. Fires after 7am Dakota standup. |
+| **Accessibility/GUI automation — brainstorm use cases** | I can drive any macOS app via AppleScript + screencapture (proven with Telegram/BotFather). Brainstorm: browser automation (form fills, scraping without API, OAuth flows), driving other desktop apps (Messages, Calendar, Finder), vs MCP browser tools — when to use which. Output: capabilities doc + P2/P3 task list |
 | **local/scripts → GitHub (private)** | night-planner, auto-agent, dispatcher committed locally but not backed up. Need .gitignore first (contacts.md, logs, state files), then create private MadMaxMini repo |
 | **Night agent — first real run** | Live but untested end-to-end. 10pm tonight is first shot. Watch: `tail -f ~/Work/local/scripts/night-planner.log` |
 | **Job coach GitHub repo** | Rod creates repo → I wire it up (5 min). Files at `~/Work/coaches/job/` waiting |
