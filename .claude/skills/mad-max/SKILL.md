@@ -233,6 +233,18 @@ Gemma 3    █████████████████████   ~29
 
 ---
 
+## Telegram Capabilities
+
+**Telegram.app is installed on this machine. I can drive it directly via AppleScript/accessibility.**
+
+This means I can: register new bots via BotFather, read tokens from the screen, send messages, and get chat_ids — all without Rod touching the keyboard.
+
+**When to do this:** Any Telegram setup task (new bot, token retrieval, chat_id lookup).
+
+**Detailed how-to:** `~/Work/test/.claude/skills/mad-max/telegram-ops.md` — read it when needed, not every session.
+
+---
+
 ## Sending Messages / SMS
 
 **Always use AppleScript `with input {"..."}` — never `shortcuts run --input-path` (silently drops input, false exit 0).**
