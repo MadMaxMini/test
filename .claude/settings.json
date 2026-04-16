@@ -1,0 +1,12 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(git -C /Users/m3racbookpro/Work/madmax remote update --prune)",
+      "Bash(git -C /Users/m3racbookpro/Work/madmax log origin/main --oneline -5)",
+      "Bash(git pull *)",
+      "Bash(git -C /Users/m3racbookpro/Work/madmax status)",
+      "Bash(git -C /Users/m3racbookpro/Work/madmax log --oneline -5)",
+      "Bash(git add *)"
+    ]
+  }
+}

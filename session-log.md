@@ -2,6 +2,26 @@
 
 ---
 
+## 2026-04-15 (laptop) — Sync pull + inbox read
+
+### Done
+- Pulled 28 days of mini work (5226eec → a576f86) — 34 files, clean fast-forward
+- Read Life Coach inbox (2 messages):
+  - **Mar 18:** Local model for Tram 360 — HIGH priority, blocking personal work
+  - **Apr 15:** Three system fixes — Today.py cron (MED), status staleness monitoring (HIGH), Faith Coach gap (LOW-MED)
+- Committed untracked files: `.claude/settings.json` (laptop permission shortcuts), `_agent_office_/` (Life Coach inbox messages)
+
+### State of the System (as seen from laptop)
+- Mini has Telegram bot live, dispatcher stack, health-coach consolidated, session rolling
+- Still no local model pulled (Ollama installed but empty) — Life Coach flagged this as blocker
+- Laptop evacuation from Mar 18 still pending (async-comms, claude-life, old recruiting files)
+- Elevated permissions proposal still open
+
+### Next (for mini)
+1. Pull a local model — `ollama pull llama3.3:8b` or similar. Unblocks Tram 360 work.
+2. Status staleness monitor — cron that checks coach status file dates, alerts when >2 days stale
+3. Today.py → LaunchAgent on mini (replace flaky iPhone Shortcut)
+4. Laptop evacuation — async-comms videos, claude-life, recruiting old files
 
 ---
 
