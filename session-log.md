@@ -17,6 +17,9 @@
 - Laptop evacuation from Mar 18 still pending (async-comms, claude-life, old recruiting files)
 - Elevated permissions proposal still open
 
+### P0 — Next Session
+- **Dakota-ops: Devon's PDF extractor** — Rod handed off `bot/pdf-extractor/` (mortgage PDF → CSV pipeline) to Devon. Devon's been tasked with output format examples (CSV/markdown/JSON) + Medium article. Mad Max should review the pipeline spec and extractor code, then propose automation enhancements (batch processing, scheduled runs, Plaid integration path, error alerting) — show Devon what the platform can do. Repo: `~/Work/dakota-ops`, key commits: `95155da`, `5696d0e`, `1ddb006`.
+
 ### Next (for mini)
 1. Pull a local model — `ollama pull llama3.3:8b` or similar. Unblocks Tram 360 work.
 2. Status staleness monitor — cron that checks coach status file dates, alerts when >2 days stale
