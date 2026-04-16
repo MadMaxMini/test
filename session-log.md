@@ -2,6 +2,33 @@
 
 ---
 
+## 2026-04-16 (mini) — Health Coach + AutoDakota Telegram bots
+
+### Done
+- **Health Coach Telegram bot** — full stack built and pushed:
+  - `telegram_notify.py` — send helper (Keychain: `telegram-health-bot-token`, `telegram-health-chat-id`)
+  - `telegram-poller.py` — interactive bot: ask questions, `log weight N`, context-aware Claude dispatch
+  - `SOUL.md` — health coach persona
+  - `com.healthcoach.telegrampoller.plist` — LaunchAgent (KeepAlive, RunAtLoad)
+- **Screen-lock bug fixed** — `daily.py` (6:30pm) was dying with AppleEvent timeout -1712 when screen locked. Swapped AppleScript/Shortcuts → Telegram primary + iMessage fallback. HTTP-only, no screen state dependency.
+- **daily-nudge.py (6am)** — same Telegram-primary pattern added. Both push bots now screen-lock-safe.
+- **AutoDakota Telegram poller** — full stack built and pushed:
+  - `telegram-poller.py` — interactive: "what's overdue?", "what's Devon working on?", context-aware task loading
+  - `SOUL.md` — ops-only persona
+  - `com.dakotaops.telegrampoller.plist` — LaunchAgent
+- **Setup doc** — `~/Work/test/telegram-bots-setup.md` — all permission steps for Rod
+
+### Deferred (needs Rod — ~15 min on phone)
+1. BotFather: register `@health_coach_rod_bot` → copy token
+2. BotFather: register `@autodakota_mini_bot` → copy token
+3. Message each bot once → get chat_id via curl
+4. `security add-generic-password` for both sets of credentials
+5. `launchctl load` both pollers from `~/Library/LaunchAgents/`
+
+See [telegram-bots-setup.md](telegram-bots-setup.md) — step-by-step, ~15 min total.
+
+---
+
 ## 2026-04-15 (laptop) — Sync pull + inbox read
 
 ### Done
