@@ -79,6 +79,14 @@ The tradeoff is worth it for Tier 2 where we're accepting slower speed for isola
 | **LLMFit** | Terminal TUI — 497 models, 133 providers. Detects RAM/GPU, scores by quality/speed/context, tells you what will actually run on your hardware. TUI + CLI mode. | `pip install llmfit` or check lnkd.in/gfy4tmSG |
 | **GGUF model chart** | HuggingFace LLM size chart for Apple M1 Max 32GB — shows quant level vs model size vs RAM fit | Reference screenshot 2026-03-06 in bottleMsg/archive |
 | **llmfit (HuggingFace CLI ext)** | One command: detects hardware, picks best llama.cpp model, launches Pi agent. | HuggingFace extension — see screenshot 2026-03-17 in bottleMsg/archive |
+| **Agent Reach** | Python CLI — gives Claude/Cursor live access to X, Reddit, YouTube, GitHub, webpages via one-line setup. No paid APIs. | `agent-reach` on GitHub. Apr 2026 intel. |
+| **Paperclip** | Multi-agent orchestration: hierarchies, goal cascading, per-agent budgets, immutable logging, tool-call tracing. Can coordinate Claude Code + Cursor + bash scripts. Can export an entire org as a template (roles/workflows/goals), no data bleed between deployments. | GitHub: Paperclip. Apr 2026 intel. |
+
+## Model Intel (Apr 2026)
+
+| Model | Notes |
+|-------|-------|
+| **Gemini 4.1 family** | Google DeepMind released Apr 2026. Performance-vs-size chart shows strong Elo scores at both thinking and non-thinking variants. Monitor for open weights. |
 
 ---
 

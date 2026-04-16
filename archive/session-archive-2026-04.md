@@ -23,3 +23,22 @@
 - Full autonomy by default in both new repos — ask only on deletes
 - Port health coach content from laptop to `~/Work/coaches/health-coach/office/`
 - Scale AI job URL for pipeline.md
+
+## 2026-04-13 (distilled)
+- Telegram context architecture designed: Channel = identity + context + session, JSONL history per channel, 3-msg default / 20-msg cap, inline `+context N` / `+model X` / `+reset` controls
+- Researched OpenClaw/MoltBot lineage; decided to reference patterns (sessions dir, SOUL.md, litellm) without deploying their code
+- Audited current system — dispatcher, msggateway, model routing already exist; only missing piece is conversation history buffer
+- bottleMsg cleanup bot designed: daily scan → SMS to Rod → go/skip → archive, human-in-the-loop same pattern as night-planner
+- mad-max skill updated with permanent bottleMsg output rule
+- Telegram context layer + bottleMsg cleanup bot added to backlog as P2
+- Plan doc dropped: `2026-04-11-telegram-context-architecture.md`
+- Blocked on: webhook exposure decision (ngrok/Cloudflare/static IP), iMessage deprecation timeline, model defaults per bot channel
+
+## 2026-04-13 (distilled)
+- Discovered `~/Work/coaches/health/` had real untracked content from Apr 8; git repo `health-coach/` was still an empty scaffold
+- Merged all content from `health/` into `health-coach/office/` (CLAUDE.md, GOALS.md, log.md, roadmap.md, session-log.md, daily-nudge.py)
+- Deleted orphaned `~/Work/coaches/health/` directory
+- Updated and reloaded `com.dakotaops.healthnudge` launchd plist to point to new path
+- Added `git pull` to `daily-nudge.py` so 6am script picks up latest GOALS.md from any device push
+- Pushed all changes to `Roderick-Clemente/health-coach` on GitHub
+- Open: `office/GOALS.md` needs weight target, workout routine, diet protocol, and sleep goals — nudges are generic until filled in
