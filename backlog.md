@@ -26,8 +26,6 @@ Last reviewed: 2026-04-08
 | Item | Notes |
 |------|-------|
 | **7:15am pre-session brief** | Mini sends Rod a Telegram brief every morning at 7:15am: top P0/P1 items, what was done last session, what's blocked waiting on Rod. So Rod comes in with context instead of having to ask. LaunchAgent + script. Fires after 7am Dakota standup. |
-| **Health Coach bot — activate 2-way** | Code done, bot registered (@healthcoach_rod_bot, token in Keychain). Rod messages the bot once → I grab chat_id → store Keychain + OpenBao → load LaunchAgent. ~2 min with Rod present. |
-| **AutoDakota bot — register + activate** | BotFather registration pending. I drive it (same as Health Coach). Then same chat_id flow. Token → Keychain + OpenBao → load poller. ~5 min with Rod present. |
 | **Accessibility/GUI automation — brainstorm use cases** | I can drive any macOS app via AppleScript + screencapture (proven with Telegram/BotFather). Brainstorm: browser automation (form fills, scraping without API, OAuth flows), driving other desktop apps (Messages, Calendar, Finder), vs MCP browser tools — when to use which. Output: capabilities doc + P2/P3 task list |
 | **local/scripts → GitHub (private)** | night-planner, auto-agent, dispatcher committed locally but not backed up. Need .gitignore first (contacts.md, logs, state files), then create private MadMaxMini repo |
 | **Night agent — first real run** | Live but untested end-to-end. 10pm tonight is first shot. Watch: `tail -f ~/Work/local/scripts/night-planner.log` |
