@@ -1,15 +1,14 @@
 """
-ArchiveLD — One-tap LaunchDarkly calendar archive
+ArchiveLD — One-tap calendar archive (one year at a time)
 
-Dumps ALL events from Jan 2019 – Dec 2024 that match LaunchDarkly
-(zoom links, calendar name, titles) to a readable markdown + JSON.
+Dumps ALL events for ONE YEAR to keep output small enough for Shortcuts.
+Change YEAR below to archive different years. Run once per year.
 
 Just tap Run in Pythonista. No arguments needed.
 Output goes to console (Pythonista shortcut can save to Dropbox).
 """
 
 import datetime as dt
-import json
 import time
 
 try:
@@ -25,27 +24,13 @@ NSDate = ObjCClass("NSDate")
 
 # ── Config (all baked in) ──────────────────────────────────
 
-START_DATE = dt.datetime(2019, 1, 1)
-END_DATE = dt.datetime(2025, 1, 1)  # exclusive — covers through Dec 31, 2024
+# ── CHANGE THIS to archive a different year ───────────────
+YEAR = 2020
+# ───────────────────────────────────────────────────────────
 
-# Match if ANY of these appear in title, calendar name, location, or URL
-LD_MARKERS = [
-    "launchdarkly",
-    "launch darkly",
-]
+START_DATE = dt.datetime(YEAR, 1, 1)
+END_DATE = dt.datetime(YEAR + 1, 1, 1)  # exclusive — covers through Dec 31
 
-# Known LD phantom events that don't contain "launchdarkly" in metadata
-LD_TITLE_EXACT = [
-    "how are you *really* doing?",
-    "weekly review",
-    "strategic team forecast call",
-    "west leadership call",
-    "srat hoffman",
-    "all revenue",
-    "compensation 101",
-    "pave training",
-    "tola weekly team call",
-]
 
 # ── Helpers ────────────────────────────────────────────────
 
@@ -104,6 +89,49 @@ def event_to_record(ev):
     except Exception:
         url = None
 
+    attendees = []
+    try:
+        att_list = ev.attendees()
+        if att_list:
+            for att in list(att_list):
+                name = safe_str(att.name()) if att.name() else None
+                email = None
+                try:
+                    url_attr = att.URL()
+                    if url_attr:
+                        raw = safe_str(url_attr.absoluteString()) or ""
+                        if raw.startswith("mailto:"):
+                            email = raw[7:]
+                        elif "@" in raw:
+                            email = raw
+                except Exception:
+                    pass
+                if name or email:
+                    attendees.append({"name": name, "email": email})
+    except Exception:
+        attendees = []
+
+    organizer = None
+    try:
+        org = ev.organizer()
+        if org:
+            org_name = safe_str(org.name()) if org.name() else None
+            org_email = None
+            try:
+                org_url = org.URL()
+                if org_url:
+                    raw = safe_str(org_url.absoluteString()) or ""
+                    if raw.startswith("mailto:"):
+                        org_email = raw[7:]
+                    elif "@" in raw:
+                        org_email = raw
+            except Exception:
+                pass
+            if org_name or org_email:
+                organizer = {"name": org_name, "email": org_email}
+    except Exception:
+        organizer = None
+
     return {
         "title": title,
         "all_day": is_all_day,
@@ -113,35 +141,13 @@ def event_to_record(ev):
         "location": location,
         "notes": notes,
         "url": url,
+        "organizer": organizer,
+        "attendees": attendees,
     }
-
-def is_ld_event(rec):
-    """Return True if this event looks like it belongs to LaunchDarkly."""
-    # Build searchable text from all metadata
-    haystack = " ".join([
-        rec.get("title") or "",
-        rec.get("calendar") or "",
-        rec.get("location") or "",
-        rec.get("url") or "",
-        rec.get("notes") or "",
-    ]).lower()
-
-    # Check markers (substring match)
-    for marker in LD_MARKERS:
-        if marker in haystack:
-            return True
-
-    # Check known phantom titles (prefix match)
-    title_lower = (rec.get("title") or "").lower()
-    for t in LD_TITLE_EXACT:
-        if title_lower.startswith(t):
-            return True
-
-    return False
 
 # ── Fetch events in chunks (EventKit can choke on huge ranges) ─
 
-def get_events_chunked(start, end, chunk_days=90):
+def get_events_chunked(start, end, chunk_days=30):
     """Fetch events in chunks to avoid EventKit memory issues."""
     store = EKEventStore.new()
     all_events = []
@@ -175,7 +181,7 @@ def get_events_chunked(start, end, chunk_days=90):
 def format_markdown(records):
     """Pretty markdown grouped by month."""
     if not records:
-        return "No LaunchDarkly events found."
+        return "No events found."
 
     lines = []
     current_month = None
@@ -204,6 +210,22 @@ def format_markdown(records):
             line += " [{0}]".format(cal)
         if rec.get("location"):
             line += " @ {0}".format(rec["location"])
+        if rec.get("organizer"):
+            org = rec["organizer"]
+            org_str = org.get("name") or ""
+            if org.get("email"):
+                org_str = "{0} <{1}>".format(org_str, org["email"]).strip() if org_str else org["email"]
+            line += "\n  organizer: {0}".format(org_str)
+        if rec.get("attendees"):
+            parts = []
+            for a in rec["attendees"]:
+                a_str = a.get("name") or ""
+                if a.get("email"):
+                    a_str = "{0} <{1}>".format(a_str, a["email"]).strip() if a_str else a["email"]
+                if a_str:
+                    parts.append(a_str)
+            if parts:
+                line += "\n  attendees: {0}".format("; ".join(parts))
         if rec.get("url"):
             line += "\n  url: {0}".format(rec["url"])
         if rec.get("notes"):
@@ -217,52 +239,18 @@ def format_markdown(records):
 
 def main():
     print("")
-    print("# LaunchDarkly Calendar Archive")
-    print("# Period: 2019-01-01 to 2024-12-31")
+    print("# Calendar Archive — {0}".format(YEAR))
     print("# Generated: {0}".format(dt.datetime.now().strftime("%Y-%m-%d %H:%M")))
-    print("")
-    print("Fetching events (this may take a minute)...")
     print("")
 
     raw_events = get_events_chunked(START_DATE, END_DATE)
-    print("")
-    print("Total calendar events in range: {0}".format(len(raw_events)))
-
-    # Convert and filter to LD only
     records = [event_to_record(ev) for ev in raw_events]
-    ld_records = [r for r in records if is_ld_event(r)]
 
-    print("LaunchDarkly events found: {0}".format(len(ld_records)))
+    print("")
+    print("Total events: {0}".format(len(records)))
     print("")
     print("=" * 60)
-
-    # Markdown output
-    print(format_markdown(ld_records))
-
-    # JSON block for machine processing
-    print("")
-    print("ROBOT_JSON_BEGIN")
-
-    def rec_to_json(r):
-        return {
-            "title": r.get("title"),
-            "all_day": bool(r.get("all_day")),
-            "start": r["start_dt"].isoformat(),
-            "end": r["end_dt"].isoformat() if r.get("end_dt") else None,
-            "calendar": r.get("calendar"),
-            "location": r.get("location"),
-            "notes": r.get("notes"),
-            "url": r.get("url"),
-        }
-
-    payload = {
-        "archive": "launchdarkly",
-        "range": {"start": "2019-01-01", "end": "2024-12-31"},
-        "total_events": len(ld_records),
-        "events": [rec_to_json(r) for r in ld_records],
-    }
-    print(json.dumps(payload, ensure_ascii=False))
-    print("ROBOT_JSON_END")
+    print(format_markdown(records))
 
 
 if __name__ == "__main__":
