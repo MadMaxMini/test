@@ -2,6 +2,28 @@
 
 ---
 
+## 2026-04-17 (mini) — ArchiveLD quarter-based testing setup
+
+### Done
+- **ArchiveLD.py refactor** — converted from full-year to quarter-based archiving
+  - Accepts `YEAR` and `QUARTER` as command-line args (defaults to Q1 2020)
+  - Auto-calculates date range for any quarter (Q1–Q4)
+  - Works in Pythonista (tap Run) or CLI: `python3 ArchiveLD.py 2020 1`
+  - Pulled latest from dakota-software, pushed updated script
+  - Ready for Rod's Pythonista → Dropbox shortcut testing
+
+### Why
+- Rod left LD but wants to archive old calendar (who he spoke with, when) for personal CRM history
+- Previous approach (full year 2020) timed out on Dropbox write via Pythonista shortcut
+- Smaller chunks (Q1, Q2, Q3, Q4 one at a time) should succeed without timeout
+- If Q1 2020 works, can scale up or batch quarters together
+
+### Next
+- Rod tests Q1 2020 through Pythonista shortcut → Dropbox
+- If successful, archive subsequent quarters (Q2, Q3, Q4 2020) and following years
+
+---
+
 ## 2026-04-16 (mini) — Telegram bots fully live
 
 ### Done
