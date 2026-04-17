@@ -2,6 +2,22 @@
 
 ---
 
+## 2026-04-16 (mini) — Telegram bots fully live
+
+### Done
+- **Health Coach bot** — built + registered (@healthcoach_rod_bot) + 2-way live. Screen-lock send bug fixed (AppleScript → Telegram). Both 6am + 6:30pm push bots now Telegram-primary.
+- **AutoDakota bot** — built + registered (@autodakota_mini_bot) + 2-way live. Interactive: tasks, overdue, team queries.
+- **Mad Max Telegram ops** — documented in skill (`telegram-ops.md`). I can drive BotFather directly, no hand-holding needed next time.
+- **7:15am morning brief** — fires daily via LaunchAgent, sends Rod P0/P1 + last session summary before each session.
+- **Backlog updated** — P1 items added: GUI automation brainstorm, pre-session brief (done).
+- **All 3 bots fully live**: @madmax_mini_bot, @healthcoach_rod_bot, @autodakota_mini_bot
+
+### Remaining
+- OpenBao — store Health Coach + AutoDakota tokens there (canonical). Needs vault unsealed.
+- KeePass — future, when Rod sets it up.
+
+---
+
 ## 2026-04-16 (mini) — Health Coach + AutoDakota Telegram bots
 
 ### Done
@@ -26,6 +42,8 @@
 5. `launchctl load` both pollers from `~/Library/LaunchAgents/`
 
 See [telegram-bots-setup.md](telegram-bots-setup.md) — step-by-step, ~15 min total.
+
+---
 
 ---
 
@@ -55,34 +73,5 @@ See [telegram-bots-setup.md](telegram-bots-setup.md) — step-by-step, ~15 min t
 
 ---
 
-
----
-
-## 2026-04-14 (mini) — Telegram bot live + context layer built
-
-### Done
-- **@madmax_mini_bot created** via BotFather — name "Mad Max", commands set, description set
-- **Bot token + chat_id stored** — Keychain (`telegram-max-bot-token`, `telegram-max-chat-id`) + OpenBao (`secret/telegram/max`)
-- **OpenBao unsealed** — container was running, unsealed via keychain script
-- **`telegram-poller.py` built** — long-polls Bot API, whitelist (Rod only), routes to dispatcher, LaunchAgent `com.madmax.telegrampoller` (KeepAlive)
-- **`sessions.py` built** — per-chat JSONL history, default 10 messages, cap 50, `+context N` / `+context full` / `+reset` inline commands
-- **`dispatcher.py` updated** — `run_model()` and `dispatch()` accept `history=` param, injects into prompt as "Recent conversation:" block
-- **Claude set as default model** — `dispatcher-model.state` = claude. Was mistral (iMessage-era default). Fixed hardcoded "mistral" reference in SYSTEM_STATIC.
-- **Memory architecture designed** — 3-tier: working (session-log 3 days) / episodic (archive, distilled on rolloff) / semantic (Mem0 + Qdrant, not built yet). Design doc in bottleMsg.
-- **Session log rolling design** — 3-day window, distill-on-rolloff, monthly archive review via SMS approval loop.
-- **Backlog updated** — added: Telegram context layer (P2, now done), bottleMsg cleanup bot (P2), session-log rolling + Mem0 (P3)
-
-### Waiting on Rod
-- Test the full loop: send a message to @madmax_mini_bot, confirm Claude responds with context
-- OpenBao: stays unsealed until container stops (auto-reseals on restart)
-- Google Voice number for dedicated bot account (separate from personal Telegram) — later
-- Secret chats: need user account (Telethon + Google Voice), not bot API — Phase later
-
-### Next session priorities
-1. Session log rolling cron (3-day window → distill → archive)
-2. Mem0 + Qdrant install for semantic memory layer
-3. SOUL.md per agent (clean persona separation)
-
----
 
 ---
