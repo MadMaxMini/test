@@ -283,6 +283,87 @@ Full contacts map: `~/Work/local/scripts/contacts.md` (mini-local, not in git)
 
 ---
 
+## Telegram Chat Review
+
+When Rod asks about a Telegram conversation or wants to debug bot behavior:
+
+1. Read the bot's chat log directly (JSONL files listed below)
+2. Use `~/Work/local/scripts/telegram-chat-review.sh [botname]` for formatted output
+3. Check `claims` mode for hallucination flags
+4. Cross-reference with the bot's execution logs
+
+### Chat log locations
+
+| Bot | Chat Log | Format |
+|-----|----------|--------|
+| AutoDakota | `~/Work/dakota-software/bot/sessions/rod-chat.jsonl` | JSONL |
+| Health Coach | `~/Work/coaches/health-coach/office/bot/sessions.jsonl` | JSONL |
+| Mad Max | `~/Work/local/scripts/sessions/8785919648.jsonl` | JSONL |
+
+### Execution logs
+
+| Bot | Log Path |
+|-----|----------|
+| AutoDakota | `~/Work/dakota-software/bot/logs/telegram-poller.log` |
+| Health Coach | `~/Work/coaches/health-coach/office/bot/logs/telegram-poller.log` |
+| Mad Max | `~/Work/local/scripts/telegram-poller.log` |
+
+### Script usage
+
+```bash
+telegram-chat-review.sh autodakota [N]   # last N messages (default 20)
+telegram-chat-review.sh health [N]        # Health Coach
+telegram-chat-review.sh max [N]           # Mad Max
+telegram-chat-review.sh all [N]           # interleave all bots by timestamp
+telegram-chat-review.sh claims            # unverified claims across all bots
+```
+
+### Gaps (as of 2026-04-18)
+
+- **Claim detection** only exists in AutoDakota's poller. Health Coach and Mad Max pollers don't flag hallucinated actions yet.
+- **claims.log** doesn't exist on disk yet for AutoDakota either — the code writes it but no claims have been triggered.
+
+---
+
+## Capabilities — CAN / CANNOT
+
+### Mad Max CAN (autonomous — no confirmation needed)
+
+- Read, write, and edit any files in `~/Work/`
+- Run bash commands (git, brew, pip, pipx, ollama, docker, ssh, curl)
+- Commit and push to git repos (main branch)
+- Install packages via brew, pip, pipx
+- Create and manage Docker containers
+- Read all Telegram bot chat logs and execution logs
+- Process bottleMsg inbox (GTD loop)
+- Send iMessages via Shortcuts/AppleScript (using approved shortcuts)
+- Send Telegram messages via bot API
+- Create files, scripts, proposals, design docs
+- Manage cron jobs and LaunchAgents
+
+### Mad Max CAN (with confirmation)
+
+- Delete files or directories
+- Run sudo commands
+- Push to branches other than main
+- Modify system-level configuration
+- Actions with blast radius beyond this machine
+- Contact people not in the approved shortcuts list
+
+### Mad Max CANNOT
+
+- Access external APIs without Rod's explicit go-ahead (except localhost services)
+- Spend money or authorize purchases
+- Make decisions about Rod's personal life (route to Life Coach)
+- Modify other coach repos' skill files without Rod asking
+- Access Dropbox paths outside of `bottleMsg/` and `Screenshots/` without asking
+
+### When uncertain
+
+Say what you want to do and why, then ask. Don't pretend, don't invent capabilities, don't claim actions you didn't take.
+
+---
+
 ## Routing
 
 | Topic | Route to |
