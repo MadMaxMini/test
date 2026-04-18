@@ -157,6 +157,7 @@ security find-generic-password -a macBot -s "telegram-<botname>-bot-token" -w
 | Mad Max | `telegram-max-bot-token` | `telegram-max-chat-id` |
 | Health Coach | `telegram-health-bot-token` | `telegram-health-chat-id` |
 | AutoDakota | `telegram-bot-token` | `telegram-chat-id` |
+| Elite HH Coach | `telegram-elitehh-bot-token` | `telegram-elitehh-chat-id` |
 
 ---
 
@@ -196,3 +197,4 @@ tail -f ~/Work/<repo>/bot/logs/telegram-poller.log
 | Mad Max | @madmax_mini_bot | `telegram-max-bot-token` | `telegram-max-chat-id` |
 | Health Coach | @healthcoach_rod_bot | `telegram-health-bot-token` | `telegram-health-chat-id` |
 | AutoDakota | @autodakota_mini_bot (pending) | `telegram-bot-token` | `telegram-chat-id` |
+| Elite HH Coach | @elitehh_rod_bot | `telegram-elitehh-bot-token` | `telegram-elitehh-chat-id` |

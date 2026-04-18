@@ -299,6 +299,7 @@ When Rod asks about a Telegram conversation or wants to debug bot behavior:
 | AutoDakota | `~/Work/dakota-software/bot/sessions/rod-chat.jsonl` | JSONL |
 | Health Coach | `~/Work/coaches/health-coach/office/bot/sessions.jsonl` | JSONL |
 | Mad Max | `~/Work/local/scripts/sessions/8785919648.jsonl` | JSONL |
+| Elite HH Coach | `~/Work/coaches/elite-hh-bot/office/bot/sessions/rod-chat.jsonl` | JSONL |
 
 ### Execution logs
 
@@ -307,6 +308,7 @@ When Rod asks about a Telegram conversation or wants to debug bot behavior:
 | AutoDakota | `~/Work/dakota-software/bot/logs/telegram-poller.log` |
 | Health Coach | `~/Work/coaches/health-coach/office/bot/logs/telegram-poller.log` |
 | Mad Max | `~/Work/local/scripts/telegram-poller.log` |
+| Elite HH Coach | `~/Work/coaches/elite-hh-bot/office/bot/logs/telegram-poller.log` |
 
 ### Script usage
 
@@ -314,14 +316,18 @@ When Rod asks about a Telegram conversation or wants to debug bot behavior:
 telegram-chat-review.sh autodakota [N]   # last N messages (default 20)
 telegram-chat-review.sh health [N]        # Health Coach
 telegram-chat-review.sh max [N]           # Mad Max
+telegram-chat-review.sh elitehh [N]       # Elite HH Coach
 telegram-chat-review.sh all [N]           # interleave all bots by timestamp
 telegram-chat-review.sh claims            # unverified claims across all bots
 ```
 
-### Gaps (as of 2026-04-18)
+### Claim detection status (as of 2026-04-18)
 
-- **Claim detection** only exists in AutoDakota's poller. Health Coach and Mad Max pollers don't flag hallucinated actions yet.
-- **claims.log** doesn't exist on disk yet for AutoDakota either — the code writes it but no claims have been triggered.
+All four bots use the shared `~/Work/local/scripts/claim_detector.py` module. Claims are written to each bot's `logs/claims.log`:
+- AutoDakota: original implementation (inline, not yet migrated to shared module)
+- Health Coach, Mad Max, Elite HH: shared module via `sys.path` import
+
+No claims.log files exist on disk yet — code is live but no triggers have fired.
 
 ---
 
