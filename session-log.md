@@ -2,6 +2,36 @@
 
 ---
 
+## 2026-04-19b (mini) — Manager Coach bot live on Telegram
+
+### Done
+- **GTD inbox sweep** — `from-manager-coach-2026-04-19-sharon-plan.md` processed WITH Rod (not just filed). Content already captured in Sharon's profile. Archived.
+- **Inbox feedback** — Rod flagged that GTD sweep was too "filing clerk" — need to actually process items together, not just route and archive. Noted.
+- **Manager Coach Telegram bot** — `@manager_coach_bot` registered (Rod did BotFather), full build:
+  - `telegram-poller.py` — Claude primary, Ollama fallback, Rod-only whitelist, session history (10-deep), claim detection via shared module
+  - `SOUL.md` — Manager Tools methodology (feedback model, 1:1s, delegation, difficult conversations) + Sharon's full profile + phrasing guide ("Sharon said X, how do I respond?")
+  - `daily.py` — 8:33am Mon-Sat nudge: the 5 Things, open items, day-specific prompts (Mon=warm text, Wed=mid-week call check, Fri=did you do both?)
+  - LaunchAgents installed: `com.manager.telegrampoller` (KeepAlive) + `com.manager.dailynudge` (Mon-Sat 8:33am)
+  - Creds in Keychain + OpenBao (`telegram-manager-bot-token`, `telegram-manager-chat-id`)
+  - Daily nudge test fired successfully
+- **Inventory + Mad Max skill updated** — chat log paths, execution log paths, telegram-ops bot registry, claim detection status
+- **Both repos pushed** — manager-coach (08864b2) + madmax (9d7f681)
+
+### Decisions
+- Manager Coach bot follows same pattern as Elite HH: poller + daily nudge + SOUL.md + session logging
+- Daily nudge at 8:33am — after 7am Dakota standup and 7:15 pre-session brief, before Rod's workday
+- No Sunday nudge per Rod
+
+### Open on Rod
+- .kdbx files in bottleMsg — still awaiting destination decision
+- Mem Palace encryption angle — still open
+- **Local AI fallback quality** — Rod tested the bot via Telegram and it knew nothing. Need to discuss Ollama model context injection and whether the fallback path is viable for coaching bots
+
+### Next
+- Discuss local AI fallback strategy — are Ollama models getting enough context? Is the fallback path worth keeping for coaching use cases?
+
+---
+
 ## 2026-04-19 (mini) — Mem Palace design + GTD sweep
 
 ### Done
