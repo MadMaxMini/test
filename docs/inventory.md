@@ -19,6 +19,7 @@ Standalone repos, Roderick-Clemente GitHub account unless noted.
 | elite-hh-bot | `~/Work/coaches/elite-hh-bot` | `git@github.com:Roderick-Clemente/elite-hh-bot.git` | Rod's job hunting + career management coach. Daily 6:30am nudge. |
 | health-coach | `~/Work/coaches/health-coach` | `git@github.com:Roderick-Clemente/health-coach.git` | Health accountability + tracking. Daily 6:30pm nudge. Content from laptop pending. |
 | dakota-software | `~/Work/dakota-software` | `git@github.com:Roderick-Clemente/dakota-software.git` | Real estate ops — team tasks, properties, bot |
+| manager-coach | `~/Work/coaches/manager-coach` | `git@github.com:Roderick-Clemente/manager-coach.git` | People management coach (Manager Tools). Daily 8:33am nudge. Sharon focus. |
 | faith | `~/Work/coaches/faith` | `git@github.com:Roderick-Clemente/faith.git` | Personal faith coaching context |
 
 Coach repos follow the skill/office pattern: skill = portable methodology, office = org-specific context.

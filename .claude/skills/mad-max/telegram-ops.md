@@ -198,3 +198,4 @@ tail -f ~/Work/<repo>/bot/logs/telegram-poller.log
 | Health Coach | @healthcoach_rod_bot | `telegram-health-bot-token` | `telegram-health-chat-id` |
 | AutoDakota | @autodakota_mini_bot (pending) | `telegram-bot-token` | `telegram-chat-id` |
 | Elite HH Coach | @elitehh_rod_bot | `telegram-elitehh-bot-token` | `telegram-elitehh-chat-id` |
+| Manager Coach | @manager_coach_bot | `telegram-manager-bot-token` | `telegram-manager-chat-id` |

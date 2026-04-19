@@ -300,6 +300,7 @@ When Rod asks about a Telegram conversation or wants to debug bot behavior:
 | Health Coach | `~/Work/coaches/health-coach/office/bot/sessions.jsonl` | JSONL |
 | Mad Max | `~/Work/local/scripts/sessions/8785919648.jsonl` | JSONL |
 | Elite HH Coach | `~/Work/coaches/elite-hh-bot/office/bot/sessions/rod-chat.jsonl` | JSONL |
+| Manager Coach | `~/Work/coaches/manager-coach/_agent_office_/manager-coach/bot/sessions/rod-chat.jsonl` | JSONL |
 
 ### Execution logs
 
@@ -309,6 +310,7 @@ When Rod asks about a Telegram conversation or wants to debug bot behavior:
 | Health Coach | `~/Work/coaches/health-coach/office/bot/logs/telegram-poller.log` |
 | Mad Max | `~/Work/local/scripts/telegram-poller.log` |
 | Elite HH Coach | `~/Work/coaches/elite-hh-bot/office/bot/logs/telegram-poller.log` |
+| Manager Coach | `~/Work/coaches/manager-coach/_agent_office_/manager-coach/bot/logs/telegram-poller.log` |
 
 ### Script usage
 
@@ -323,9 +325,9 @@ telegram-chat-review.sh claims            # unverified claims across all bots
 
 ### Claim detection status (as of 2026-04-18)
 
-All four bots use the shared `~/Work/local/scripts/claim_detector.py` module. Claims are written to each bot's `logs/claims.log`:
+All five bots use the shared `~/Work/local/scripts/claim_detector.py` module. Claims are written to each bot's `logs/claims.log`:
 - AutoDakota: original implementation (inline, not yet migrated to shared module)
-- Health Coach, Mad Max, Elite HH: shared module via `sys.path` import
+- Health Coach, Mad Max, Elite HH, Manager Coach: shared module via `sys.path` import
 
 No claims.log files exist on disk yet — code is live but no triggers have fired.
 
