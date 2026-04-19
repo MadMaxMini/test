@@ -42,3 +42,31 @@
 - Added `git pull` to `daily-nudge.py` so 6am script picks up latest GOALS.md from any device push
 - Pushed all changes to `Roderick-Clemente/health-coach` on GitHub
 - Open: `office/GOALS.md` needs weight target, workout routine, diet protocol, and sleep goals — nudges are generic until filled in
+
+## 2026-04-15 (distilled)
+- Pulled 28 days of mini work (5226eec → a576f86), 34 files fast-forward; committed `.claude/settings.json` and `_agent_office_/` inbox
+- Read 2 Life Coach messages: Mar 18 local-model blocker for Tram 360 (HIGH); Apr 15 three fixes (Today.py cron MED, status staleness HIGH, Faith Coach LOW-MED)
+- Mini state: Telegram bot live, dispatcher stack, health-coach consolidated, session rolling; Ollama installed but no model pulled
+- Dakota-ops handoff: Devon owns `bot/pdf-extractor/` (mortgage PDF→CSV) with output-format examples + Medium article; Mad Max to review pipeline and propose batch/scheduled/Plaid/alerting enhancements
+- Key dakota-ops commits: 95155da, 5696d0e, 1ddb006 in `~/Work/dakota-ops`
+- Open: laptop evacuation from Mar 18 (async-comms, claude-life, recruiting) still pending
+- Open: elevated permissions proposal still unresolved
+- Next P0 for mini: `ollama pull llama3.3:8b` to unblock Tram 360
+- Next for mini: status staleness cron (>2 days alert), Today.py → LaunchAgent replacing iPhone Shortcut, laptop evacuation
+
+## 2026-04-16 (distilled)
+- All 3 Telegram bots registered and live: @madmax_mini_bot, @healthcoach_rod_bot, @autodakota_mini_bot
+- Health Coach bot: 6am + 6:30pm push notifications, AppleScript screen-lock send bug fixed
+- AutoDakota bot: interactive queries for tasks, overdue items, team info
+- 7:15am morning brief LaunchAgent fires daily with P0/P1 tasks + last session summary
+- Telegram ops documented in `telegram-ops.md` skill; BotFather workflow self-sufficient going forward
+- OpenBao token storage for Health Coach + AutoDakota pending (vault needs unsealing)
+
+## 2026-04-16 (distilled)
+- Built Health Coach Telegram bot stack: send helper, interactive poller, SOUL.md persona, LaunchAgent plist
+- Built AutoDakota Telegram bot stack: same pattern, ops-only persona, separate LaunchAgent
+- Fixed screen-lock AppleEvent timeout bug in daily.py (6:30pm) — swapped AppleScript/Shortcuts for Telegram primary + iMessage fallback
+- Applied same Telegram-primary pattern to daily-nudge.py (6am) — both push bots now screen-lock-safe
+- Credentials stored in Keychain; LaunchAgents configured with KeepAlive + RunAtLoad
+- Created telegram-bots-setup.md with full setup walkthrough (~15 min)
+- Open: Rod needs to register both bots via BotFather, capture tokens, get chat_ids, add Keychain entries, and load both LaunchAgents
