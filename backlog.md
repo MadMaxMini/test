@@ -76,6 +76,8 @@ Last reviewed: 2026-04-08
 | **OpenBao store HF token** | Path confirmed: tokens/huggingface |
 | **Agent encryption — office/ folders** | Transit keys set up, not yet wired to any agent |
 | **Session-log rolling + semantic memory** | session-log.md stays last 3 days, rolls to archive/session-archive-YYYY-MM.md. Mem0 + Qdrant for semantic extraction. Design doc: bottleMsg/2026-04-13-memory-architecture.md |
+| **bottleMsg watcher** | Watch ~/Dropbox/bottleMsg/ for new .md files, text Rod on drop. Generic — not just cheat-sheet failures. LaunchAgent (WatchPaths or poll). Delivery: iMessage shortcut or Telegram. |
+| **Mem Palace — ~/Work/palace/** | Shared read layer for all agents. Rooms: rod/ (profile, health), team/ (index), platform/ (services, secrets map, shortcuts, routing), decisions/. Wire each CLAUDE.md with 1-line pointer. Phase 2: per-agent audit + consolidation. See Telegram thread 2026-04-19. |
 
 ---
 

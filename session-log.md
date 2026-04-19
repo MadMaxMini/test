@@ -2,6 +2,23 @@
 
 ---
 
+## 2026-04-19 (mini) — Mem Palace design + GTD sweep
+
+### Done
+- **GTD inbox sweep** — bottleMsg processed: TODO-bottlemsg-watcher.md → backlog P3, two .kdbx files surfaced to needs-rod.md (awaiting Rod's instruction on destination)
+- **Memory architecture audit** — surveyed all 5 memory layers across every agent repo. Identified duplication: team identities in 3 places, arm injury only in Mad Max SOUL.md, routing buried in 6 skill files
+- **Mem Palace designed** — `~/Work/palace/` proposal: shared read layer with rooms rod/, team/, platform/, decisions/. All agents get 1-line pointer in CLAUDE.md. Sent 3-part Telegram write-up to Rod
+- **Backlog updated** — bottleMsg watcher + Mem Palace both added as P3; needs-rod.md created
+
+### Open on Rod
+- .kdbx files in bottleMsg — what's the destination?
+- Mem Palace encryption angle: laptop FileVault check / encrypt palace dir / platform/security.md — pick one
+
+### Next
+- Rod picks encryption angle → Phase 1 build (~2hrs)
+
+---
+
 ## 2026-04-18 (mini) — Telegram awareness + Elite HH Coach bot
 
 ### Done
