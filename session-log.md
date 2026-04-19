@@ -19,6 +19,24 @@
 
 ---
 
+## 2026-04-16 (mini) — health-coach Telegram wiring
+
+### Done
+- **Diagnosed 6:30pm send failures** — root cause: AppleEvent timeouts when screen locked/idle. Affects both Messages.app and Shortcuts Events. Switched daily.py to Shortcuts on Apr 14 (d0d7966) but hit same wall.
+- **Both bots updated to use `telegram_notify.py`** — `daily.py` (6:30pm) and `daily-nudge.py` (6am) both load it as primary send channel, iMessage as fallback
+- **`telegram_notify.py` created** — reads `telegram-health-bot-token` + `telegram-health-chat-id` from Keychain, pure HTTP (no AppleScript)
+
+### Open on Rod
+- **Keychain credentials missing** — `telegram-health-bot-token` and `telegram-health-chat-id` not set. Two options:
+  1. Reuse Mad Max bot (`telegram-max-*` creds already in Keychain) — zero setup, works now
+  2. New dedicated health bot via BotFather — cleaner separation, ~5min setup
+- Until one of these is done, bots fall back to iMessage (still flaky at 6:30pm)
+
+### Next
+- Rod picks: reuse max bot or new health bot → store creds in Keychain → test
+
+---
+
 ## 2026-04-18 (mini) — Telegram awareness + Elite HH Coach bot
 
 ### Done
