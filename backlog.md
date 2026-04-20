@@ -33,6 +33,7 @@ Last reviewed: 2026-04-20
 | **Dispatcher conversation history + context** | Every SMS/Telegram message is stateless — bot forgets you the moment you reply. Fix: per-chat history file (`history-<chat_id>.json`), append every message, inject last N messages into every prompt before "Rod says: ...". Rod decides N (suggest 10). Works for both SMS dispatcher and Telegram bot. Tradeoff: richer convo vs token cost on local models |
 | **Sharon engagement** | Still dark. Standup going to her, no signal she's reading it. Low spam, warm only at Rod's word |
 | **ba8715bc ghost group deletion** | Rod+Devon+Sharon+Doc duplicate with Sharon number without +. Rod deletes in Messages |
+| **Permissions cleanup — per-device, per-repo** | Mini = open (build machine), laptop = tighter. Clean up madmax settings.json (has accumulated dakota/cross-repo perms). Move broad perms to global, keep repo-specific in project settings. Each coach repo gets its own scoped settings. |
 
 ---
 
