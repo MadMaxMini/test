@@ -2,6 +2,9 @@
 
 ---
 
+
+---
+
 ## 2026-04-19b (mini) — Manager Coach bot live on Telegram
 
 ### Done
@@ -16,19 +19,31 @@
   - Daily nudge test fired successfully
 - **Inventory + Mad Max skill updated** — chat log paths, execution log paths, telegram-ops bot registry, claim detection status
 - **Both repos pushed** — manager-coach (08864b2) + madmax (9d7f681)
+- **Shared `ollama_dispatch.py` module** — flexible Ollama fallback for all bots:
+  - Dynamic model discovery (queries Ollama API for pulled models)
+  - Preference-ordered dispatch: gemma3:27b > mistral-small > devstral > mixtral > llama3.1:8b > llama3.2:3b
+  - Compressed per-bot prompts (SOUL.md is 2000-5500 chars, compressed to ~500 for local models)
+  - Two tiers: "deep" (450 tokens, 90s timeout) and "fast" (250 tokens, 30s timeout)
+  - `/models` command on manager-coach bot shows all local models with strengths and use cases
+  - Wired into: manager-coach, elite-hh, health-coach. AutoDakota + Mad Max use different dispatch patterns (skipped).
+  - All 3 pollers restarted and verified running
+- **3 more repos pushed** — manager-coach, elite-hh-bot, health-coach
 
 ### Decisions
 - Manager Coach bot follows same pattern as Elite HH: poller + daily nudge + SOUL.md + session logging
 - Daily nudge at 8:33am — after 7am Dakota standup and 7:15 pre-session brief, before Rod's workday
 - No Sunday nudge per Rod
+- Local AI fallback: Option C (flexible, not hardcoded). Shared module, not copy-paste per bot.
 
 ### Open on Rod
 - .kdbx files in bottleMsg — still awaiting destination decision
 - Mem Palace encryption angle — still open
-- **Local AI fallback quality** — Rod tested the bot via Telegram and it knew nothing. Need to discuss Ollama model context injection and whether the fallback path is viable for coaching bots
 
 ### Next
-- Discuss local AI fallback strategy — are Ollama models getting enough context? Is the fallback path worth keeping for coaching use cases?
+- Rod wants bots to have knowledge OF local models (can discuss/compare in chat) — `/models` command is a start, needs enrichment
+- AutoDakota + Mad Max bot dispatch patterns differ — wire shared module if desired
+
+---
 
 ---
 
@@ -48,22 +63,6 @@
 - Rod picks encryption angle → Phase 1 build (~2hrs)
 
 ---
-
-## 2026-04-16 (mini) — health-coach Telegram wiring
-
-### Done
-- **Diagnosed 6:30pm send failures** — root cause: AppleEvent timeouts when screen locked/idle. Affects both Messages.app and Shortcuts Events. Switched daily.py to Shortcuts on Apr 14 (d0d7966) but hit same wall.
-- **Both bots updated to use `telegram_notify.py`** — `daily.py` (6:30pm) and `daily-nudge.py` (6am) both load it as primary send channel, iMessage as fallback
-- **`telegram_notify.py` created** — reads `telegram-health-bot-token` + `telegram-health-chat-id` from Keychain, pure HTTP (no AppleScript)
-
-### Open on Rod
-- **Keychain credentials missing** — `telegram-health-bot-token` and `telegram-health-chat-id` not set. Two options:
-  1. Reuse Mad Max bot (`telegram-max-*` creds already in Keychain) — zero setup, works now
-  2. New dedicated health bot via BotFather — cleaner separation, ~5min setup
-- Until one of these is done, bots fall back to iMessage (still flaky at 6:30pm)
-
-### Next
-- Rod picks: reuse max bot or new health bot → store creds in Keychain → test
 
 ---
 
@@ -91,29 +90,5 @@
 - Rod reviews `proposals/two-tier-telegram-dispatch.md` — confirm keyword triggers + confirmation gate design
 - Test `@elitehh_rod_bot` with a real job hunting session; verify summary fires at 9pm
 - AutoDakota: migrate inline claim detection to shared module (backlog)
-
----
-
-## 2026-04-17 (mini) — ArchiveLD quarter-based testing setup
-
-### Done
-- **ArchiveLD.py refactor** — converted from full-year to quarter-based archiving
-  - Accepts `YEAR` and `QUARTER` as command-line args (defaults to Q1 2020)
-  - Auto-calculates date range for any quarter (Q1–Q4)
-  - Works in Pythonista (tap Run) or CLI: `python3 ArchiveLD.py 2020 1`
-  - Pulled latest from dakota-software, pushed updated script
-  - Ready for Rod's Pythonista → Dropbox shortcut testing
-
-### Why
-- Rod left LD but wants to archive old calendar (who he spoke with, when) for personal CRM history
-- Previous approach (full year 2020) timed out on Dropbox write via Pythonista shortcut
-- Smaller chunks (Q1, Q2, Q3, Q4 one at a time) should succeed without timeout
-- If Q1 2020 works, can scale up or batch quarters together
-
-### Next
-- Rod tests Q1 2020 through Pythonista shortcut → Dropbox
-- If successful, archive subsequent quarters (Q2, Q3, Q4 2020) and following years
-
----
 
 ---
