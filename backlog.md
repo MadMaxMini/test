@@ -7,7 +7,7 @@ Priority scale:
 - **P3** — backlog, good idea, not urgent
 - **P4** — shelve until trigger event
 
-Last reviewed: 2026-04-08
+Last reviewed: 2026-04-20
 
 ---
 
@@ -15,8 +15,7 @@ Last reviewed: 2026-04-08
 
 | Item | Why Now |
 |------|---------|
-| **Job search — resume + gap analysis** | 3 live targets (LangChain, Darktrace, Scale AI). Time-sensitive. Resume needs to land in `~/Work/coaches/job/resume-versions/` before gap analysis can happen |
-| **Health GOALS.md** | 6am texts firing but generic — useless until `~/Work/coaches/health/GOALS.md` is filled in |
+| **Job search — GOALS.md + career-doc.md** | 5 live targets in pipeline (LangChain, Darktrace, Scale AI, ScaleOps, Rubrik). Resume v8 exists. Profile docs (GOALS.md, career-doc.md) are empty templates — bot can't do strategic positioning without them. Rod to fill via interview session with Elite HH coach. |
 | **Scale AI job URL** | Mentioned as target #3, never tracked in pipeline.md |
 
 ---
