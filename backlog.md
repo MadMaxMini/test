@@ -18,6 +18,12 @@ Last reviewed: 2026-04-20
 | **Job search — GOALS.md + career-doc.md** | 5 live targets in pipeline (LangChain, Darktrace, Scale AI, ScaleOps, Rubrik). Resume v8 exists. Profile docs (GOALS.md, career-doc.md) are empty templates — bot can't do strategic positioning without them. Rod to fill via interview session with Elite HH coach. |
 | **Scale AI job URL** | Mentioned as target #3, never tracked in pipeline.md |
 
+AND Hit me up next session — we can enrich the /models command so the bots actually know model strengths and can discuss tradeoffs with you in chat.
+
+AND how do I use my local AI in the console when Claude dies, is there a plugin for that? 
+
+AND can i start Claude in Haiku, for chatting and loading context and then bump up to opus when we're ready to go? or vice versa that? 
+
 ---
 
 ## P1 — This Week
@@ -34,6 +40,7 @@ Last reviewed: 2026-04-20
 | **Sharon engagement** | Still dark. Standup going to her, no signal she's reading it. Low spam, warm only at Rod's word |
 | **ba8715bc ghost group deletion** | Rod+Devon+Sharon+Doc duplicate with Sharon number without +. Rod deletes in Messages |
 | **Permissions cleanup — per-device, per-repo** | Mini = open (build machine), laptop = tighter. Clean up madmax settings.json (has accumulated dakota/cross-repo perms). Move broad perms to global, keep repo-specific in project settings. Each coach repo gets its own scoped settings. |
+| **Mem Palace — ~/Work/palace/** | Shared read layer for all agents. 5 files: ROD, TEAM, PLATFORM, COMMUNICATION, ROUTING. Replaces ~15KB duplication across 6 repos with ~4KB single source. Full chunked plan: `~/.claude/plans/eager-conjuring-jellyfish.md` + copy in bottleMsg. 10 chunks, ~2hr build session. Design done 2026-04-19, plan done 2026-04-20. Trigger to P0: first time an agent gives wrong info due to stale duplicate. |
 
 ---
 
@@ -77,7 +84,6 @@ Last reviewed: 2026-04-20
 | **Agent encryption — office/ folders** | Transit keys set up, not yet wired to any agent |
 | **Session-log rolling + semantic memory** | session-log.md stays last 3 days, rolls to archive/session-archive-YYYY-MM.md. Mem0 + Qdrant for semantic extraction. Design doc: bottleMsg/2026-04-13-memory-architecture.md |
 | **bottleMsg watcher** | Watch ~/Dropbox/bottleMsg/ for new .md files, text Rod on drop. Generic — not just cheat-sheet failures. LaunchAgent (WatchPaths or poll). Delivery: iMessage shortcut or Telegram. |
-| **Mem Palace — ~/Work/palace/** | Shared read layer for all agents. Rooms: rod/ (profile, health), team/ (index), platform/ (services, secrets map, shortcuts, routing), decisions/. Wire each CLAUDE.md with 1-line pointer. Phase 2: per-agent audit + consolidation. See Telegram thread 2026-04-19. |
 
 ---
 
