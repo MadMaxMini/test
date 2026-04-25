@@ -1,5 +1,28 @@
 # Session Log
 
+## 2026-04-25 — Calendar Bot Live + Context Fix
+
+**What got done:**
+- Calendar Bot built end-to-end: parser (13,616 events → SQLite FTS5), search engine, Claude+Ollama query layer, Telegram poller
+- Bot registered: @cala_tele_bot, token + chat_id in Keychain
+- Fixed: emails now included in LLM context (were being stripped to names-only)
+- Fixed: conversation history now passed to search + LLM (follow-ups like "all emails please" work)
+- Fixed: triple-response bug — multiple poller instances killed, single instance running
+- Created PROJECT.md in calendar-bot repo
+
+**Decisions:**
+- No git repo for calendar bot — personal data, encrypt later
+- Data lives at ~/Work/coaches/calendar-bot/data/ (not Dropbox)
+- LLM mode: auto (Claude primary, Ollama fallback)
+
+**What's next:**
+- P1: Fuzzy search (alias/synonym layer for company name variations)
+- LaunchAgent so poller survives reboots
+- Local LLM benchmark (Claude vs Ollama quality on calendar queries)
+- Data encryption
+
+---
+
 ## 2026-04-24 — PM Pipeline Stood Up + PDF Rename/Dup Detection
 
 **What got done:**
