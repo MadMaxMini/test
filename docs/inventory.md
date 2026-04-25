@@ -1,7 +1,7 @@
 # Asset Inventory
 
 Where everything lives and what it does.
-Last updated: 2026-04-02
+Last updated: 2026-04-25
 
 > **Note for Claude:** This file is a reference map only. Do NOT proactively read
 > the files listed here unless explicitly needed for the current task. Know they exist,
@@ -56,6 +56,15 @@ README.md                    # Repo overview
 ## Local Services — IN repo (~/Work/test/local/)
 
 Previously at ~/Work/local/ — moved into repo 2026-03-02. Now version controlled.
+
+### Local Agent (~/Work/local/scripts/local-agent.py)
+```
+local-agent.py         # One-shot Ollama task runner — prompt + optional file → local model → output
+                       # Symlinked to /opt/homebrew/bin/local-agent (on PATH)
+                       # Supports: --file (text/PDF), --out, --model, --system, --quiet, --list
+                       # Default model: gemma3:27b
+                       # Streams output, handles piped stdin, PDF extraction via pdftotext
+```
 
 ### Ollama (~/Work/local/ollama/)
 ```

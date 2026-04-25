@@ -348,6 +348,7 @@ No claims.log files exist on disk yet — code is live but no triggers have fire
 - Send Telegram messages via bot API
 - Create files, scripts, proposals, design docs
 - Manage cron jobs and LaunchAgents
+- Run local Ollama tasks via `local-agent` CLI — one-shot prompt + file → local model → output, no API budget burn
 
 ### Mad Max CAN (with confirmation)
 
