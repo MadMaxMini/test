@@ -64,9 +64,9 @@ Run this on every session start (mini mode). bottleMsg is the capture inbox. Don
 
 ### The Loop
 
-**1. Collect** — list everything in `~/Library/CloudStorage/Dropbox/bottleMsg/` (skip `archive/` and `mini-control-guide.md`)
+**1. Collect** — list everything in `~/Library/CloudStorage/Dropbox/bottleMsg/` root (skip subdirectories and `mini-control-guide.md`)
 
-**2. Clarify** — for each item, ask: what is it? is it actionable?
+**2. Clarify** — for each item: what is it? is it actionable? brief description.
 
 **3. Organize** — route to exactly one destination:
 
@@ -80,31 +80,41 @@ Run this on every session start (mini mode). bottleMsg is the capture inbox. Don
 | Screenshot: confirmation / done | `archive/` — fully processed, no future reference |
 | Unknown / ambiguous | Surface to Rod, don't guess |
 
-**4. Print table** — after processing, show Rod (numbered for easy reference):
+**4. Show Rod the current state** — always display:
 
+**A. Inbox root items (numbered table):**
 ```
-1. **Item Name** | Type | Route | Action/Status
-2. **Item Name** | Type | Route | Action/Status
-3. ...
-```
-
-Example:
-```
-1. **Phase 1 Complete** | Confirmation | inbox (to read) | Elite-hh-bot encryption Phase 1 done
-2. **Screenshot Apr 23** | ACTION | backlog.md P1 | pm-statements setup blocker
-3. **KeePass backups** | BLOCKED | needs-rod.md | Destination TBD
+| # | Item | Type | Description | Route |
+|---|------|------|-------------|-------|
+| 1 | **Phase 1 Complete** | Confirmation | Elite-hh encryption Phase 1 done | inbox (to read) |
+| 2 | **Intake Pipeline** | Confirmation | Mad Max intake system 136 tasks live | digest/ |
+| 3 | **KeePass backups** | BLOCKED | Where to store? (bkUp.kdbx, bkup2bkup.kdbx) | needs-rod.md |
 ```
 
-**5. Move to destination** — `digest/` for reading material, `archive/` for fully processed items
+**B. Folder summary (tree + item count):**
+```
+bottleMsg/
+├── inbox/          (N items to read)
+├── digest/         (N items — reading material)
+├── archive/        (N items — fully processed)
+└── mini-control-guide.md  (permanent reference)
+```
+
+**5. Move to destination** — execute all moves. Log which items were moved where.
 
 ### Rules
+
 - **Never leave items in the inbox unprocessed.** If you can't route it, surface it.
 - **One item, one destination.** Don't split or duplicate.
 - **Screenshots are read first** — use the Read tool to view the image before deciding.
 - `mini-control-guide.md` is permanent reference — never move it.
-- **digest/** = reference/learning material Rod will read later. Keep until Rod cleans it.
-- **archive/** = fully processed, no future reference needed.
+- **inbox/** = to-read items (confirmations, reference). Rod decides when to move to digest/archive.
+- **digest/** = learning material, reference, inspiration. Stays until Rod cleans it out.
+- **archive/** = fully processed, no future reference needed. Default for simple screenshots with no lasting value.
+- **Archive vs Delete protocol:** Archive is default. Only delete if Rod explicitly says "delete this" (not "archive").
+- **Monthly archive review prompt:** On first GTD of the month, surface: "archive has N items, review and delete/move as needed?"
 - If bottleMsg root is empty: say so in one line and move on.
+- If archive is getting large (>30 items): prompt Rod to clean it.
 
 ---
 
