@@ -79,13 +79,19 @@ Run this on every session start (mini mode). bottleMsg is the capture inbox. Don
 | Screenshot: inspiration / someday | `archive/` — note the idea in a comment |
 | Unknown / ambiguous | Surface to Rod, don't guess |
 
-**4. Print table** — after processing, show Rod:
+**4. Print table** — after processing, show Rod (numbered for easy reference):
 
 ```
-| Item | Routed to | Action taken |
-|------|-----------|--------------|
-| ... | backlog.md P2 | Added model-lab entry |
-| ... | archive | Calendar invite confirmed |
+1. **Item Name** | Type | Route | Action/Status
+2. **Item Name** | Type | Route | Action/Status
+3. ...
+```
+
+Example:
+```
+1. **Phase 1 Complete** | Confirmation | inbox (to read) | Elite-hh-bot encryption Phase 1 done
+2. **Screenshot Apr 23** | ACTION | backlog.md P1 | pm-statements setup blocker
+3. **KeePass backups** | BLOCKED | needs-rod.md | Destination TBD
 ```
 
 **5. Archive** — move each processed file to `bottleMsg/archive/` using `mv`
