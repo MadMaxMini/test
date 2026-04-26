@@ -102,6 +102,14 @@ bottleMsg/
 
 **5. Move to destination** — execute all moves. Log which items were moved where.
 
+**6. Update ARCHIVE.md** — after archiving items, add them to `bottleMsg/ARCHIVE.md` manifest (silent update, don't surface unless Rod asks):
+```
+| Date archived | Item filename | Type | Tags | Brief description |
+|---|---|---|---|---|
+| 2026-04-26 | Phase 1 Complete | confirmation | encryption, elite-hh | DMG ready for Phase 2 |
+```
+ARCHIVE.md is reference-only. Only read/surface it if Rod explicitly asks to search/review the archive.
+
 ### Rules
 
 - **Never leave items in the inbox unprocessed.** If you can't route it, surface it.
@@ -111,10 +119,15 @@ bottleMsg/
 - **inbox/** = to-read items (confirmations, reference). Rod decides when to move to digest/archive.
 - **digest/** = learning material, reference, inspiration. Stays until Rod cleans it out.
 - **archive/** = fully processed, no future reference needed. Default for simple screenshots with no lasting value.
+  - **Always add to ARCHIVE.md manifest** — include: date, filename, type, tags, brief description.
+  - Makes items searchable by tag/keyword for future reference.
 - **Archive vs Delete protocol:** Archive is default. Only delete if Rod explicitly says "delete this" (not "archive").
-- **Monthly archive review prompt:** On first GTD of the month, surface: "archive has N items, review and delete/move as needed?"
+  - Deleted items are not added to manifest (gone).
+  - Archived items stay in `archive/` subdirectory + catalogued in ARCHIVE.md.
+- **Monthly archive review prompt:** On first GTD of the month, surface: "ARCHIVE.md has N entries. Review for old/useless items?"
+- **Quarterly deep-clean:** Every 3 months, offer to age-out old items to `archive/YYYY-MM/` subdirs for cleaner root.
 - If bottleMsg root is empty: say so in one line and move on.
-- If archive is getting large (>30 items): prompt Rod to clean it.
+- If archive/ARCHIVE.md is getting large (>50 entries): prompt Rod to clean it.
 
 ---
 
