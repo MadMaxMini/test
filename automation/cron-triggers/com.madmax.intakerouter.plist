@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN"
+  "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+  <key>Label</key>
+  <string>com.madmax.intakerouter</string>
+
+  <key>ProgramArguments</key>
+  <array>
+    <string>/opt/homebrew/bin/python3</string>
+    <string>/Users/macBot/Work/test/automation/intake_router.py</string>
+    <string>process</string>
+    <string>--pull</string>
+    <string>--push</string>
+  </array>
+
+  <key>StartInterval</key>
+  <integer>86400</integer>
+
+  <key>WorkingDirectory</key>
+  <string>/Users/macBot/Work/test</string>
+
+  <key>EnvironmentVariables</key>
+  <dict>
+    <key>HOME</key>
+    <string>/Users/macBot</string>
+    <key>PATH</key>
+    <string>/usr/local/bin:/usr/bin:/bin:/opt/homebrew/bin</string>
+  </dict>
+
+  <key>StandardOutPath</key>
+  <string>/Users/macBot/Work/test/automation/logs/intake-router.stdout.log</string>
+
+  <key>StandardErrorPath</key>
+  <string>/Users/macBot/Work/test/automation/logs/intake-router.stderr.log</string>
+
+  <key>RunAtLoad</key>
+  <false/>
+</dict>
+</plist>
