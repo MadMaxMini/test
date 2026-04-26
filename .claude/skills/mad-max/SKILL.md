@@ -75,8 +75,9 @@ Run this on every session start (mini mode). bottleMsg is the capture inbox. Don
 | Project plan / new work | `backlog.md` — add as P2 or P3 with one-line summary |
 | Model / tool intel | `local-ai.md` — appropriate section |
 | Architecture decision needed | `proposals/` — create a proposal file |
-| Screenshot: confirmation / done | `archive/` — no action needed |
-| Screenshot: inspiration / someday | `archive/` — note the idea in a comment |
+| Confirmation / completed work | `digest/` — information to read, no action |
+| Screenshot: inspiration / reference | `digest/` — learning material, ideas to revisit |
+| Screenshot: confirmation / done | `archive/` — fully processed, no future reference |
 | Unknown / ambiguous | Surface to Rod, don't guess |
 
 **4. Print table** — after processing, show Rod (numbered for easy reference):
@@ -94,14 +95,16 @@ Example:
 3. **KeePass backups** | BLOCKED | needs-rod.md | Destination TBD
 ```
 
-**5. Archive** — move each processed file to `bottleMsg/archive/` using `mv`
+**5. Move to destination** — `digest/` for reading material, `archive/` for fully processed items
 
 ### Rules
 - **Never leave items in the inbox unprocessed.** If you can't route it, surface it.
 - **One item, one destination.** Don't split or duplicate.
 - **Screenshots are read first** — use the Read tool to view the image before deciding.
-- `mini-control-guide.md` is permanent reference — never archive it.
-- If bottleMsg is empty: say so in one line and move on.
+- `mini-control-guide.md` is permanent reference — never move it.
+- **digest/** = reference/learning material Rod will read later. Keep until Rod cleans it.
+- **archive/** = fully processed, no future reference needed.
+- If bottleMsg root is empty: say so in one line and move on.
 
 ---
 
