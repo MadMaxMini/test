@@ -1,23 +1,14 @@
 {
   "permissions": {
     "allow": [
-      "Bash(git -C /Users/m3racbookpro/Work/madmax remote update --prune)",
-      "Bash(git -C /Users/m3racbookpro/Work/madmax log origin/main --oneline -5)",
-      "Bash(git pull *)",
-      "Bash(git -C /Users/m3racbookpro/Work/madmax status)",
-      "Bash(git -C /Users/m3racbookpro/Work/madmax log --oneline -5)",
+      "Edit(.claude/skills/**)",
+      "Edit(tasks/**)",
+      "Edit(backlog.md)",
       "Bash(git add *)",
-      "Bash(git -C /Users/m3racbookpro/Work/madmax push origin main)",
-      "Read(//Users/m3racbookpro/Work/dakota-ops/**)",
-      "Read(//Users/m3racbookpro/Work/**)",
-      "Bash(git -C /Users/m3racbookpro/Work/dakota-software log --oneline -20)",
-      "Bash(git -C /Users/m3racbookpro/Work/dakota-software log --oneline --all --author=\"devon\" -20)",
-      "Bash(git -C /Users/m3racbookpro/Work/dakota-software log --oneline --all -20)",
-      "Bash(git -C /Users/m3racbookpro/Work/dakota-ops log --oneline -20)",
-      "Bash(git -C /Users/m3racbookpro/Work/dakota-ops show 95155da --stat)",
-      "Bash(git -C /Users/m3racbookpro/Work/dakota-ops log --oneline 95155da..HEAD --grep=\"PDF\\\\|Devon\\\\|extractor\\\\|pdf\" -i)",
-      "Bash(grep -E \"\\(\\\\.py|\\\\.json\\)$\")",
-      "Bash(git rm *)"
+      "Bash(git pull *)",
+      "Bash(git push origin main)",
+      "Bash(git commit *)",
+      "Read(/Users/macBot/Work/**)"
     ]
   }
 }
