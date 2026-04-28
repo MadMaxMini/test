@@ -171,6 +171,26 @@ Git history is preserved inside the DMG — nothing is lost.
 
 **Confidence level:** High. Ready to move to Phase 2.
 
+## Phase 2 Results (2026-04-26)
+
+✅ **All git operations tested and passed.**
+
+- Git commit through encrypted mount — works
+- Git push to GitHub — works
+- Git pull from remote — works
+- Git diff/log — works
+- No path issues, no symlink problems
+
+## Phase 3 Local Results (2026-04-28)
+
+✅ **OpenBao integration works.**
+
+- Stored DMG password in OpenBao at `secret/data/dmg/elite-hh-phase1-test`
+- Retrieved via API, mounted DMG, verified files, unmounted
+- Full cycle: OpenBao → password → mount → work → unmount
+
+**Next step:** Move OpenBao to Pi. See bottleMsg digest `2026-04-28-encryption-project-digest.md` for full pickup instructions.
+
 ---
 
 ## Rollout order (after elite-hh-bot proves the pattern)

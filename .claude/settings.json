@@ -8,7 +8,9 @@
       "Bash(git pull *)",
       "Bash(git push origin main)",
       "Bash(git commit *)",
-      "Read(/Users/macBot/Work/**)"
+      "Read(/Users/macBot/Work/**)",
+      "Glob",
+      "Grep"
     ]
   }
 }
