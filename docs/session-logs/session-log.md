@@ -1,5 +1,30 @@
 # Session Log
 
+## 2026-04-28 — GTD Sweep via Telegram
+
+**What got done:**
+- Built `gtd-sweep.py` — scans bottleMsg inbox, classifies items, sends numbered GTD table to Rod via Telegram
+- Wired GTD reply commands into `dispatcher.py`: `gtd go`, `gtd go 1,3`, `gtd hold 2`, `gtd move 4 archive`, `gtd skip`
+- Created LaunchAgent `com.madmax.gtdsweep` — dual trigger: WatchPaths on bottleMsg (on file drop) + 11:55am daily
+- 5-min debounce so rapid Dropbox syncs don't spam
+- KeePass files auto-classified as "stays" (Rod wants them in bottleMsg)
+- Cheat-sheet failure alerts auto-routed to archive (laptop-only)
+- Fixed VS Code permissions: added Glob + Grep to settings.json allow list
+- Processed bottleMsg inbox: routed phase1/phase2 confirmations, autonomous layer design doc, screenshots (job leads, productivity, smol-audio), Devon PM pipeline text
+
+**Decisions:**
+- GTD sweep is async via Telegram, not session-only — Rod approves from phone
+- Cheat-sheet failures are laptop-only, ignore on mini (saved to memory)
+- KeePass files stay in bottleMsg root per Rod's preference
+
+**What's next:**
+- Monitor GTD sweep in the wild — first 11:55am fire tomorrow
+- Rod still needs to reply `gtd go` to the test sweep sent today
+- P0: Job search docs (GOALS.md + career-doc.md) still empty
+- P1: 7:15am pre-session brief, night agent first real run, local/scripts → GitHub
+
+---
+
 ## 2026-04-25 — Calendar Bot Live + Context Fix
 
 **What got done:**
