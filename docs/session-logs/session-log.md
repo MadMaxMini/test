@@ -1,5 +1,33 @@
 # Session Log
 
+## 2026-04-29 — Sheets Pipeline Phase 1 Built + Tested
+
+**What got done:**
+- Analyzed both Kickapoo Google Sheets (401 + 403) via Playwright — mapped full tab structure, formula chains, historical data blocks
+- Key insight: Info tab is a pure formula rollup — bridge writes to Mortgage tab historical section, not Info
+- Built `sheets_bridge.py` — single Playwright session, reads all historical rows in one pass, dual dup check (CSV + Sheet), date normalization (MM/DD/YY ↔ MM/DD/YYYY), payment change alerting
+- Built `property_map.json` — both Kickapoo properties mapped with loan numbers and tab structure
+- Created dupe log at `~/Library/CloudStorage/Dropbox/bottleMsg/logs/sheets-dupes.log`
+- Live test on kickapoo-403: balance $53,455.45 written to row 63, payment alert fired ($330.58→$628.48), dup detection verified on re-run
+- Rod added 4 more property sheet IDs (grand-pines, la-estancia, piney-point, cash-tracking)
+- Dropped RFC in all Dakota team inboxes
+- Saved sheet architecture to madmax + dakota memory (cross-repo reference with sync cadence)
+
+**Decisions:**
+- Phase 1 = balance only + payment change alerts. Escrow = Phase 2. PM statements = Phase 3.
+- Payment change on 30yr fixed = escrow recalc → alert Rod, Sharon updates Chase
+- Bridge uses Playwright directly (not shelling out per cell) — single browser session for all reads + writes
+- Dupe log in Dropbox (not repo) so Rod can check from phone
+- Scripts home in `dakota-software/bot/pdf-extractor/` for now, review in Phase 2
+
+**What's next:**
+- Wire bridge into shell pipeline (extract-and-commit.sh calls sheets_bridge.py after extraction)
+- Onboard additional properties (need loan numbers + verify Mortgage tab matches template)
+- Phase 2: escrow tracking
+- Phase 3: PM statement updates (multi-unit, vacancy alerts, rent change detection)
+
+---
+
 ## 2026-04-28 — GTD Sweep via Telegram
 
 **What got done:**
