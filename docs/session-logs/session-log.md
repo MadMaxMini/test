@@ -1,5 +1,42 @@
 # Session Log
 
+## 2026-04-30 — Phase 1 Review + Handoff Plans + FDA Blocker Found
+
+**What got done:**
+- Walked Rod through full sheet architecture (tab hierarchy, formula chains, historical data blocks)
+- Revised phase roadmap: P1=mortgage balance, P2=cleanup+hardening, P3=escrow, P4=PM statements, P5=harden
+- Date format alignment: both extractors now normalize to MM/DD/YYYY at extraction boundary
+- Rod added 4 more property sheet IDs to SHEET_MAP (grand-pines, la-estancia, piney-point, cash-tracking)
+- Properties config file scoped for Phase 2 with change watcher (alert on config drift in multi-hand repo)
+- Notification routing decided: routine processing → Telegram to Rod only, payment alerts → Telegram + iMessage to Rod, Dakota group only for urgent/actionable
+- CSV-in-repo question raised for Phase 2 (duplicate data — Sheet vs CSV, worth rethinking)
+- Investigated Sharon's missing PDFs: 4 PM Owner Statements stuck in inbox since Apr 25-29
+- Root cause: FDA (Full Disk Access) not granted to launchd `/bin/bash` — both pdfwatch and pmwatch are dead
+- Wrote 3 handoff prompts for fresh agents: wire-bridge, FDA fix, and Phase 2 plan in memory
+
+**Decisions:**
+- Phase 1 isn't complete until PDF drop → Sheet update is hands-free (wire-up is P1 completion, not P2)
+- Extractor should pass data directly to bridge via CLI args, not re-read from CSV (cleaner, faster)
+- Escrow bumped to Phase 3, PM statements to Phase 4, hardening to Phase 5
+- Folder rename (account-statements → mortgage/loan-statements) — Rod to decide, Sharon uses it
+
+**Blockers:**
+- FDA permissions — both launchd watchers dead. Rod must grant in System Settings manually.
+- 4 PM PDFs stuck unprocessed (can run manually from terminal as workaround)
+
+**Handoff prompts written:**
+- `dakota-software/bot/pdf-extractor/WIRE-BRIDGE-PROMPT.md` — wire bridge into shell pipeline
+- `dakota-software/bot/pdf-extractor/FIX-FDA-PROMPT.md` — fix FDA + process stuck PDFs
+- Phase 2 scope saved in `project_sheets_architecture.md` memory
+
+**What's next:**
+- Fix FDA (Rod manual step)
+- Wire bridge into pipeline (agent prompt ready)
+- Process 4 stuck PM PDFs
+- Phase 2: properties config, change watcher, CSV question, onboard more properties
+
+---
+
 ## 2026-04-29 — Sheets Pipeline Phase 1 Built + Tested
 
 **What got done:**
