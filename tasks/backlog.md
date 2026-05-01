@@ -15,6 +15,8 @@ Last reviewed: 2026-04-20
 
 | Item | Why Now |
 |------|---------|
+| **Sheets pipeline — FDA fix (Rod)** | PDF watchers dead — FDA not granted to /bin/bash. Rod manual step in System Settings. Blocks all PDF automation + bridge wiring. Task: `T-2026-04-30-sheets-pipeline-fda-fix` |
+| **Sheets pipeline — wire bridge (Max)** | `sheets_bridge.py` built + tested, not wired into auto-pipeline. Blocked on FDA. Prompt ready: `WIRE-BRIDGE-PROMPT.md`. Task: `T-2026-04-30-sheets-pipeline-wire-bridge` |
 | **Job search — GOALS.md + career-doc.md** | 5 live targets in pipeline (LangChain, Darktrace, Scale AI, ScaleOps, Rubrik). Resume v8 exists. Profile docs (GOALS.md, career-doc.md) are empty templates — bot can't do strategic positioning without them. Rod to fill via interview session with Elite HH coach. |
 | **Scale AI job URL** | Mentioned as target #3, never tracked in pipeline.md |
 
@@ -73,7 +75,7 @@ AND can i start Claude in Haiku, for chatting and loading context and then bump 
 | **model-lab — LoRA/SFT pipeline** | Fine-tune open coding model on our data. Stack: Unsloth/Axolotl. Rented GPU for training. Start with 100-500 clean examples. Folder at ~/Work/model-lab/ |
 | **Dakota folder refactor** | Rethink repo structure — inbox, contact tracking, property tracking, bot layout. Rod defines vision, Max builds |
 | **Bot pipeline — per-person micro-bots** | Fix standup conflation. Each person bot gets tasks + role context, stitcher combines. Structural fix |
-| **Google Sheets CSV export** | Apps Script → CSV → bot picks up for financial context |
+| **Sheets pipeline Phase 2+** | Properties config file, onboard remaining properties (grand-pines, la-estancia, piney-point), escrow tracking, PM statement updates. Depends on Phase 1 wiring (P0). See `bottleMsg/inbox/2026-04-30-sheets-pipeline-status.md` for full roadmap |
 | **iMessage group creation via AppleScript** | Blocked (-1700 error). Workaround: Rod creates group, I use chat ID. Investigate alternatives |
 | **Open WebUI — first real use** | Live at localhost:3000, untouched |
 | **n8n setup** | Phase 4 workflow automation, docker-compose ready |

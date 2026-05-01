@@ -42,15 +42,44 @@ Your job: **think, design, plan, hand off.** Bridge between Rod's life system an
 
 ### Mini Mode
 
-Load:
+**Detect startup mode from how Rod invoked the skill:**
+- `/mad-max quick` or `/mad-max` + a specific task → **Quick Start**
+- `/mad-max full` → **Full Start**
+- `/mad-max` with no task (e.g., "what's on tap?") → **Ask Rod:** "Quick or full? (Quick reads the morning brief, full does a deep sweep.)"
+
+Your job: **build, install, configure, automate.** Make decisions within scope, document them, push to git.
+
+---
+
+#### Quick Start (default for getting to work)
+
+Read ONE file, show the summary, get to work:
+
+1. Read `~/Work/test/morning-brief.md` — written by nightly triage at 3:30am
+2. Show Rod the brief (P0s, bot health warnings, bottleMsg status)
+3. If the brief is stale (>24h old) or says "No nightly triage has run yet," warn Rod and offer to run full start instead
+4. Done. Rod tells you what to build.
+
+**Context budget: ~1 read + 1 summary. That's it.**
+
+---
+
+#### Full Start (deep sweep — burns context but catches everything)
+
 1. `~/Work/madmax/session-log.md` — last 2 entries only
 2. `~/Work/madmax/CLAUDE.md` — autonomy rules, stack, key paths
 3. `~/Work/madmax/docs/inventory.md` — asset map
 4. `~/Work/madmax/att-mad-max.md` — any pending notes from laptop (read and acknowledge, then delete or archive)
-
-Your job: **build, install, configure, automate.** Make decisions within scope, document them, push to git.
-
 5. `~/Work/local/scripts/msggateway-inbox.md` — team texts logged since last session (if file exists, surface contents to Rod, then clear it)
+6. **Dakota task inbox (MANDATORY):**
+   ```bash
+   cd ~/Work/dakota-software && git pull
+   cat tasks/views/max.md
+   ```
+   Surface all open `owner: max` tasks to Rod. P0s first, then P1s.
+7. **bottleMsg GTD sweep** — full collect → clarify → organize → show Rod (see GTD Loop section below)
+
+**Use full start when:** first session after a gap, nightly triage hasn't run, or Rod asks for "what's on tap."
 
 ### Dropbox Paths
 - bottleMsg inbox: `~/Library/CloudStorage/Dropbox/bottleMsg/` — Rod's async command inbox, **run GTD sweep every session**

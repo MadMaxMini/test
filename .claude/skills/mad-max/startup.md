@@ -1,10 +1,40 @@
 # Mad Max Startup Checklist
 
-**Goal:** Understand system state, read Dakota's world, process any bottleMsg work.
+**Goal:** Get Rod oriented and into build mode as fast as possible.
 
 ---
 
-## Phase 1: Context Load
+## Mode Detection
+
+- `/mad-max quick` or `/mad-max` + specific task → **Quick Start**
+- `/mad-max full` → **Full Start**
+- `/mad-max` with open-ended question ("what's on tap?") → Ask: "Quick or full?"
+
+---
+
+## Quick Start (default)
+
+Read ONE file. Show the summary. Get to work.
+
+```bash
+cat ~/Work/test/morning-brief.md
+```
+
+- If brief is <24h old → show it, ask Rod what to build
+- If brief is stale or placeholder → warn Rod, offer full start
+- **Context budget: ~1 read. That's it.**
+
+The morning brief is written nightly at 3:30am by `nightly-triage.py` (Gemma 3 27B).
+It covers: Dakota max tasks, bot health, bottleMsg state, blockers.
+Brief also lands in `bottleMsg/inbox/` so Rod sees it on his phone.
+
+---
+
+## Full Start
+
+Deep sweep. Burns context but catches everything.
+
+### Phase 1: Context Load
 
 **1. Pull latest**
 ```bash
@@ -24,7 +54,7 @@ git pull
 
 ---
 
-## Phase 2: Dakota Hand-in-Glove
+### Phase 2: Dakota Hand-in-Glove
 
 **This machine works with Dakota team.** You need to understand their state.
 
@@ -41,10 +71,13 @@ cat team-standup/$(date +%Y-%m-%d).md
 
 **2. Check Dakota's task registry**
 ```bash
+cat tasks/views/max.md          # Max-owned + watched tasks (THIS IS YOUR INBOX)
 cat tasks/views/standup.md      # all P0/P1/P2
-cat tasks/views/rod.md          # Rod's owned + watched
 cat tasks/views/blockers.md     # P0/P1 only
 ```
+
+> **Max view is mandatory.** Any task with `owner: max` is work assigned to this machine.
+> Surface all open Max tasks to Rod at session start. Don't skip this.
 
 **3. Check if anything is blocked on the mini**
 ```bash
