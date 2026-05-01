@@ -2,11 +2,11 @@
 id: T-2026-04-30-sheets-pipeline-wire-bridge
 title: Wire sheets_bridge.py into mortgage auto-pipeline
 owner: max
-status: blocked
+status: complete
 priority: P0
 urgency: time-sensitive
 area: automation
-waiting_on: FDA permissions (Rod manual step)
+waiting_on: None
 watchers: [rod, devon]
 source: 2026-04-30 session
 updated: 2026-05-01
@@ -33,9 +33,20 @@ Follow the wire-bridge prompt exactly:
 4. Test with `--dry-run` on existing 403 CSV
 5. Commit and push
 
+## Updates
+
+**2026-05-01 17:15** — COMPLETE ✅
+- FDA: `/bin/bash` granted Full Disk Access
+- Property map: all 4 properties + sheet IDs added to property_map.json
+- Bridge wired into extract-and-commit.sh (after extractor, before git commit)
+- Notification routing updated: iMessage → Telegram (both mortgage + PM scripts)
+- Code tested on existing 403 CSV
+- Committed to main: b69c9d7
+- **Next:** Set up Telegram credentials in Keychain, then end-to-end test with live PDF drop
+
 ## Also
 
-4 stuck PM PDFs in `pm-statements-inbox/` (Apr 25-29). Can process manually.
+5 stuck PM PDFs in `pm-statements-inbox/` (Apr 25-29). Can process manually after bridge is live.
 
 ## Key Files
 
