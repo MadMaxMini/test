@@ -396,6 +396,32 @@ No claims.log files exist on disk yet — code is live but no triggers have fire
 
 ---
 
+## Tools & Services — Status
+
+### Whisper (Audio Transcription)
+
+| Component | Status | Details |
+|-----------|--------|---------|
+| Installation | ✓ | `openai-whisper` via pipx, version 20250625 |
+| Model | ✓ | `large` cached locally (~2.88GB) |
+| CPU mode | ✓ | Stable, ~16 min for 32 min audio |
+| GPU mode (MPS) | ⚠️ | Small files work, large files (30+min) hit NaN crash in attention mechanism |
+| Fallback | ✓ | Watch script auto-retries on CPU if MPS fails |
+| Auto-watch | ✓ | LaunchAgent `com.madmax.transcribe-watch` monitors `/Users/macBot/Documents/Recording/` |
+
+**GPU Issue (2026-05-01):**
+- MPS (Apple Metal) has numerical instability in attention with long sequences
+- Fix: Force FP32 (`--fp16 0`) instead of FP16
+- Status: Testing FP32 on large file (task be0krfqip)
+- Reference: `~/.claude/skills/mad-max/whisper-mps-debug.md`
+
+**Current behavior:**
+- Small audio files: Try MPS → fallback to CPU if fail
+- Large audio files (30+ min): CPU works, GPU pending fix validation
+- Output: `.txt` transcript in same dir as audio file
+
+---
+
 ## Capabilities — CAN / CANNOT
 
 ### Mad Max CAN (autonomous — no confirmation needed)
