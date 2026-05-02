@@ -190,12 +190,36 @@ tail -f ~/Work/<repo>/bot/logs/telegram-poller.log
 
 ---
 
-## Bots currently registered (as of 2026-04-16)
+## Bots currently registered (as of 2026-05-01)
 
 | Bot | Username | Keychain token key | Keychain chat_id key |
 |-----|----------|--------------------|----------------------|
 | Mad Max | @madmax_mini_bot | `telegram-max-bot-token` | `telegram-max-chat-id` |
 | Health Coach | @healthcoach_rod_bot | `telegram-health-bot-token` | `telegram-health-chat-id` |
-| AutoDakota | @autodakota_mini_bot (pending) | `telegram-bot-token` | `telegram-chat-id` |
+| AutoDakota | @autodakota_mini_bot | `telegram-bot-token` | `telegram-chat-id` |
 | Elite HH Coach | @elitehh_rod_bot | `telegram-elitehh-bot-token` | `telegram-elitehh-chat-id` |
 | Manager Coach | @manager_coach_bot | `telegram-manager-bot-token` | `telegram-manager-chat-id` |
+
+## Group Chats
+
+| Group | Purpose | Chat ID | Primary Bot | Keychain key |
+|-------|---------|---------|-------------|--------------|
+| Dakota Automation Team | Team ops, standups, task tracking | -1003906522433 | AutoDakota | `telegram-dakota-automation-group-chat-id` |
+
+---
+
+## Sending Messages to Groups
+
+Mad Max can send platform-level alerts to the Dakota Automation Team group (AutoDakota is primary):
+
+```bash
+TOKEN=$(security find-generic-password -a macBot -s "telegram-max-bot-token" -w)
+CHAT_ID=$(security find-generic-password -a macBot -s "telegram-dakota-automation-group-chat-id" -w)
+curl -s "https://api.telegram.org/bot${TOKEN}/sendMessage" \
+  -d "chat_id=${CHAT_ID}" \
+  -d "text=Your message here"
+```
+
+**Role split:**
+- **AutoDakota**: Primary — responds to group messages, sends standups, manages tasks
+- **Mad Max**: Secondary — sends infrastructure alerts, system status, escalations

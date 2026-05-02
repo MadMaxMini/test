@@ -302,9 +302,16 @@ Gemma 3    █████████████████████   ~29
 
 This means I can: register new bots via BotFather, read tokens from the screen, send messages, and get chat_ids — all without Rod touching the keyboard.
 
-**When to do this:** Any Telegram setup task (new bot, token retrieval, chat_id lookup).
+**Active Telegram channels:**
+- **Direct to Rod**: via @madmax_mini_bot (1-on-1)
+- **Dakota Automation Team group**: @madmax_mini_bot (secondary — AutoDakota is primary)
 
-**Detailed how-to:** `~/Work/test/.claude/skills/mad-max/telegram-ops.md` — read it when needed, not every session.
+**When to send messages:**
+- Rod asks "send me..." → direct message
+- Infrastructure alert or platform status → Dakota Automation Team group
+- Anything else → ask Rod which channel
+
+**Detailed how-to:** `~/Work/test/.claude/skills/mad-max/telegram-ops.md` — read for setup tasks, group chat list, and message examples.
 
 ---
 
