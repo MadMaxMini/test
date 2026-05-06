@@ -1,5 +1,27 @@
 # Session Log
 
+## 2026-05-06 — Local Model Audit + Telegram Bot Intelligence Upgrade
+
+**What got done:**
+- Full HuggingFace / local model audit — inventoried all 6 Ollama models (74 GB total), reviewed March benchmark results across Dakota ops + Faith coach workloads
+- Created `~/Work/local/scripts/reference-models.md` — detailed reference doc with installed models, speed charts, scorecards, sample outputs, failure modes, and verdicts
+- Wired `models` and `models detail` commands into dispatcher — on-demand pull (not auto-loaded), accessible from Telegram
+- Diagnosed why Telegram bot feels dopey: 10-message history + 200-token output cap
+- Bumped conversation depth 10 → 20 in sessions.py
+- Bumped Ollama output cap 200 → 500 tokens in dispatcher.py
+
+**Decisions:**
+- Mixtral 8x7B confirmed dead weight — 26 GB, times out on every task. Candidate for removal to free space for Qwen3.5-35B-A3B
+- Mistral Small remains dispatcher default (Fallback 1), Devstral as Fallback 2
+- Gemma 3 disqualified from ops pipelines (hallucination risk), chat-only
+- Reference docs should be pull-not-push — don't burn tokens loading into every message context
+
+**What's next:**
+- Remove Mixtral, pull Qwen3.5-35B-A3B and benchmark it
+- Consider further Telegram bot improvements (richer SOUL, more reference commands)
+
+---
+
 ## 2026-04-30 — Phase 1 Review + Handoff Plans + FDA Blocker Found
 
 **What got done:**
