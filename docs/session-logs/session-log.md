@@ -1,5 +1,25 @@
 # Session Log
 
+## 2026-05-08 — Via Verona 8302 Sheet Onboarding
+
+**What got done:**
+- Reviewed two competing Google Sheets for Via Verona via Playwright — identified "good" (real Via Verona data) vs "bad" (stale Jacksonville/Gilmore St copy, safe to delete)
+- Verified sheet structure after Rod's row fix — now matches Kickapoo template (row 17 = Historical Data)
+- Caught label column difference: Via Verona uses column G for field labels, Kickapoo uses J. Made `label_column` configurable in property_map.json (defaults to J)
+- Caught escrow field mismatch: bridge was writing escrow account balance ($10,701) to a row meant for monthly escrow payment ($1,783). Added new "Escrow Balance" row 24 + "Current Escrow Balance" row 14 in the sheet. Changed config to target the new row
+- Wired Via Verona into `property_map.json` and `SHEET_MAP` in `sheets_bridge.py`
+- Live bridge run: 6 cells written successfully (balance, escrow balance, as-of dates)
+- All 6 properties now online in the mortgage pipeline
+
+**Decisions:**
+- Escrow account balance tracked separately from monthly escrow payment (new row, not overwrite)
+- Label column is per-property config, not hardcoded to J
+
+**What's next:**
+- Sharon to delete the "bad" Via Verona sheet (Jacksonville copy)
+- Loan number in sheet still truncated to "3595" — Max 1 may have fixed (commit mentions it)
+- Phase 2 rent tab for quadplex (4 units) still ahead
+
 ## 2026-05-06 — Local Model Audit + Telegram Bot Intelligence Upgrade
 
 **What got done:**
