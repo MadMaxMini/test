@@ -427,6 +427,10 @@ No claims.log files exist on disk yet — code is live but no triggers have fire
 - Large audio files (30+ min): CPU works, GPU pending fix validation
 - Output: `.txt` transcript in same dir as audio file
 
+### Playwright + Google Sheets
+- `networkidle` hangs forever on Google Sheets (collab sync never idles). Use `domcontentloaded`.
+- Reference: `~/Work/test/debug/playwright-timeout-2026-05/README.md`
+
 ---
 
 ## Capabilities — CAN / CANNOT
