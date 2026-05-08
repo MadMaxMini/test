@@ -32,6 +32,7 @@ AND can i start Claude in Haiku, for chatting and loading context and then bump 
 
 | Item | Notes |
 |------|-------|
+| **Alert pipeline — lifecycle-aware daily digest** | Replace per-event alerts with a daily monitoring loop: email capture (servicer sends when statement ready) → calendar-aware "have we seen this property this cycle?" → Sharon drop tracking → one daily consolidated digest per property (email received → PDF dropped → extracted → CSV → Sheet → done). Design captured in `bottleMsg/digest/2026-05-06-alert-pipeline-design.md` |
 | **7:15am pre-session brief** | Mini sends Rod a Telegram brief every morning at 7:15am: top P0/P1 items, what was done last session, what's blocked waiting on Rod. So Rod comes in with context instead of having to ask. LaunchAgent + script. Fires after 7am Dakota standup. |
 | **Accessibility/GUI automation — brainstorm use cases** | I can drive any macOS app via AppleScript + screencapture (proven with Telegram/BotFather). Brainstorm: browser automation (form fills, scraping without API, OAuth flows), driving other desktop apps (Messages, Calendar, Finder), vs MCP browser tools — when to use which. Output: capabilities doc + P2/P3 task list |
 | **local/scripts → GitHub (private)** | night-planner, auto-agent, dispatcher committed locally but not backed up. Need .gitignore first (contacts.md, logs, state files), then create private MadMaxMini repo |

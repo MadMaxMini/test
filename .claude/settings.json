@@ -10,7 +10,15 @@
       "Bash(git commit *)",
       "Read(/Users/macBot/Work/**)",
       "Glob",
-      "Grep"
+      "Grep",
+      "Bash(security find-generic-password *)",
+      "Bash(hostname)",
+      "Bash(launchctl list *)",
+      "Bash(ollama list)",
+      "Bash(ollama ps)",
+      "Bash(ollama show *)",
+      "Bash(docker info *)",
+      "Bash(docker compose ps *)"
     ]
   }
 }
