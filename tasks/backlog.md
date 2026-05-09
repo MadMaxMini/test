@@ -15,8 +15,7 @@ Last reviewed: 2026-04-20
 
 | Item | Why Now |
 |------|---------|
-| **Sheets pipeline — FDA fix (Rod)** | PDF watchers dead — FDA not granted to /bin/bash. Rod manual step in System Settings. Blocks all PDF automation + bridge wiring. Task: `T-2026-04-30-sheets-pipeline-fda-fix` |
-| **Sheets pipeline — wire bridge (Max)** | `sheets_bridge.py` built + tested, not wired into auto-pipeline. Blocked on FDA. Prompt ready: `WIRE-BRIDGE-PROMPT.md`. Task: `T-2026-04-30-sheets-pipeline-wire-bridge` |
+| **Sheets pipeline — wire bridge (Max)** | `sheets_bridge.py` built + tested, not wired into auto-pipeline. **FDA unblocked 2026-05-09** — pdfwatch + pmwatch now have access. Ready to wire. Prompt ready: `WIRE-BRIDGE-PROMPT.md`. Task: `T-2026-04-30-sheets-pipeline-wire-bridge` |
 | **Job search — GOALS.md + career-doc.md** | 5 live targets in pipeline (LangChain, Darktrace, Scale AI, ScaleOps, Rubrik). Resume v8 exists. Profile docs (GOALS.md, career-doc.md) are empty templates — bot can't do strategic positioning without them. Rod to fill via interview session with Elite HH coach. |
 | **Scale AI job URL** | Mentioned as target #3, never tracked in pipeline.md |
 
