@@ -1,5 +1,23 @@
 # Session Log
 
+## 2026-05-10 — Max Bot in Dakota Automation Team Group
+
+**What got done:**
+- Wired @madmax_mini_bot into the Dakota Automation Team Telegram group (was unmonitored)
+- Architecture decision: Max handles the group (better dispatcher), AutoDakota stays as Rod's 1-on-1 task bot
+- Group commands live: `/ping`, `/status`, `/models`, `/tasks [name]`, `/standup`, plus `@madmax_mini_bot [question]` for full AI dispatch
+- AutoDakota poller upgraded: `tg_send` accepts explicit chat_id so it can push outbound notifications to the group when needed
+- Fix pass after first deploy: `/tasks` was reading the legacy `people/{p}/tasks.md` redirect — switched to canonical `tasks/views/{p}.md`
+- Added `tg_send_chunked` — splits long replies at paragraph boundaries, capped at 3 messages, each under 4000 chars
+- Group session history wired via `sessions_mod.Session(GROUP_CHAT_ID)`, sender first-name prefixed so the AI knows who said what
+
+**Decisions:**
+- Group monitoring: Max bot only (not both bots — keeps responsibility clean)
+- `/tasks` group output: P0/P1 first, max 5 per person, strip verbose descriptions to keep replies tight
+
+**What's next:**
+- iMessage path has no session history (msggateway → dispatcher); fixable by adding sessions to that path. Rod hasn't asked yet — leave for now.
+
 ## 2026-05-08 — Via Verona 8302 Sheet Onboarding
 
 **What got done:**
