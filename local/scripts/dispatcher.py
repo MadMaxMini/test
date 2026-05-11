@@ -2,8 +2,10 @@
 # dispatcher.py — channel-agnostic command dispatcher
 #
 # Default model: mistral-small:latest (local Ollama)
-# Persistent switch: text "model claude|gemma|fast|local"
-# One-off override: say "use claude", "use gemma", "use fast" in any message
+# Three model switch modes:
+#   - Permanent: /model mistral (sticks until changed)
+#   - Temporary: /model gemma 2h (expires then reverts)
+#   - One-off: "use claude" in message (this message only)
 #
 # Called by log-watcher.py (SMS) and email-poller.py (email).
 # dispatch(body, reply_fn, context="text")
@@ -13,7 +15,7 @@ import logging
 import re
 import json
 import urllib.request
-from datetime import datetime
+from datetime import datetime, timedelta
 from glob import glob
 from pathlib import Path
 
@@ -31,6 +33,7 @@ MODEL_FAST    = "llama3.2:3b"
 MODEL_GEMMA   = "gemma3:27b"
 
 MODEL_STATE_FILE = HOME / "Work/test/local/scripts/dispatcher-model.state"
+MODEL_TTL_STATE_FILE = HOME / "Work/test/local/scripts/dispatcher-model-ttl.state"
 
 MODEL_NAMES = {
     "claude":  "Claude (Anthropic CLI)",
@@ -46,7 +49,42 @@ def get_persistent_model():
 def set_persistent_model(label):
     MODEL_STATE_FILE.write_text(label)
 
-SYSTEM_STATIC = """You are Mad Max — the automation bot on Rod Clemente's Mac mini (M4, 32GB, macOS).
+def get_ttl_model():
+    """Check TTL model state; return (label, remaining_mins) or (None, None) if expired/missing."""
+    if not MODEL_TTL_STATE_FILE.exists():
+        return None, None
+    try:
+        data = json.loads(MODEL_TTL_STATE_FILE.read_text())
+        expires_at = datetime.fromisoformat(data["expires_at"])
+        now = datetime.now()
+        if now > expires_at:
+            MODEL_TTL_STATE_FILE.unlink()
+            return None, None
+        remaining = (expires_at - now).total_seconds() / 60
+        return data["label"], remaining
+    except Exception:
+        return None, None
+
+def set_ttl_model(label, minutes):
+    """Set temporary model switch; expires in minutes."""
+    expires_at = datetime.now() + timedelta(minutes=minutes)
+    data = {"label": label, "expires_at": expires_at.isoformat()}
+    MODEL_TTL_STATE_FILE.write_text(json.dumps(data))
+
+def _load_soul(context="text"):
+    if context == "telegram":
+        soul_path = HOME / "Work/local/scripts/SOUL-telegram.md"
+    else:
+        soul_path = HOME / "Work/test/SOUL.md"
+    try:
+        return soul_path.read_text().strip()
+    except:
+        return ""
+
+_SOUL_TEXT = _load_soul("text")
+_SOUL_TELEGRAM = _load_soul("telegram")
+
+SYSTEM_STATIC_FALLBACK = """You are Mad Max — the automation bot on Rod Clemente's Mac mini (M4, 32GB, macOS).
 
 WHO YOU ARE:
 - You run on this machine 24/7, monitoring SMS and email
@@ -70,11 +108,11 @@ KEY PATHS:
 - Agent queue: ~/Work/local/scripts/agent-queue.json
 - Contacts (mini-local): ~/Work/local/scripts/contacts.md
 
-MODEL SWITCHING:
-- Default model: mistral-small:latest
-- "model claude|gemma|fast|local" → persistent switch until changed
-- "use claude / use gemma / use fast" in a message → one-shot, that message only, then reverts
-- "model?" → report current active model
+MODEL SWITCHING (3 modes):
+- Permanent: /model mistral (sticks until changed)
+- Temporary: /model gemma 2h (expires in 2 hours, then reverts)
+- One-off: "use claude" in message (this message only, then reverts)
+- Query: /model? → report current active model
 
 NIGHT AGENT COMMANDS (when Rod replies to AutoMax task proposals):
 - "go 1" / "go 2" → approve and run that task
@@ -87,6 +125,12 @@ RULES:
 - If you need one piece of info → ask it
 - Never claim you can't access files or run commands — you can
 - Don't pad replies"""
+
+
+def _get_system_prompt(context="text"):
+    if context == "telegram" and _SOUL_TELEGRAM:
+        return _SOUL_TELEGRAM
+    return _SOUL_TEXT or SYSTEM_STATIC_FALLBACK
 
 
 QUEUE_FILE    = HOME / "Work/local/scripts/agent-queue.json"
@@ -148,14 +192,14 @@ def call_ollama(model, prompt):
         "model": model,
         "prompt": prompt,
         "stream": False,
-        "options": {"num_predict": 200, "temperature": 0.4}
+        "options": {"num_predict": 500, "temperature": 0.4}
     }).encode()
     try:
         req = urllib.request.Request(
             OLLAMA_URL, data=payload,
             headers={"Content-Type": "application/json"}
         )
-        with urllib.request.urlopen(req, timeout=60) as resp:
+        with urllib.request.urlopen(req, timeout=120) as resp:
             data = json.loads(resp.read())
             return data.get("response", "").strip()
     except Exception as e:
@@ -185,27 +229,48 @@ def call_claude(prompt):
     return None
 
 
-def run_model(body, context="text"):
+def run_model(body, context="text", history=""):
     cmd_lower = body.lower()
 
-    # One-off override keywords take priority over persistent state
+    # Priority order: one-off > TTL > persistent > default
+    # One-off override keywords take priority over all state
     if "use claude" in cmd_lower or "ask claude" in cmd_lower:
         model_label = "claude"
     elif "use gemma" in cmd_lower or "ask gemma" in cmd_lower:
         model_label = "gemma"
     elif "use fast" in cmd_lower or "use small" in cmd_lower:
         model_label = "fast"
+    elif "use mistral" in cmd_lower or "use local" in cmd_lower:
+        model_label = "default"
     else:
-        model_label = get_persistent_model()
+        # Check TTL model (temporary, expires in 1-2 hours)
+        ttl_label, remaining_mins = get_ttl_model()
+        if ttl_label:
+            model_label = ttl_label
+        else:
+            # Check persistent model (permanent until changed)
+            persistent = get_persistent_model()
+            if persistent in (None, "", "default") and context == "text":
+                # iMessage default = Claude (better conversational nuance).
+                # Mistral kicks in via fallback chain below if Claude fails.
+                model_label = "claude"
+            else:
+                model_label = persistent or "default"
 
     live_ctx = build_live_context()
-    full_prompt = f"{SYSTEM_STATIC}\n\nActive model: {MODEL_NAMES.get(model_label, model_label)}\n\n{live_ctx}\n\nChannel: {context}\nRod says: {body}"
+    history_block = f"\n\nRecent conversation:\n{history}" if history else ""
+    system_prompt = _get_system_prompt(context)
+    full_prompt = f"{system_prompt}\n\nActive model: {MODEL_NAMES.get(model_label, model_label)}\n\n{live_ctx}{history_block}\n\nChannel: {context}\nRod says: {body}"
+
+    claude_attempted = False  # track for fallback notification
 
     if model_label == "claude":
         log(f"[dispatcher] → claude")
+        claude_attempted = True
         result = call_claude(full_prompt)
         if result:
             return result
+        log(f"[dispatcher] claude failed — falling back to mistral")
 
     if model_label == "gemma":
         log(f"[dispatcher] → gemma3:27b")
@@ -223,15 +288,18 @@ def run_model(body, context="text"):
     log(f"[dispatcher] → mistral-small:latest")
     result = call_ollama(MODEL_DEFAULT, full_prompt)
     if result:
+        if claude_attempted:
+            return f"⚠️ Claude unavailable — replied via Mistral.\n\n{result}"
         return result
 
-    # Final fallback: claude
-    log(f"[dispatcher] ollama failed, falling back to claude")
-    result = call_claude(full_prompt)
-    if result:
-        return result
+    # Final fallback: claude (skip if we already tried it above)
+    if not claude_attempted:
+        log(f"[dispatcher] ollama failed, falling back to claude")
+        result = call_claude(full_prompt)
+        if result:
+            return result
 
-    return "No model responded. Check ollama and claude. Run 'status' for diagnostics."
+    return "⚠️ All models down. Both Claude and Mistral failed. Check ollama, network, and Claude CLI."
 
 
 # ── Fast commands ─────────────────────────────────────────────────────────────
@@ -386,14 +454,464 @@ def cmd_agent_plan():
     return "Night planner running — I'll text you the plan in a minute."
 
 
+# ── Sweep / inbox commands (read-only) ────────────────────────────────────────
+
+REFERENCE_MODELS = HOME / "Work/local/scripts/reference-models.md"
+BOTTLEMSG_DIR = HOME / "Library/CloudStorage/Dropbox/bottleMsg"
+EMAIL_INBOX   = HOME / "Work/local/scripts/email-inbox.md"
+
+BOTTLEMSG_SKIP = {"archive", "mini-control-guide.md", "reviews", ".DS_Store"}
+
+
+def _list_bottlemsg():
+    """List actionable items in bottleMsg (skip archive, permanent files)."""
+    if not BOTTLEMSG_DIR.exists():
+        return []
+    items = []
+    for p in sorted(BOTTLEMSG_DIR.iterdir()):
+        if p.name in BOTTLEMSG_SKIP or p.name.startswith("."):
+            continue
+        if p.is_dir():
+            continue
+        age_hrs = (datetime.now().timestamp() - p.stat().st_mtime) / 3600
+        suffix = p.suffix.lower()
+        if suffix in (".md", ".txt"):
+            kind = "note"
+        elif suffix in (".png", ".jpg", ".jpeg", ".heic"):
+            kind = "screenshot"
+        elif suffix in (".m4a", ".mp3", ".wav"):
+            kind = "audio"
+        elif suffix in (".pdf",):
+            kind = "pdf"
+        elif suffix in (".kdbx",):
+            kind = "keypass"
+        else:
+            kind = "file"
+        items.append({"name": p.name, "kind": kind, "age_hrs": age_hrs})
+    return items
+
+
+def _list_email_inbox():
+    """List unprocessed entries from email-inbox.md."""
+    if not EMAIL_INBOX.exists():
+        return []
+    items = []
+    for line in EMAIL_INBOX.read_text().splitlines():
+        line = line.strip()
+        if not line or line.startswith("#"):
+            continue
+        if line.startswith("- ["):
+            items.append(line)
+    return items
+
+
+def _fmt_age(hrs):
+    if hrs < 1:
+        return f"{int(hrs * 60)}m"
+    if hrs < 24:
+        return f"{hrs:.0f}h"
+    return f"{hrs / 24:.0f}d"
+
+
+def cmd_sweep():
+    """Show pending items across bottleMsg and email inbox."""
+    btl = _list_bottlemsg()
+    emails = _list_email_inbox()
+
+    if not btl and not emails:
+        return "Inbox zero. Nothing in bottleMsg or email inbox."
+
+    parts = []
+    if btl:
+        parts.append(f"📬 bottleMsg ({len(btl)} items):")
+        for i, item in enumerate(btl, 1):
+            parts.append(f"  {i}. [{item['kind']}] {item['name']} ({_fmt_age(item['age_hrs'])} old)")
+
+    if emails:
+        parts.append(f"\n📧 Email inbox ({len(emails)} entries):")
+        for line in emails[:10]:  # cap at 10 to keep message short
+            parts.append(f"  {line[:120]}")
+        if len(emails) > 10:
+            parts.append(f"  ... and {len(emails) - 10} more")
+
+    parts.append(f"\nTotal: {len(btl)} bottleMsg + {len(emails)} email")
+    parts.append("(Read-only view — use a Claude Code session to process items)")
+    return "\n".join(parts)
+
+
+def cmd_inbox():
+    """Quick count of pending items."""
+    btl = _list_bottlemsg()
+    emails = _list_email_inbox()
+    return f"📬 bottleMsg: {len(btl)} items | 📧 email: {len(emails)} entries"
+
+
+# ── Digest browser (bottleMsg/digest content navigation) ─────────────────────
+
+BROWSE_STATE = HOME / "Work/local/scripts/digest-browse-state.json"
+
+def _first_meaningful_line(p, maxlen=80):
+    """Return the first non-empty, non-frontmatter line of a file."""
+    if p.suffix.lower() not in (".md", ".txt"):
+        return ""
+    try:
+        text = p.read_text(errors="ignore")
+    except Exception:
+        return ""
+    in_frontmatter = False
+    for i, line in enumerate(text.splitlines()):
+        line = line.strip()
+        if i == 0 and line == "---":
+            in_frontmatter = True
+            continue
+        if in_frontmatter:
+            if line == "---":
+                in_frontmatter = False
+            continue
+        if not line or line.startswith("#"):
+            # take H1/H2 if no other content
+            if line.startswith("#") and not line.lstrip("#").strip() == "":
+                return line.lstrip("#").strip()[:maxlen]
+            continue
+        return line[:maxlen]
+    return ""
+
+def _save_browse(items):
+    """Save current browse list so /read N references it."""
+    BROWSE_STATE.write_text(json.dumps({
+        "timestamp": datetime.now().isoformat(),
+        "items": [str(p) for p in items],
+    }))
+
+def _load_browse():
+    if not BROWSE_STATE.exists():
+        return None
+    try:
+        return json.loads(BROWSE_STATE.read_text())
+    except Exception:
+        return None
+
+def cmd_digest(args):
+    """List items in bottleMsg/digest, sorted by newest. Args: N | today | topic."""
+    digest = BOTTLEMSG_DIR / "digest"
+    if not digest.exists():
+        return "No digest folder."
+
+    files = [p for p in digest.iterdir() if p.is_file() and not p.name.startswith(".")]
+    files.sort(key=lambda p: p.stat().st_mtime, reverse=True)
+
+    if not files:
+        return "📭 digest is empty."
+
+    arg = (args or "").strip().lower()
+    today = None
+    n = 5
+
+    if arg == "today":
+        today = datetime.now().date()
+        files = [p for p in files if datetime.fromtimestamp(p.stat().st_mtime).date() == today]
+        if not files:
+            return "📭 nothing in digest from today."
+    elif arg == "topic":
+        # Group by leading date prefix or first word
+        groups = {}
+        for p in files:
+            slug = p.stem
+            for prefix in ["2026-", "2025-"]:
+                if slug.startswith(prefix):
+                    slug = slug[11:]  # strip YYYY-MM-DD-
+                    break
+            key = slug.split("-")[0] if "-" in slug else slug.split("_")[0] if "_" in slug else slug[:20]
+            groups.setdefault(key.lower(), []).append(p)
+        lines = ["📚 digest by topic:\n"]
+        for key in sorted(groups.keys(), key=lambda k: -len(groups[k])):
+            lines.append(f"• {key} ({len(groups[key])})")
+        lines.append("\nTo see one: /dig <keyword>")
+        return "\n".join(lines)
+    elif arg.isdigit():
+        n = int(arg)
+
+    files = files[:n]
+    _save_browse(files)
+
+    lines = [f"📚 digest — {len(files)} {'newest' if not today else 'today'}:\n"]
+    for i, p in enumerate(files, 1):
+        age_hrs = (datetime.now().timestamp() - p.stat().st_mtime) / 3600
+        preview = _first_meaningful_line(p)
+        lines.append(f"{i}. {p.name}  ({_fmt_age(age_hrs)})")
+        if preview:
+            lines.append(f"   ↳ {preview}")
+    lines.append("\nReply: /read N (open one) · /dig <keyword> (search)")
+    return "\n".join(lines)
+
+
+def cmd_dig(keyword):
+    """Search across digest + inbox for keyword in filename or content."""
+    keyword = (keyword or "").strip()
+    if not keyword:
+        return "Usage: /dig <keyword>"
+    kw = keyword.lower()
+
+    matches = []
+    for folder in ("digest", "inbox"):
+        d = BOTTLEMSG_DIR / folder
+        if not d.exists():
+            continue
+        for p in d.iterdir():
+            if not p.is_file() or p.name.startswith("."):
+                continue
+            if kw in p.name.lower():
+                matches.append((p, "filename"))
+                continue
+            if p.suffix.lower() in (".md", ".txt"):
+                try:
+                    if kw in p.read_text(errors="ignore").lower():
+                        matches.append((p, "content"))
+                except Exception:
+                    pass
+
+    if not matches:
+        return f"🔍 No matches for '{keyword}'."
+
+    matches.sort(key=lambda mp: mp[0].stat().st_mtime, reverse=True)
+    paths = [mp[0] for mp in matches]
+    _save_browse(paths[:20])
+
+    lines = [f"🔍 '{keyword}' — {len(matches)} match{'es' if len(matches) != 1 else ''}:\n"]
+    for i, (p, where) in enumerate(matches[:20], 1):
+        age_hrs = (datetime.now().timestamp() - p.stat().st_mtime) / 3600
+        lines.append(f"{i}. {p.parent.name}/{p.name}  [{where}]  ({_fmt_age(age_hrs)})")
+    if len(matches) > 20:
+        lines.append(f"\n... and {len(matches) - 20} more")
+    lines.append("\nReply: /read N to open one")
+    return "\n".join(lines)
+
+
+def cmd_read(arg):
+    """Read file content by browse-list number or filename."""
+    arg = (arg or "").strip()
+    if not arg:
+        return "Usage: /read N or /read <filename>"
+
+    target = None
+    if arg.isdigit():
+        state = _load_browse()
+        if not state:
+            return "No active browse list. Try /digest or /dig <keyword> first."
+        idx = int(arg) - 1
+        if idx < 0 or idx >= len(state["items"]):
+            return f"Item {arg} not in browse list (have {len(state['items'])})."
+        target = Path(state["items"][idx])
+    else:
+        # Try to find by filename match
+        for folder in ("digest", "inbox", "archive"):
+            d = BOTTLEMSG_DIR / folder
+            if not d.exists():
+                continue
+            for p in d.iterdir():
+                if p.is_file() and arg.lower() in p.name.lower():
+                    target = p
+                    break
+            if target:
+                break
+
+    if not target or not target.exists():
+        return f"Couldn't find '{arg}'."
+
+    if target.suffix.lower() not in (".md", ".txt"):
+        return f"📎 {target.name} — not a text file ({target.suffix}). Open in Dropbox."
+
+    try:
+        content = target.read_text(errors="ignore")
+    except Exception as e:
+        return f"Read failed: {e}"
+
+    # Keep under Telegram limit (~4000 chars per message; poller chunks bigger)
+    header = f"📄 {target.parent.name}/{target.name}\n{'─' * 30}\n"
+    return header + content
+
+
+# ── GTD sweep commands ───────────────────────────────────────────────────────
+
+GTD_SWEEP_SCRIPT = HOME / "Work/local/scripts/gtd-sweep.py"
+GTD_STATE_FILE   = HOME / "Work/local/scripts/gtd-sweep-state.json"
+
+# ── Meme support (Telegram only) ─────────────────────────────────────────────
+import random
+
+MEME_PATHS = {
+    "boom":   HOME / "Downloads/boom",
+    "vanish": HOME / "Downloads/vanish",
+    "hold":   HOME / "Downloads/hold",
+}
+
+def _send_meme(category, caption=None):
+    """Pick a random image/gif from category folder and send to Rod's Telegram. Silent no-op if folder missing/empty."""
+    folder = MEME_PATHS.get(category)
+    if not folder or not folder.exists():
+        return
+    files = [f for f in folder.iterdir() if f.is_file() and f.suffix.lower() in (".gif", ".jpg", ".jpeg", ".png", ".mp4", ".webp")]
+    if not files:
+        return
+    pick = random.choice(files)
+    try:
+        token = subprocess.check_output(["security", "find-generic-password", "-a", "macBot", "-s", "telegram-max-bot-token", "-w"], text=True).strip()
+        chat_id = subprocess.check_output(["security", "find-generic-password", "-a", "macBot", "-s", "telegram-max-chat-id", "-w"], text=True).strip()
+    except Exception as e:
+        log(f"[meme] keychain lookup failed: {e}")
+        return
+    endpoint = "sendAnimation" if pick.suffix.lower() in (".gif", ".mp4") else "sendPhoto"
+    field    = "animation"    if pick.suffix.lower() in (".gif", ".mp4") else "photo"
+    cmd = ["curl", "-s", "-X", "POST", f"https://api.telegram.org/bot{token}/{endpoint}",
+           "-F", f"chat_id={chat_id}", "-F", f"{field}=@{pick}"]
+    if caption:
+        cmd += ["-F", f"caption={caption}"]
+    try:
+        subprocess.run(cmd, capture_output=True, timeout=20)
+        log(f"[meme] sent {category}/{pick.name}")
+    except Exception as e:
+        log(f"[meme] send failed: {e}")
+
+
+def _load_gtd_state():
+    if not GTD_STATE_FILE.exists():
+        return None
+    try:
+        state = json.loads(GTD_STATE_FILE.read_text())
+        expires = datetime.fromisoformat(state["expires"])
+        if datetime.now() > expires:
+            GTD_STATE_FILE.unlink()
+            return None
+        return state
+    except Exception:
+        return None
+
+
+def _clear_gtd_state():
+    if GTD_STATE_FILE.exists():
+        GTD_STATE_FILE.unlink()
+
+
+def cmd_gtd_sweep():
+    """Trigger a GTD sweep now."""
+    subprocess.Popen(
+        ["/usr/bin/python3", str(GTD_SWEEP_SCRIPT)],
+        stdout=open(str(HOME / "Work/local/scripts/gtd-sweep.log"), "a"),
+        stderr=subprocess.STDOUT,
+        start_new_session=True
+    )
+    return "GTD sweep running — table incoming."
+
+
+def _load_gtd_module():
+    """Dynamic-load gtd-sweep.py so we can call record_correct/record_correction."""
+    import importlib.util
+    spec = importlib.util.spec_from_file_location("gtd_sweep", str(GTD_SWEEP_SCRIPT))
+    gtd = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(gtd)
+    return gtd
+
+
+def cmd_gtd_go(nums=None):
+    """Approve and execute moves. nums=None means all."""
+    state = _load_gtd_state()
+    if not state:
+        return "No active GTD sweep. Send `gtd` to start one."
+
+    items = state["items"]
+    if nums:
+        to_move = [i for i in items if i["num"] in nums]
+        if not to_move:
+            return f"No items match numbers: {nums}"
+    else:
+        to_move = [i for i in items if i["route"] != "stays"]
+
+    gtd = _load_gtd_module()
+    moved, failed = gtd.execute_moves(to_move)
+
+    # Learning: items that successfully moved at their proposed route = correct guess
+    moved_names = set(moved) if isinstance(moved, list) and moved and isinstance(moved[0], str) else set()
+    for item in to_move:
+        if item["name"] in moved_names or any(item["name"] in m for m in moved):
+            gtd.record_correct()
+
+    parts = []
+    if moved:
+        parts.append(f"💥 BOOM — moved {len(moved)} item{'s' if len(moved)!=1 else ''}:")
+        for m in moved:
+            parts.append(f"  ✨ {m}")
+        # Streak badge if applicable
+        badge = gtd.streak_badge()
+        if badge:
+            parts.append(badge)
+        _send_meme("boom")
+    if failed:
+        parts.append(f"💀 Failed ({len(failed)}):")
+        for f in failed:
+            parts.append(f"  ⚠️ {f}")
+    if not moved and not failed:
+        parts.append("🤷 Nothing to move.")
+
+    _clear_gtd_state()
+    return "\n".join(parts)
+
+
+def cmd_gtd_hold(nums):
+    """Hold items — remove them from the proposal so they stay in inbox."""
+    state = _load_gtd_state()
+    if not state:
+        return "No active GTD sweep."
+
+    gtd = _load_gtd_module()
+    held = []
+    for item in state["items"]:
+        if item["num"] in nums:
+            # Log Rod-correction before flipping route
+            gtd.record_correction(item["path"], item["route"], "stays")
+            item["route"] = "stays"
+            held.append(item["name"])
+
+    GTD_STATE_FILE.write_text(json.dumps(state, indent=2))
+    if held:
+        return f"✋ Holding: {', '.join(held)}\nReply 'go' to move the rest."
+    return f"No items match numbers: {nums}"
+
+
+def cmd_gtd_move(num, dest):
+    """Override the route for a single item."""
+    state = _load_gtd_state()
+    if not state:
+        return "No active GTD sweep."
+
+    gtd = _load_gtd_module()
+    for item in state["items"]:
+        if item["num"] == num:
+            new_route = f"{dest}/"
+            # Log Rod-correction (he overrode the proposed route)
+            if item["route"] != new_route:
+                gtd.record_correction(item["path"], item["route"], new_route)
+            item["route"] = new_route
+            GTD_STATE_FILE.write_text(json.dumps(state, indent=2))
+            return f"↗️ #{num} ({item['name']}) → {dest}/\nReply 'go' to execute."
+
+    return f"No item #{num} in current sweep."
+
+
+def cmd_gtd_skip():
+    """Dismiss the current sweep without moving anything."""
+    _clear_gtd_state()
+    return "👻 Poof! GTD sweep dismissed. Nothing moved."
+
+
 # ── Main entry point ──────────────────────────────────────────────────────────
 
-def dispatch(body, reply_fn, context="text"):
+def dispatch(body, reply_fn, context="text", history=""):
     body = (body or "").strip()
     if not body:
         return
 
-    cmd = body.lower().strip()
+    # Strip leading slash so /status == status, /model == model, etc.
+    cmd = body.lower().strip().lstrip("/")
     log(f"[dispatcher] [{context}] {body[:100]}")
 
     if cmd == "ping":
@@ -405,19 +923,118 @@ def dispatch(body, reply_fn, context="text"):
         return
 
     if cmd in ("help", "commands"):
-        reply_fn("commands: ping, status, pull <model>, model <claude|gemma|fast|local>. One-off: prefix any message with 'use claude', 'use gemma', 'use fast'.")
+        reply_fn(
+            "🤖 Mad Max — Commands\n"
+            "\n"
+            "🗂 GTD (bottleMsg inbox)\n"
+            "  /gtd            sweep + propose moves\n"
+            "  /inbox          list current items\n"
+            "\n"
+            "  After /gtd, reply to the proposal with:\n"
+            "    go              execute all\n"
+            "    go 1,3          execute only those\n"
+            "    hold 2          skip item 2\n"
+            "    move 4 archive  override destination\n"
+            "    skip            dismiss\n"
+            "\n"
+            "📊 System\n"
+            "  /status         services + last session\n"
+            "  /models         list local models\n"
+            "  /model?         show active model\n"
+            "  /pull <name>    pull a new local model\n"
+            "  /reset          clear conversation context\n"
+            "  /context        show current context depth\n"
+            "  /btl            write this chat to bottleMsg\n"
+            "  ping            check alive\n"
+            "\n"
+            "🔧 Model Switching (3 modes)\n"
+            "  PERMANENT:  /model mistral\n"
+            "    → Sticks until changed (next permanent switch)\n"
+            "\n"
+            "  TEMPORARY:  /model gemma 2h   or   /model fast 30m\n"
+            "    → Expires then reverts to persistent or default\n"
+            "    → Valid: Nm (minutes) or Nh (hours)\n"
+            "\n"
+            "  ONE-OFF:    use claude ... (any message)\n"
+            "    → This message only, reverts after\n"
+            "\n"
+            "  Options: claude / gemma / fast / mistral (local)\n"
+            "\n"
+            "💡 Inline overrides (mid-message)\n"
+            "  +context full   use full memory for this msg\n"
+            "  use mistral:    prefix to switch one-shot"
+        )
+        return
+
+    if cmd in ("models", "models detail", "model audit", "model inventory", "what models"):
+        if not REFERENCE_MODELS.exists():
+            reply_fn("reference-models.md not found. Run a benchmark session to generate it.")
+            return
+        content = REFERENCE_MODELS.read_text()
+        if cmd == "models detail":
+            # Full file — send in chunks if needed
+            if len(content) > 4000:
+                # Send in chunks to avoid Telegram message limits
+                chunks = [content[i:i+4000] for i in range(0, len(content), 4000)]
+                for chunk in chunks:
+                    reply_fn(chunk)
+            else:
+                reply_fn(content)
+        else:
+            # Summary view — installed models + verdicts only
+            lines = content.splitlines()
+            summary_parts = []
+            in_section = False
+            target_sections = ("## Installed Models", "## Speed Chart", "## Verdicts", "## Failure Modes Found")
+            for line in lines:
+                if any(line.startswith(s) for s in target_sections):
+                    in_section = True
+                    summary_parts.append(line)
+                    continue
+                if in_section and line.startswith("## "):
+                    in_section = False
+                if in_section:
+                    summary_parts.append(line)
+            reply_fn("\n".join(summary_parts) if summary_parts else content[:2000])
+        return
+
+    if cmd in ("sweep", "inbox sweep", "show inbox"):
+        reply_fn(cmd_sweep())
+        return
+
+    if cmd == "inbox":
+        reply_fn(cmd_inbox())
         return
 
     m = re.match(r"model\s*\??\s*$", cmd)
     if m:
-        current = get_persistent_model()
-        reply_fn(f"Active model: {MODEL_NAMES.get(current, current)}")
+        ttl_label, remaining_mins = get_ttl_model()
+        if ttl_label:
+            reply_fn(f"Active model: {MODEL_NAMES.get(ttl_label, ttl_label)} (temporary, expires in {remaining_mins:.0f}m)")
+        else:
+            current = get_persistent_model()
+            reply_fn(f"Active model: {MODEL_NAMES.get(current, current)} (permanent)")
         return
 
-    m = re.match(r"model\s+(claude|gemma|fast|local|default)", cmd)
+    # /model X duration — temporary switch (expires in N minutes or N hours)
+    # Examples: /model gemma 30m, /model mistral 2h
+    m = re.match(r"model\s+(claude|gemma|fast|local|default|mistral)\s+(\d+)([mh])", cmd)
     if m:
         label = m.group(1)
-        if label in ("local", "default"):
+        if label in ("local", "default", "mistral"):
+            label = "default"
+        duration = int(m.group(2))
+        unit = m.group(3)
+        minutes = duration * 60 if unit == "h" else duration
+        set_ttl_model(label, minutes)
+        reply_fn(f"Switched to {MODEL_NAMES.get(label, label)} for {duration}{unit}. Expires then reverts.")
+        return
+
+    # /model X — permanent switch
+    m = re.match(r"model\s+(claude|gemma|fast|local|default|mistral)$", cmd)
+    if m:
+        label = m.group(1)
+        if label in ("local", "default", "mistral"):
             label = "default"
         set_persistent_model(label)
         reply_fn(f"Switched to {MODEL_NAMES.get(label, label)}. Sticks until you change it.")
@@ -465,4 +1082,75 @@ def dispatch(body, reply_fn, context="text"):
         reply_fn(cmd_agent_plan())
         return
 
-    reply_fn(run_model(body, context))
+    # ── GTD sweep commands ────────────────────────────────────────────────────
+
+    if cmd in ("gtd", "gtd sweep"):
+        reply_fn(cmd_gtd_sweep())
+        return
+
+    # ── Digest browser ────────────────────────────────────────────────────────
+
+    m_digest = re.match(r"^digest(?:\s+(.+))?$", cmd)
+    if m_digest:
+        reply_fn(cmd_digest(m_digest.group(1)))
+        return
+
+    m_dig = re.match(r"^dig\s+(.+)$", cmd)
+    if m_dig:
+        reply_fn(cmd_dig(m_dig.group(1)))
+        return
+
+    m_read = re.match(r"^read\s+(.+)$", cmd)
+    if m_read:
+        reply_fn(cmd_read(m_read.group(1)))
+        return
+
+    if re.match(r"gtd\s+go(\s|$)", cmd) or cmd == "gtd go":
+        m_nums = re.match(r"gtd\s+go\s+([\d,\s]+)", cmd)
+        nums = None
+        if m_nums:
+            nums = [int(x.strip()) for x in m_nums.group(1).split(",") if x.strip().isdigit()]
+        reply_fn(cmd_gtd_go(nums))
+        return
+
+    m_hold = re.match(r"gtd\s+hold\s+([\d,\s]+)", cmd)
+    if m_hold:
+        nums = [int(x.strip()) for x in m_hold.group(1).split(",") if x.strip().isdigit()]
+        reply_fn(cmd_gtd_hold(nums))
+        return
+
+    m_move = re.match(r"gtd\s+move\s+(\d+)\s+(archive|digest|inbox)", cmd)
+    if m_move:
+        reply_fn(cmd_gtd_move(int(m_move.group(1)), m_move.group(2)))
+        return
+
+    if cmd in ("gtd skip", "gtd dismiss"):
+        reply_fn(cmd_gtd_skip())
+        return
+
+    # ── Context-aware bare commands when active proposal exists ───────────────
+    # If Rod replied to a GTD sweep with bare "go" / "hold 2" / "move 4 archive" / "skip",
+    # route as GTD command instead of falling through to the LLM.
+    if _load_gtd_state():
+        if cmd == "go":
+            reply_fn(cmd_gtd_go(None))
+            return
+        m_bare_go = re.match(r"^go\s+([\d,\s]+)$", cmd)
+        if m_bare_go:
+            nums = [int(x.strip()) for x in m_bare_go.group(1).split(",") if x.strip().isdigit()]
+            reply_fn(cmd_gtd_go(nums))
+            return
+        m_bare_hold = re.match(r"^hold\s+([\d,\s]+)$", cmd)
+        if m_bare_hold:
+            nums = [int(x.strip()) for x in m_bare_hold.group(1).split(",") if x.strip().isdigit()]
+            reply_fn(cmd_gtd_hold(nums))
+            return
+        m_bare_move = re.match(r"^move\s+(\d+)\s+(archive|digest|inbox)$", cmd)
+        if m_bare_move:
+            reply_fn(cmd_gtd_move(int(m_bare_move.group(1)), m_bare_move.group(2)))
+            return
+        if cmd in ("skip", "dismiss"):
+            reply_fn(cmd_gtd_skip())
+            return
+
+    reply_fn(run_model(body, context, history=history))
