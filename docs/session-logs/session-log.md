@@ -1,5 +1,35 @@
 # Session Log
 
+## 2026-05-12 (evening) — Model switching: temporary TTL + flipped defaults
+
+**What got done:**
+- Added third model-switch mode to dispatcher: temporary with TTL (1-2 hour expiration), alongside existing permanent and one-off modes
+- New state file `dispatcher-model-ttl.state` (JSON: `{label, expires_at}`) with auto-expire on read
+- Priority chain in `run_model()`: one-off ("use claude" in msg) > TTL > persistent > default
+- Command parser supports `/model X Nm` and `/model X Nh` for explicit durations
+- **Flipped defaults per Rod's preference:** bare `/model X` is now temporary (2h default), `/model X perm` is the explicit permanent switch (also accepts `permanent`, `forever`, `sticky`)
+- "perm" switch clears any active TTL so persistent takes effect immediately
+- `/model?` query now reports TTL with remaining minutes vs. permanent
+- `/help` rewritten with dedicated 🔧 Model Switching (3 modes) section — temporary listed first as the default path
+- Cleaned up misleading `use mistral:` colon-prefix entry from inline-overrides section (was duplicate + implied syntax that didn't exist)
+
+**Decisions:**
+- Temporary 2h is the right default — most switches should auto-revert; permanent is the explicit exception
+- Default TTL = 120 minutes (2 hours). Reasoning: long enough for a focused session, short enough that you won't accidentally leave gemma running for days
+- Kept "default", "mistral", "local" all aliased to mistral-small (Rod's mental model varies)
+
+**Commits:**
+- `8be6d52` — initial TTL implementation + help expansion
+- `ac76a1f` — flipped defaults to temp-first
+- `8517c5c` — removed misleading colon-prefix line from /help
+
+**Known cruft (not fixed tonight):**
+- `~/Work/test/local/scripts/dispatcher.py` is the test-repo tracked copy; canonical lives at `~/Work/local/scripts/dispatcher.py`. I sync by `cp` before commit. Should consolidate — flagged previously, still flagged.
+
+**What's next:**
+- Pact still active (no new builds) — this session was polish on an existing surface, allowed under "closing loops"
+- No follow-up needed on model switching — three modes cover the use space
+
 ## 2026-05-12 — Big-picture audit + 30-day no-build pact + OpenBao unsealed
 
 **What got done:**
