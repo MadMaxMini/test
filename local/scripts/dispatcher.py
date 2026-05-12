@@ -965,8 +965,7 @@ def dispatch(body, reply_fn, context="text", history=""):
             "  Check:   /model?  (shows active + remaining time)\n"
             "\n"
             "💡 Inline overrides (mid-message)\n"
-            "  +context full   use full memory for this msg\n"
-            "  use mistral:    prefix to switch one-shot"
+            "  +context full   use full memory for this msg"
         )
         return
 
