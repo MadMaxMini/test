@@ -1,5 +1,35 @@
 # Session Log
 
+## 2026-05-12 — Big-picture audit + 30-day no-build pact + OpenBao unsealed
+
+**What got done:**
+- Full-start sweep — session log, inventory, Dakota tasks, bot health, bottleMsg state
+- Big-picture honest assessment delivered: Dakota mortgage pipeline is the franchise (only thing with measurable $ impact), 2-3 coaches are zombies, OpenBao was sitting idle (turned out NOT idle — see below), platform layer is necessary overhead not the prize
+- Verified FDA fix: unloaded + reloaded pdfwatch/pmwatch, did real file-move test on Piney Point PDF. Stderr clean, watcher fired, extractor ran, dedup correctly skipped the duplicate. **FDA is working.** Morning brief's "FDA blocker" was stale (May 1).
+- **OpenBao discovery:** Not half-built — already initialized, KV + Transit engines live, real secrets stored (dmg/, email/, hf, telegram/, tokens/). Was just sealed. Unsealed via `unseal-keychain.sh`. Functional R/W test passed via API.
+- Wrote 30-day no-build pact to `bottleMsg/2026-05-11-30-day-no-build-pact.md`
+- Saved pact as persistent feedback memory: `feedback_no_build_pact_2026.md` + MEMORY.md index entry (loads into every future session)
+- needs-rod.md updated with 4 new items from this session
+
+**Decisions:**
+- **30-day no-build pact ACTIVE through 2026-06-10.** No new agents/coaches/services. Closing existing loops only. Override clause: Rod must explicitly say "I'm overriding the pact for X because Y." Full rules in pact file + memory.
+- Cash tracking deferred to week 2 minimum (was Rod's instinct to start now — pact blocked it)
+- Coaches died ≠ true — outbound nudges fire fine for Elite HH/Health/Manager. INBOUND Telegram pollers are broken (DNS errors). Distinct bug, lower severity unless Rod actually chats back.
+
+**Discoveries / bugs surfaced (not fixed tonight):**
+- OpenBao helper scripts (`store-secret.sh`, `get-secret.sh`) look for token at `~/.openbao-init` plaintext path, not Keychain. Scripts unusable from CLI until fixed (one-line edit). Backlogged.
+- No auto-unseal LaunchAgent for OpenBao — every Docker restart silently breaks every coach that depends on a secret. Decision pending (see needs-rod.md).
+- Elite HH + Health Coach Telegram pollers throwing `getUpdates error: [Errno 8] nodename nor servname provided` since 2026-05-08. Daily nudges fine, inbound chat broken. Severity depends on whether Rod ever replies to nudges.
+- Watcher dedup logic leaves duplicate PDFs in inbox instead of moving to processed/ — cosmetic, not functional.
+
+**What's next (priority order within the pact):**
+1. Auto-unseal LaunchAgent for OpenBao (~5 min, closes a reliability loop)
+2. Coach roster triage — Elite HH, Manager, Health, Faith, Recruiting: keep/simplify/archive decision per coach
+3. Time audit setup — log builder vs doer hours starting Monday
+4. DNS poller fix for Elite HH / Health (if Rod confirms he chats back to them)
+5. Helper script Keychain bug fix
+6. Phase 2 Dakota — properties config, change watcher, PM end-to-end hardening
+
 ## 2026-05-10 — Max Bot in Dakota Automation Team Group
 
 **What got done:**
