@@ -3,9 +3,10 @@
 #
 # Default model: mistral-small:latest (local Ollama)
 # Three model switch modes:
-#   - Permanent: /model mistral (sticks until changed)
-#   - Temporary: /model gemma 2h (expires then reverts)
-#   - One-off: "use claude" in message (this message only)
+#   - Temporary (default): /model gemma  → 2h TTL, then reverts
+#   - Temporary custom:    /model gemma 30m or /model fast 4h
+#   - Permanent:           /model mistral perm (explicit keyword)
+#   - One-off:             "use claude" in message (this message only)
 #
 # Called by log-watcher.py (SMS) and email-poller.py (email).
 # dispatch(body, reply_fn, context="text")
@@ -930,12 +931,13 @@ def dispatch(body, reply_fn, context="text", history=""):
             "  /gtd            sweep + propose moves\n"
             "  /inbox          list current items\n"
             "\n"
-            "  After /gtd, reply to the proposal with:\n"
-            "    go              execute all\n"
-            "    go 1,3          execute only those\n"
-            "    hold 2          skip item 2\n"
-            "    move 4 archive  override destination\n"
-            "    skip            dismiss\n"
+            "  After /gtd, reply with one of:\n"
+            "    go              execute ALL items\n"
+            "    go 1            execute only item 1\n"
+            "    go 1,3,5        execute items 1, 3, 5\n"
+            "    hold 2          skip item 2 (move rest)\n"
+            "    move 4 archive  override item 4's destination\n"
+            "    skip            dismiss proposal\n"
             "\n"
             "📊 System\n"
             "  /status         services + last session\n"
@@ -948,17 +950,19 @@ def dispatch(body, reply_fn, context="text", history=""):
             "  ping            check alive\n"
             "\n"
             "🔧 Model Switching (3 modes)\n"
-            "  PERMANENT:  /model mistral\n"
-            "    → Sticks until changed (next permanent switch)\n"
+            "  TEMPORARY (default):  /model gemma\n"
+            "    → 2h default, then reverts to permanent/default\n"
+            "    → Custom duration: /model fast 30m  or  /model gemma 4h\n"
+            "    → Units: Nm (minutes) or Nh (hours)\n"
             "\n"
-            "  TEMPORARY:  /model gemma 2h   or   /model fast 30m\n"
-            "    → Expires then reverts to persistent or default\n"
-            "    → Valid: Nm (minutes) or Nh (hours)\n"
+            "  PERMANENT:  /model mistral perm\n"
+            "    → Sticks until changed (add `perm` keyword)\n"
             "\n"
             "  ONE-OFF:    use claude ... (any message)\n"
             "    → This message only, reverts after\n"
             "\n"
             "  Options: claude / gemma / fast / mistral (local)\n"
+            "  Check:   /model?  (shows active + remaining time)\n"
             "\n"
             "💡 Inline overrides (mid-message)\n"
             "  +context full   use full memory for this msg\n"
@@ -1016,9 +1020,22 @@ def dispatch(body, reply_fn, context="text", history=""):
             reply_fn(f"Active model: {MODEL_NAMES.get(current, current)} (permanent)")
         return
 
-    # /model X duration — temporary switch (expires in N minutes or N hours)
+    # /model X perm|permanent — explicit permanent switch
+    m = re.match(r"model\s+(claude|gemma|fast|local|default|mistral)\s+(perm|permanent|forever|sticky)$", cmd)
+    if m:
+        label = m.group(1)
+        if label in ("local", "default", "mistral"):
+            label = "default"
+        # Clear any TTL so persistent takes effect immediately
+        if MODEL_TTL_STATE_FILE.exists():
+            MODEL_TTL_STATE_FILE.unlink()
+        set_persistent_model(label)
+        reply_fn(f"Switched to {MODEL_NAMES.get(label, label)} permanently. Sticks until you change it.")
+        return
+
+    # /model X duration — temporary switch with explicit duration
     # Examples: /model gemma 30m, /model mistral 2h
-    m = re.match(r"model\s+(claude|gemma|fast|local|default|mistral)\s+(\d+)([mh])", cmd)
+    m = re.match(r"model\s+(claude|gemma|fast|local|default|mistral)\s+(\d+)([mh])$", cmd)
     if m:
         label = m.group(1)
         if label in ("local", "default", "mistral"):
@@ -1030,14 +1047,14 @@ def dispatch(body, reply_fn, context="text", history=""):
         reply_fn(f"Switched to {MODEL_NAMES.get(label, label)} for {duration}{unit}. Expires then reverts.")
         return
 
-    # /model X — permanent switch
+    # /model X — temporary switch with default 2h TTL (the common case)
     m = re.match(r"model\s+(claude|gemma|fast|local|default|mistral)$", cmd)
     if m:
         label = m.group(1)
         if label in ("local", "default", "mistral"):
             label = "default"
-        set_persistent_model(label)
-        reply_fn(f"Switched to {MODEL_NAMES.get(label, label)}. Sticks until you change it.")
+        set_ttl_model(label, 120)
+        reply_fn(f"Switched to {MODEL_NAMES.get(label, label)} for 2h (default). Add `perm` to make permanent, or e.g. `30m`/`4h` for custom duration.")
         return
 
     m = re.match(r"pull\s+(.+)", cmd)
