@@ -1,5 +1,42 @@
 # Session Log
 
+## 2026-05-12 (late evening) — Sheets pipeline Phase 1 shipped + Phase 2 code landed (UNTESTED LIVE)
+
+**Context:** Rod ran today's morning test plan with Sharon dropping May statements on all 6 properties. Came in this evening to review logs + outputs.
+
+**What got done:**
+- Reviewed `pdf-extractor.log` for all 6 properties' May 12 runs. 5 worked (with anomalies), 1 dedup'd (Via Verona — turned out to be a real duplicate, not a bug)
+- Found scope drift: bridge was writing 5 fields (Balance, Escrow, Total Payment, Servicer, Escrow Shortfall) + dates per statement. Rod's product intent was only Balance + date, with payment-change alert
+- Found Piney Point formula trap: cell C20 held `=C19+C4`, bridge read it as a string, fired false PAYMENT CHANGE alerts to Sharon via Telegram + iMessage twice (May 7 and May 12)
+- Patched `sheets_bridge.py` (commit `f020bd1`):
+  - Shrank `MORTGAGE_FIELD_SPECS` from 4 entries to 1 (Balance only)
+  - Added formula-as-previous-payment guard: if `prev_payment.startswith("=")`, suppress alert
+- Rod manually verified all 6 sheets in sequence (401 K, 403 K, Grand Pines, Piney, La Estancia, Via Verona) — sheet-by-sheet cleanup of wrongly-written cells
+- Logged decision: defer escrow-balance sheet tracking; CSV still captures it
+- Logged Phase 2 hardening items in `dakota-software/docs/sheets/roadmap.md`: scope-down, formula-guard, re-wire Sheets API (was wired up earlier this spring, never recorded, lost), per-servicer extractor refactor consideration
+- Opened P0 task for Sharon: drop the real May Via Verona statement when ServiceMac issues it + report back. Task lives at `dakota-software/tasks/active/T-2026-05-12-sharon-via-verona-may-statement.md`
+- Wrote Phase 1 shipped celebration to bottleMsg + mirrored into `dakota-software/docs/sheets/2026-05-12-phase-1-shipped.md`
+
+**Decisions:**
+- Bridge writes scope down to KISS: only `C21` (Balance) + `D21` (date), always together. Read `C20` for change-detection only, never write
+- Sheets API re-wire is a Phase 2 hardening item, not urgent — Playwright works
+- Per-servicer extractor refactor: wait for trigger (new servicer being onboarded), not urgent
+- Phase 1 marked ✅ COMPLETE in roadmap (with Via Verona May validation called out as pending Sharon)
+- Bridge changes are LANDED IN CODE but UNTESTED LIVE — first real test is early June statement cycle
+
+**Commits (dakota-software):**
+- `f020bd1` — sheets bridge: scope down to balance-only + payment-change alert (UNTESTED LIVE)
+- `37d6027` — sheets pipeline: mark Phase 1 complete + open P0 task for Sharon
+- `2af58c0` — docs(sheets): add Phase 1 shipped writeup alongside project files
+
+**What's next:**
+- Sharon: drop real May Via Verona statement when ServiceMac issues it + report back (P0)
+- Rod is starting Phase 3 (Chase → PM Cash Tracking) wiring in parallel
+- Mad Max long-poll on Phase 2 verification (per Rod's ask) — monitor `pdf-extractor.log` + bridge writes when June statements drop (~early June 2026), confirm scope-down + formula-guard worked, report on first real run of new code
+- Pact note: scope-down + formula-guard count as bug-fix maintenance inside Phase 1 closeout. Phase 3 wiring is genuinely new build — Rod aware of the no-build pact (active through 2026-06-10), driving the decision himself
+
+---
+
 ## 2026-05-12 (evening) — Model switching: temporary TTL + flipped defaults
 
 **What got done:**
