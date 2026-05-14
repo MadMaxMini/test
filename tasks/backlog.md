@@ -75,7 +75,7 @@ AND can i start Claude in Haiku, for chatting and loading context and then bump 
 | **model-lab — LoRA/SFT pipeline** | Fine-tune open coding model on our data. Stack: Unsloth/Axolotl. Rented GPU for training. Start with 100-500 clean examples. Folder at ~/Work/model-lab/ |
 | **Dakota folder refactor** | Rethink repo structure — inbox, contact tracking, property tracking, bot layout. Rod defines vision, Max builds |
 | **Bot pipeline — per-person micro-bots** | Fix standup conflation. Each person bot gets tasks + role context, stitcher combines. Structural fix |
-| **Sheets pipeline Phase 2+** | Properties config file, onboard remaining properties (grand-pines, la-estancia, piney-point), escrow tracking, PM statement updates. Depends on Phase 1 wiring (P0). See `bottleMsg/inbox/2026-04-30-sheets-pipeline-status.md` for full roadmap |
+| **Sheets pipeline Phase 2 (cleanup + hardening)** | All Phase 2 scope lives in `dakota-software/docs/sheets/roadmap.md`. Includes: config-file consolidation, sheet layout audit (Sharon), re-wire Google Sheets API (was browser-based OAuth via `python3 ~/Work/local/scripts/gsheets_login.py`, token cached at `~/.playwright-google/` — still valid, can re-implement if needed), Piney Point formula-as-previous-payment guard. Depends on Phase 1 wiring (P0). |
 | **iMessage group creation via AppleScript** | Blocked (-1700 error). Workaround: Rod creates group, I use chat ID. Investigate alternatives |
 | **Open WebUI — first real use** | Live at localhost:3000, untouched |
 | **n8n setup** | Phase 4 workflow automation, docker-compose ready |
