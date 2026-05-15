@@ -25,7 +25,7 @@ Claude should ask before:
 ## Memory Rules
 - System-wide memory (`~/.claude/projects/.../memory/MEMORY.md`): update only on explicit user request
 - Project memory files: live in the current project folder
-- Session logs: `session-YYYY-MM-DD.md` in `~/Work/test/`
+- Session logs: single unified `session-log.md` in repo root (newest entries first)
 
 ---
 
