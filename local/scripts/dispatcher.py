@@ -129,7 +129,7 @@ RULES:
 
 
 def _get_system_prompt(context="text"):
-    if context == "telegram" and _SOUL_TELEGRAM:
+    if context in ("telegram", "group") and _SOUL_TELEGRAM:
         return _SOUL_TELEGRAM
     return _SOUL_TEXT or SYSTEM_STATIC_FALLBACK
 

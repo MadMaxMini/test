@@ -3,27 +3,30 @@
 
 ---
 
-## 2026-05-15 — Email system audit + Phase 2 detailed report
+## 2026-05-15 — Email audit + Phase 2 report + Stage A shipped
 
 **Completed:**
 - Audited email handling system end-to-end (poller, classifier, debounce, Telegram dispatch)
 - Confirmed dep state: `pdftotext` (poppler) already installed on mini; `pdfplumber` already in `dakota-software/bot/pdf-extractor/venv` — no new tools needed for Phase 2 PDF ingestion
-- Wrote detailed Phase 2 walkthrough split into 3 independently-shippable stages (A: SOUL-telegram hallucination fix, B: read-only sweep commands, C: action commands with allowlist)
-- Filed full report to `dakota-software/docs/2026-05-15-email-system-status-phase-2.md` (committed c5b5e5a, pushed)
-- Copied report to bottleMsg as `2026-05-15-email-system-status-phase-2.md`
+- Wrote detailed Phase 2 walkthrough split into 3 stages (A: SOUL-telegram hallucination fix, B: read-only sweep commands, C: action commands with allowlist)
+- Filed full report to `dakota-software/docs/2026-05-15-email-system-status-phase-2.md` (c5b5e5a, pushed)
+- Copied report to bottleMsg
 - Summary sent to Dakota Automation Team via `AutoDakota_Notify_Group` (iMessage)
+- **Stage A executed:** discovered SOUL-telegram.md + dispatcher routing for context="telegram" was already shipped. Closed the gap: extended `_get_system_prompt` to route context="group" → SOUL-telegram.md too (Dakota group chat was still using SOUL.md). Added Dakota team awareness section to SOUL-telegram.md so group chat doesn't lose Devon/Doc/Sharon name context. Restarted telegram-poller LaunchAgent. Verified all 3 contexts route correctly.
 
 **Decisions:**
-- Skip poppler install — already there + we'll use pdfplumber via shell-out to Dakota's existing venv (consistency + no dep sprawl)
-- Recommended Phase 2 build order: Stage A (1 afternoon) → Stage B (1 day) → wait & observe → Stage C only if Stage B is in active use
+- Skip poppler install — already there + use pdfplumber via shell-out to Dakota's existing venv (consistency + no dep sprawl)
+- Phase 2 build order: Stage A ✅ → Stage B → wait & observe → Stage C only if Stage B is in active use
+- Group context uses same SOUL as direct telegram (one honest SOUL for all chat-mode contexts)
 
 **Blockers/Open:**
-- 5 decisions pending Rod on Phase 2 (Stage A approval, Stage B approval, confirmation flow style, pdfplumber shell-out vs install, nudge cadence)
+- 4 decisions still pending Rod on Phase 2 (Stage B approval, confirmation flow style, pdfplumber shell-out vs install, nudge cadence)
 - Morning brief is 14 days stale (from 2026-05-01) — nightly triage may not be running
 - EliteHH coach STALE 119h, ManagerCoach STALE 132h per last morning brief
-- 19 bottleMsg items still pending GTD sweep (deferred — Rod gtg)
+- 19 bottleMsg items still pending GTD sweep
+- `~/Work/test/local/scripts/` is an out-of-sync mirror of `~/Work/local/scripts/`; only synced files touched this session (dispatcher.py + SOUL-telegram.md)
 
-**What's next:** Rod returns → answers Phase 2 decisions → I build Stage A (SOUL-telegram fix) next session.
+**What's next:** Watch group chat for honest behavior. Rod's call on Stage B (read-only sweep commands).
 
 ---
 
