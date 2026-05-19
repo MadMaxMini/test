@@ -69,6 +69,27 @@ Claude should ask before:
 | Ollama API | 11434 | 127.0.0.1 only |
 | OpenBao | 8200 | 127.0.0.1 only |
 | Open WebUI | 3000 | 127.0.0.1 only (when set up) |
+| Telegram (Max bot) | — | Cloud (Telegram API) |
+
+---
+
+## Telegram Commands (Mad Max Bot)
+
+**Stage B shipped (2026-05-19)** — Read-only inbox browsing via `@madmax_mini_bot` direct chat.
+
+| Command | What |
+|---------|------|
+| `/sweep` | 📬 bottleMsg items + 📧 recent emails, emoji-coded, saves browse state |
+| `/inbox` | Quick count (bottleMsg items + email entries) |
+| `/email [N]` | Last N emails (default 10, max 50), with tier icons 🔴🟡🔵⚪ |
+| `/email pending` | Debounce batch about to flush |
+| `/read N` | Read bottleMsg item N from `/sweep`, supports md/txt/PDF |
+| `/digest [N]` | Browse learning material in bottleMsg/digest/ |
+| `/dig keyword` | Search digest + inbox by keyword |
+| `/status` | Machine health (Ollama, Docker, Vault) |
+| `/models` | List loaded Ollama models |
+
+**See [CAPABILITIES.md](CAPABILITIES.md) for full documentation and testing instructions.**
 
 ---
 
@@ -82,18 +103,31 @@ Claude should ask before:
 
 ---
 
-## Current Status (as of 2026-03-01)
-- Ollama installed, localhost-only, no models pulled yet
-- Docker Desktop installed, needs to be launched once to initialize
-- OpenBao compose file ready, waiting for Docker to be up
-- HuggingFace CLI installed (`hf`), account not created yet
-- System hardened: SIP ✅ FileVault ✅ Firewall ✅ Stealth mode ✅
-- SSH configured for GitHub ✅
+## Current Status (as of 2026-05-19)
 
-## Next Session Checklist
-1. Open Docker.app (initialize engine)
-2. `cd ~/Work/local/openbao && docker compose up -d`
-3. Initialize and unseal OpenBao (scripts ready in `openbao/scripts/`)
-4. Create HuggingFace account → generate token → store in OpenBao
-5. Pull first Tier 1 model via Ollama
-6. Test API end to end
+**Infrastructure:**
+- Ollama ✅ (native, localhost:11434, models loaded)
+- OpenBao ✅ (Docker, localhost:8200, running)
+- Docker Desktop ✅ (initialized)
+- HuggingFace CLI ✅ (installed, account: madmaxmini)
+- System hardened ✅ (SIP, FileVault, Firewall, Stealth mode)
+- SSH GitHub ✅ (ed25519 key, MadMaxMini account)
+
+**Daemons (Live):**
+- email-poller ✅ (Gmail IMAP, classification, debounce, Telegram notify)
+- telegram-poller ✅ (@madmax_mini_bot, dispatcher, Stage B commands)
+- GTD sweep (on-demand via `/gtd` command)
+- Night planner ✅ (10pm task proposals via Telegram)
+- Auto-agent ✅ (approvals via `/go` commands)
+
+**Telegram (Stage B):**
+- `/sweep`, `/inbox`, `/email`, `/read` commands live
+- Browse state for `/read N` references
+- PDF reading via pdfplumber venv
+- All read-only (no file actions yet — Stage C deferred 1 week)
+
+**One-Week Observation Period:**
+- Monitoring email-inbox.md + email-batch.json for anomalies
+- Watching telegram-poller.log for errors
+- Testing commands from phone daily
+- See [CAPABILITIES.md](CAPABILITIES.md) for test procedures
