@@ -1,5 +1,24 @@
 # Session Log
 
+## 2026-05-19 — Stage B shipped: read-only sweep commands
+
+**Completed:**
+- **Stage B built and live:** Read-only Telegram inbox commands, all verified working
+  - `/sweep` → bottleMsg items + recent emails, emoji-rich (📝📸🎙️📄🔐📎), aged markers (⏰ for >48h), saves browse state for `/read N`
+  - `/inbox` → quick count
+  - `/email [N]` → show last N emails (default 10, max 50), sorted newest-first, with tier icons (🔴🟡🔵⚪)
+  - `/email pending` → debounce batch sorted by urgency, ready to flush
+  - `/read N|filename` → md/txt/PDF support — PDFs shell-out to Dakota's pdfplumber venv, show first 5 pages max
+  - All pure read-only; pagination via existing `tg_send_chunked`; verified with direct dispatch test before deploy
+- Restarted telegram-poller clean (13:41:27); synced dispatcher.py to test repo
+
+**Earlier (2026-05-15):**
+- Audited email system, confirmed no new deps (poppler + pdfplumber present)
+- Wrote Phase 2 report with 3-stage design
+- **Stage A shipped:** fixed Telegram group chat (context="group" now routes to SOUL-telegram.md, fixing hallucination bug where group was still using full SOUL.md)
+
+---
+
 ## 2026-05-19 (distilled)
 - **Phase 2 rollup formulas SHIPPED** (`dakota-software` commit `fabf3fc`, pushed) — bridge now ALWAYS emits `=-x-y-z` addend formulas for collapsed rows (mortgage, distribution, etc.), not just `is_partial`. Singletons stay flat. The TODO at sheets_bridge.py line 953 is now closed.
 - **Three connected items captured in roadmap doc** `dakota-software/docs/cash-tracking/2026-05-19-rollup-formulas-and-verification-roadmap.md` (commit `f90635a`, corrected `a749b84`): rollup formulas (✅ DONE), day-of-month drift fix (DEFERRED), pending verification yellow+UNVERIFIED model (DEFERRED). All three share the same code path; bundle when revisiting.

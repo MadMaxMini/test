@@ -460,8 +460,19 @@ def cmd_agent_plan():
 REFERENCE_MODELS = HOME / "Work/local/scripts/reference-models.md"
 BOTTLEMSG_DIR = HOME / "Library/CloudStorage/Dropbox/bottleMsg"
 EMAIL_INBOX   = HOME / "Work/local/scripts/email-inbox.md"
+EMAIL_BATCH_FILE  = HOME / "Work/local/scripts/email-batch.json"
+PDFPLUMBER_PYTHON = HOME / "Work/dakota-software/bot/pdf-extractor/venv/bin/python3"
 
 BOTTLEMSG_SKIP = {"archive", "mini-control-guide.md", "reviews", ".DS_Store"}
+
+KIND_EMOJI = {
+    "note":       "📝",
+    "screenshot": "📸",
+    "audio":      "🎙️",
+    "pdf":        "📄",
+    "keypass":    "🔐",
+    "file":       "📎",
+}
 
 
 def _list_bottlemsg():
@@ -488,7 +499,7 @@ def _list_bottlemsg():
             kind = "keypass"
         else:
             kind = "file"
-        items.append({"name": p.name, "kind": kind, "age_hrs": age_hrs})
+        items.append({"name": p.name, "kind": kind, "age_hrs": age_hrs, "path": p})
     return items
 
 
@@ -515,28 +526,38 @@ def _fmt_age(hrs):
 
 
 def cmd_sweep():
-    """Show pending items across bottleMsg and email inbox."""
+    """Show pending items across bottleMsg and email inbox (read-only)."""
     btl = _list_bottlemsg()
     emails = _list_email_inbox()
 
     if not btl and not emails:
-        return "Inbox zero. Nothing in bottleMsg or email inbox."
+        return "✨ Inbox zero. Nothing in bottleMsg or email inbox."
 
     parts = []
     if btl:
-        parts.append(f"📬 bottleMsg ({len(btl)} items):")
+        # Save Path objects so /read N references the bottleMsg list after /sweep
+        _save_browse([item["path"] for item in btl])
+
+        parts.append(f"📬 *bottleMsg* — {len(btl)} item{'s' if len(btl) != 1 else ''}")
         for i, item in enumerate(btl, 1):
-            parts.append(f"  {i}. [{item['kind']}] {item['name']} ({_fmt_age(item['age_hrs'])} old)")
+            emoji = KIND_EMOJI.get(item["kind"], "📎")
+            age = _fmt_age(item["age_hrs"])
+            aged = " ⏰" if item["age_hrs"] > 48 else ""
+            parts.append(f"  {i}. {emoji} {item['name']}  ({age}){aged}")
 
     if emails:
-        parts.append(f"\n📧 Email inbox ({len(emails)} entries):")
-        for line in emails[:10]:  # cap at 10 to keep message short
-            parts.append(f"  {line[:120]}")
+        parts.append(f"\n📧 *Email* — {len(emails)} entr{'ies' if len(emails) != 1 else 'y'}")
+        # Show 10 most recent (file is append-only, newest at end)
+        for line in emails[-10:]:
+            clean = line[2:] if line.startswith("- ") else line
+            parts.append(f"  {clean[:140]}")
         if len(emails) > 10:
-            parts.append(f"  ... and {len(emails) - 10} more")
+            parts.append(f"  …{len(emails) - 10} older — /email 25 for more")
 
-    parts.append(f"\nTotal: {len(btl)} bottleMsg + {len(emails)} email")
-    parts.append("(Read-only view — use a Claude Code session to process items)")
+    parts.append("")
+    parts.append(f"Total: {len(btl)} 📬 + {len(emails)} 📧")
+    if btl:
+        parts.append("→ /read N to view item · /email pending for batch")
     return "\n".join(parts)
 
 
@@ -545,6 +566,72 @@ def cmd_inbox():
     btl = _list_bottlemsg()
     emails = _list_email_inbox()
     return f"📬 bottleMsg: {len(btl)} items | 📧 email: {len(emails)} entries"
+
+
+def cmd_email(arg=None):
+    """Show recent classified emails, or pending debounce batch.
+
+    /email          → last 10 emails
+    /email N        → last N emails (capped at 50)
+    /email pending  → debounce batch about to send
+    """
+    arg = (arg or "").strip().lower()
+
+    if arg in ("pending", "batch", "debounce"):
+        return cmd_email_pending()
+
+    n = 10
+    if arg.isdigit():
+        n = max(1, min(int(arg), 50))
+
+    emails = _list_email_inbox()
+    if not emails:
+        return "📭 No emails logged yet."
+
+    recent = emails[-n:]
+    lines = [f"📧 *Last {len(recent)} email{'s' if len(recent) != 1 else ''}* (of {len(emails)})\n"]
+    for line in recent:
+        clean = line[2:] if line.startswith("- ") else line
+        lines.append(clean[:180])
+    if len(emails) > n:
+        lines.append(f"\n…{len(emails) - n} older not shown · /email 25 for more")
+    lines.append("→ /email pending to see debounce batch")
+    return "\n".join(lines)
+
+
+def cmd_email_pending():
+    """Show what's in the email debounce batch (about to flush)."""
+    if not EMAIL_BATCH_FILE.exists() or EMAIL_BATCH_FILE.stat().st_size == 0:
+        return "📭 Debounce batch empty. No emails pending notification."
+
+    try:
+        data = json.loads(EMAIL_BATCH_FILE.read_text())
+    except Exception as e:
+        return f"⚠️ Couldn't parse batch file: {e}"
+
+    items = data.get("items", []) if isinstance(data, dict) else (data if isinstance(data, list) else [])
+    if not items:
+        return "📭 Debounce batch empty."
+
+    started = data.get("started", 0) if isinstance(data, dict) else 0
+    age_str = ""
+    if started:
+        age_min = (datetime.now().timestamp() - started) / 60
+        age_str = f" (oldest {age_min:.0f}m in batch, flush at 15m)"
+
+    lines = [f"⏳ *Debounce batch* — {len(items)} email{'s' if len(items) != 1 else ''}{age_str}:\n"]
+    tier_order = {"urgent": 0, "important": 1, "info": 2, "noise": 3}
+    items_sorted = sorted(items, key=lambda x: tier_order.get(x.get("classification", {}).get("tier", "info"), 3))
+    for item in items_sorted[:20]:
+        c = item.get("classification", {})
+        icon = c.get("icon", "🔵")
+        sender = item.get("sender", "?")
+        sender_clean = sender.split("<")[0].strip().strip('"') or sender
+        subject = item.get("subject", "")
+        lines.append(f"  {icon} {sender_clean[:35]} — {subject[:60]}")
+    if len(items) > 20:
+        lines.append(f"  …{len(items) - 20} more in batch")
+    return "\n".join(lines)
 
 
 # ── Digest browser (bottleMsg/digest content navigation) ─────────────────────
@@ -688,8 +775,49 @@ def cmd_dig(keyword):
     return "\n".join(lines)
 
 
+def _read_pdf(path):
+    """Extract PDF text via Dakota's pdfplumber venv."""
+    if not PDFPLUMBER_PYTHON.exists():
+        return f"📄 {path.name} — pdfplumber venv not found. Open in Dropbox."
+
+    script = """
+import sys
+import pdfplumber
+try:
+    with pdfplumber.open(sys.argv[1]) as pdf:
+        pages = []
+        for i, page in enumerate(pdf.pages[:5], 1):
+            text = page.extract_text() or ""
+            pages.append(f"--- page {i} ---\\n{text}")
+        out = "\\n".join(pages)
+        if len(pdf.pages) > 5:
+            out += f"\\n\\n[...{len(pdf.pages) - 5} more pages]"
+        print(out)
+except Exception as e:
+    print(f"ERR: {e}", file=sys.stderr)
+    sys.exit(1)
+"""
+
+    try:
+        r = subprocess.run(
+            [str(PDFPLUMBER_PYTHON), "-c", script, str(path)],
+            capture_output=True, text=True, timeout=30
+        )
+        if r.returncode != 0:
+            return f"📄 {path.name} — PDF read failed: {r.stderr.strip()[:200]}"
+        header = f"📄 {path.parent.name}/{path.name}\n{'─' * 30}\n"
+        return header + r.stdout.strip()
+    except subprocess.TimeoutExpired:
+        return f"📄 {path.name} — PDF read timed out (>30s)"
+    except Exception as e:
+        return f"📄 {path.name} — read error: {e}"
+
+
 def cmd_read(arg):
-    """Read file content by browse-list number or filename."""
+    """Read file content by browse-list number or filename.
+
+    Supports: .md, .txt (full content), .pdf (first 5 pages via pdfplumber).
+    """
     arg = (arg or "").strip()
     if not arg:
         return "Usage: /read N or /read <filename>"
@@ -698,15 +826,18 @@ def cmd_read(arg):
     if arg.isdigit():
         state = _load_browse()
         if not state:
-            return "No active browse list. Try /digest or /dig <keyword> first."
+            return "No active browse list. Try /sweep or /digest first."
         idx = int(arg) - 1
         if idx < 0 or idx >= len(state["items"]):
             return f"Item {arg} not in browse list (have {len(state['items'])})."
         target = Path(state["items"][idx])
     else:
         # Try to find by filename match
-        for folder in ("digest", "inbox", "archive"):
-            d = BOTTLEMSG_DIR / folder
+        for folder in ("digest", "inbox", "archive", ""):
+            if folder:
+                d = BOTTLEMSG_DIR / folder
+            else:
+                d = BOTTLEMSG_DIR
             if not d.exists():
                 continue
             for p in d.iterdir():
@@ -719,8 +850,12 @@ def cmd_read(arg):
     if not target or not target.exists():
         return f"Couldn't find '{arg}'."
 
-    if target.suffix.lower() not in (".md", ".txt"):
-        return f"📎 {target.name} — not a text file ({target.suffix}). Open in Dropbox."
+    suffix = target.suffix.lower()
+    if suffix == ".pdf":
+        return _read_pdf(target)
+
+    if suffix not in (".md", ".txt"):
+        return f"📎 {target.name} — not readable ({suffix}). Open in Dropbox."
 
     try:
         content = target.read_text(errors="ignore")
@@ -728,7 +863,7 @@ def cmd_read(arg):
         return f"Read failed: {e}"
 
     # Keep under Telegram limit (~4000 chars per message; poller chunks bigger)
-    header = f"📄 {target.parent.name}/{target.name}\n{'─' * 30}\n"
+    header = f"📝 {target.parent.name}/{target.name}\n{'─' * 30}\n"
     return header + content
 
 
@@ -1007,6 +1142,11 @@ def dispatch(body, reply_fn, context="text", history=""):
 
     if cmd == "inbox":
         reply_fn(cmd_inbox())
+        return
+
+    m_email = re.match(r"^email(?:\s+(.+))?$", cmd)
+    if m_email:
+        reply_fn(cmd_email(m_email.group(1)))
         return
 
     m = re.match(r"model\s*\??\s*$", cmd)
