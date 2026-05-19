@@ -1,5 +1,26 @@
 # Session Log
 
+## 2026-05-19 — Sorting Hat Session 1 shipped (PR #3)
+
+**Completed:**
+- **Classifier built and passing:** `bot/pdf-extractor/sorting_hat.py` — deterministic `classify(path) → ClassificationResult{statement_type, confidence, evidence, route}`. Types: `mortgage | chase_checking | chase_credit | pm_owner | unknown`. PDF path uses pdfplumber text + servicer/marker scoring; CSV path uses header set match. Ambiguity guard (runner-up within 0.15 → unknown). Confidence floor 0.7. CLI `python sorting_hat.py <file> [--json]`.
+- **11 real fixtures, 100% accuracy:** 4 mortgage (Wells Fargo, NewRez, Rocket, ServiceMac), 2 Chase checking PDFs, 2 Chase credit PDFs, 2 PM owner (HomeRiver Group), 1 Chase native checking CSV. Every classification at 0.95 confidence with rich multi-marker evidence.
+- **PII out of repo:** Real loan numbers, balances, addresses don't go to GitHub. `tests/fixtures/sorting-hat/fetch.sh` copies from local Dropbox `processed/` paths; local `.gitignore` covers PDFs and CSVs in that subtree.
+- **No production touch:** Existing mortgage/Chase/PM extractors, LaunchAgents, inbox folders unchanged. Sorting Hat lands as new code in new files.
+- 3 commits on `phase-2-sorting-hat` (fetch infra → classifier → tests); PR #3 opened against main.
+
+**Key correction during session:** kickoff doc said PM owner statements were Phase 4 / "not yet seen." Rod corrected: PM ingest *works* (LaunchAgent loaded, CSV gets written), only sheets-wiring is the messy Phase 4 piece. So PM samples went into the fixture set and the classifier covers all 4 real types, not 3 + stub.
+
+**Open for next session (cutover):**
+- Unified-inbox folder (`account-statements-inbox` + `pm-statements-inbox` → single `inbox/`)
+- LaunchAgent rewiring → call Sorting Hat first, dispatch to existing extractors
+- Quarantine path for unknowns + alert
+- Chase credit native CSV pattern (no real sample yet — current Chase CSV support is checking only)
+
+**Repos touched:** `dakota-software` (branch `phase-2-sorting-hat`, PR #3, pushed). No `madmax` code changes this session — only session log.
+
+---
+
 ## 2026-05-19 — Stage B shipped: read-only sweep commands
 
 **Completed:**
