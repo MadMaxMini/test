@@ -122,3 +122,48 @@
 - Blocker: awaiting Rod on .kdbx destination
 - Blocker: Rod to pick encryption angle (FileVault check / encrypt palace dir / platform/security.md)
 - Next: Phase 1 Mem Palace build (~2hrs) once encryption angle chosen
+
+## 2026-04-30 (distilled)
+- Reviewed sheet architecture; revised phase roadmap (P1=balance, P2=cleanup, P3=escrow, P4=PM, P5=hardening)
+- Aligned date format to MM/DD/YYYY across extractors
+- Added 4 property IDs (grand-pines, la-estancia, piney-point, cash-tracking)
+- Decided notification routing: routine→Telegram, alerts→Telegram+iMessage, urgent→Dakota group
+- Root cause found: FDA not granted to launchd /bin/bash — pdfwatch and pmwatch both dead, blocking PDF processing
+- Wrote 3 handoff prompts (wire-bridge, FDA fix, Phase 2 plan)
+- **Open blocker: FDA permissions must be granted manually in System Settings**
+- Next steps: FDA fix, wire bridge into pipeline, process 4 stuck PM Owner Statements
+
+## 2026-04-29 (distilled)
+- Analyzed Kickapoo 401K + 403K sheets via Playwright, mapped tab structure and formulas
+- Built sheets_bridge.py with dual duplicate checking (CSV + Sheet), date normalization, payment-change alerting, single Playwright session
+- Built property_map.json for Kickapoo properties
+- Live test (kickapoo-403) passed: balance ($53,455.45) written, payment alert fired, duplicate check validated
+- Phase 1 scope locked: balance + payment alerts (escrow deferred to Phase 2, PM to Phase 3)
+- RFC distributed to Dakota team inboxes
+- Sheet architecture documented in madmax + dakota memory
+
+## 2026-04-28 (distilled)
+- Built gtd-sweep.py to sync bottleMsg inventory to Telegram via classified table
+- Wired GTD reply commands: `gtd go`, `gtd go 1,3`, `gtd hold 2`, `gtd move 4 archive`, `gtd skip`
+- Created LaunchAgent (com.madmax.gtdsweep) with WatchPaths on bottleMsg + daily 11:55am trigger (5-min debounce)
+- Automated KeePass auto-stay and cheat-sheet-failure auto-archive (laptop-only)
+- Processed bottleMsg inbox backlog
+- Decided on async GTD sweep via Telegram instead of synchronous
+- Documented cheat-sheet failures laptop-only scope in memory
+
+## 2026-04-25 (distilled)
+- Calendar Bot built end-to-end: 13.6K events indexed in SQLite FTS5, search engine, Claude+Ollama LLM layer, Telegram poller
+- Registered @cala_tele_bot, credentials stored in Keychain
+- Fixed: emails now in LLM context, conversation history passed to search+LLM, triple-response bug resolved
+- Created PROJECT.md documentation
+- Decided against git repo (personal data; plan to encrypt later)
+- Data stored at ~/Work/coaches/calendar-bot/data/
+
+## 2026-04-24 (distilled)
+- PM pipeline live (com.dakotaops.pmwatch installed + loaded); Devon's extractor + wrappers integrated
+- Updated shell scripts + launchd plists for Dropbox folder renames (statements → account-statements-inbox, new pm-statements-inbox)
+- Canonical PDF rename implemented: YYYY-MM_property-slug_bank.pdf
+- Dual PDF deduplication: filename check + CSV date check
+- Symlinked operations/mortgage-data + operations/pm-data into Dropbox processed/
+- Test extracted Georgia Owner Statement (HomeRiver) clean; results sent to bottleMsg
+- Decision: flat pm-statements-inbox structure (no subfolders); Owner Statement PDFs as extraction target
