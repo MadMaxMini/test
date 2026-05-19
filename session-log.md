@@ -34,6 +34,12 @@
 
 **End-of-month goal met:** Sorting Hat fully designed, tested, and ready for deployment.
 
+**Cutover decisions actioned:**
+1. ✅ Dropbox Smart Sync: pinned offline (per existing memory)
+2. 🔄 Alert verbosity: written `docs/sheets/sorting-hat-alert-discussion.md` (4 options A-D); iMessage sent to Dakota group asking Doc, Devon, Sharon to weigh in
+3. ✅ Quarantine cleanup: manual to start (safest default)
+4. 🔄 Chase credit routing: Telegram DM to Rod (msg 306) asking whether 3160/3202 flow to sheets automatically today, before deciding route vs quarantine
+
 ---
 
 ## 2026-05-19 — Stage B shipped + quit/timeout added
