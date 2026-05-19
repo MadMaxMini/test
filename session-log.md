@@ -17,12 +17,16 @@
 - Quarantine path for unknowns + alert
 - Chase credit native CSV pattern (no real sample yet — current Chase CSV support is checking only)
 
-**Follow-up: logging + viewer (same session)**
+**Follow-up: logging + viewer + hardening (same session)**
 - `sorting_hat.py` now supports `--log FILE` → appends JSONL per run
 - `sorting-hat-viewer.html` — static page reads JSONL, shows last 50 runs as emoji table, red highlight for unknowns
+- **Error handling:** nonexistent files, bad PDFs, corrupt CSVs all log gracefully as "unknown" (not crashes)
+- **Integration test:** verify JSONL format round-trips (test_sorting_hat_logging.py, 3 tests passing)
+- **Chase credit CSV:** added TODO stub + commented pattern (no real native sample yet; extractor outputs in operations/bank-data/ are processed, not native)
 - Ready for LaunchAgent wiring in cutover session
+- **Cutover prep:** kicked off Gemma to draft LaunchAgent script, folder layout, alert mechanism (parallel task)
 
-**Repos touched:** `dakota-software` (merged PR #3 + logging/viewer follow-up). No `madmax` code changes this session — only session log.
+**Repos touched:** `dakota-software` (merged PR #3 + logging/viewer + error handling + tests). No `madmax` code changes this session — only session log.
 
 ---
 
