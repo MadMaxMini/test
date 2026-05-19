@@ -17,7 +17,12 @@
 - Quarantine path for unknowns + alert
 - Chase credit native CSV pattern (no real sample yet — current Chase CSV support is checking only)
 
-**Repos touched:** `dakota-software` (branch `phase-2-sorting-hat`, PR #3, pushed). No `madmax` code changes this session — only session log.
+**Follow-up: logging + viewer (same session)**
+- `sorting_hat.py` now supports `--log FILE` → appends JSONL per run
+- `sorting-hat-viewer.html` — static page reads JSONL, shows last 50 runs as emoji table, red highlight for unknowns
+- Ready for LaunchAgent wiring in cutover session
+
+**Repos touched:** `dakota-software` (merged PR #3 + logging/viewer follow-up). No `madmax` code changes this session — only session log.
 
 ---
 
