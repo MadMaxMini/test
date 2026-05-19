@@ -675,9 +675,23 @@ def _load_browse():
     if not BROWSE_STATE.exists():
         return None
     try:
-        return json.loads(BROWSE_STATE.read_text())
+        state = json.loads(BROWSE_STATE.read_text())
+        # Auto-expire browse state after 30 minutes
+        created = datetime.fromisoformat(state.get("timestamp", ""))
+        if (datetime.now() - created).total_seconds() > 1800:  # 30 min
+            BROWSE_STATE.unlink()
+            return None
+        return state
     except Exception:
         return None
+
+
+def cmd_quit():
+    """Clear browse state."""
+    if BROWSE_STATE.exists():
+        BROWSE_STATE.unlink()
+        return "Browse state cleared. ✓"
+    return "No active browse state."
 
 def cmd_digest(args):
     """List items in bottleMsg/digest, sorted by newest. Args: N | today | topic."""
@@ -1259,6 +1273,10 @@ def dispatch(body, reply_fn, context="text", history=""):
     m_read = re.match(r"^read\s+(.+)$", cmd)
     if m_read:
         reply_fn(cmd_read(m_read.group(1)))
+        return
+
+    if cmd in ("quit", "done", "clear"):
+        reply_fn(cmd_quit())
         return
 
     if re.match(r"gtd\s+go(\s|$)", cmd) or cmd == "gtd go":
