@@ -24,9 +24,15 @@
 - **Integration test:** verify JSONL format round-trips (test_sorting_hat_logging.py, 3 tests passing)
 - **Chase credit CSV:** added TODO stub + commented pattern (no real native sample yet; extractor outputs in operations/bank-data/ are processed, not native)
 - Ready for LaunchAgent wiring in cutover session
-- **Cutover prep:** kicked off Gemma to draft LaunchAgent script, folder layout, alert mechanism (parallel task)
+- **Cutover prep (Gemma):** `sorting-hat-watch.sh` (unified inbox classifier + router) + `SORTING_HAT_CUTOVER.md` (full design doc, migration checklist, 4 decisions for Rod)
 
-**Repos touched:** `dakota-software` (merged PR #3 + logging/viewer + error handling + tests). No `madmax` code changes this session — only session log.
+**Session 2 (end of month):** Wire the LaunchAgent, test full pipeline, go live. Four decisions needed from Rod first (Dropbox Smart Sync, alert batching, quarantine cleanup, credit card routing).
+
+**Repos touched:** 
+- `dakota-software`: PR #3 merged (classifier + tests + fixtures), logging/viewer, error handling, cutover design (4 commits total)
+- `madmax`: session log updated
+
+**End-of-month goal met:** Sorting Hat fully designed, tested, and ready for deployment.
 
 ---
 
