@@ -21,22 +21,32 @@
 
 ---
 
-## 2026-05-19 — Stage B shipped: read-only sweep commands
+## 2026-05-19 — Stage B shipped + quit/timeout added
 
 **Completed:**
-- **Stage B built and live:** Read-only Telegram inbox commands, all verified working
-  - `/sweep` → bottleMsg items + recent emails, emoji-rich (📝📸🎙️📄🔐📎), aged markers (⏰ for >48h), saves browse state for `/read N`
+- **Stage B built and live:** Read-only Telegram inbox commands (verified working)
+  - `/sweep` → bottleMsg + recent emails, emoji-rich, aged markers (⏰), saves browse state
   - `/inbox` → quick count
-  - `/email [N]` → show last N emails (default 10, max 50), sorted newest-first, with tier icons (🔴🟡🔵⚪)
-  - `/email pending` → debounce batch sorted by urgency, ready to flush
-  - `/read N|filename` → md/txt/PDF support — PDFs shell-out to Dakota's pdfplumber venv, show first 5 pages max
-  - All pure read-only; pagination via existing `tg_send_chunked`; verified with direct dispatch test before deploy
-- Restarted telegram-poller clean (13:41:27); synced dispatcher.py to test repo
+  - `/email [N]` → last N emails (default 10, max 50) with tier icons
+  - `/email pending` → debounce batch about to flush
+  - `/read N|filename` → md/txt/PDF (pdfplumber venv, first 5 pages)
+  - `/quit` / `/done` / `/clear` → manual browse state clear
+  - Browse state auto-expires after 30 min (prevents stale `/read` references)
+  - All read-only; tested before deploy
+
+- **Documentation updated:** CAPABILITIES.md (testing procedures + monitoring), CLAUDE.md (added Telegram section + current status)
+- **Deferring Stage C for 1 week** — observation period to validate Stage B UX before building file-moving actions
+- **Decision:** resist jumping to GTD/Stage C work; use Stage B for real, report back what needs improvement
+
+**Commits this session:**
+- `cda0724` — Stage B commands shipped
+- `9e7c2a2` — Documentation (CAPABILITIES.md + CLAUDE.md)
+- `c3bc60d` — /quit + 30-min timeout
 
 **Earlier (2026-05-15):**
-- Audited email system, confirmed no new deps (poppler + pdfplumber present)
-- Wrote Phase 2 report with 3-stage design
-- **Stage A shipped:** fixed Telegram group chat (context="group" now routes to SOUL-telegram.md, fixing hallucination bug where group was still using full SOUL.md)
+- Stage A shipped: SOUL-telegram.md routing for context="group" (fixed hallucination bug)
+- Audited email system (no new deps — poppler + pdfplumber present)
+- Wrote Phase 2 report with 3-stage design (A ✅, B ✅, C deferred)
 
 ---
 
