@@ -1,5 +1,16 @@
 # Session Log
 
+## 2026-05-19 — Backlog setup + nightly triage fix
+
+**Completed:**
+- **Created backlog.md** — canonical roadmap for mini work (P0/P1/P2/P3). TTS hook for Claude Code sessions added as P1, blocked by 30-day no-build pact through 2026-06-10.
+- **Fixed nightly triage** — morning-brief.md was 18 days stale (last run 2026-05-01). Root cause: Dropbox Smart Sync PermissionError. LaunchAgent ran at 3:30am before Dropbox daemon hydrated cloud-only bottleMsg cache. Added 10s startup sleep in nightly-triage.py; manual test successful. Should resume on next overnight run.
+- Committed and pushed both changes to main.
+
+**Status:** Nightly triage should resume tonight. TTS setup queued as P1 (post-pact, 2026-06-10).
+
+---
+
 ## 2026-05-19 — Sorting Hat Session 1 shipped (PR #3)
 
 **Completed:**
