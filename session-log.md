@@ -1,5 +1,54 @@
 # Session Log
 
+## 2026-05-20 — Overnight sheets-pipeline hardening review + Phase 2 to ~90%
+
+**Setup:** Scheduled cron `02bf6900` (one-shot CronCreate from previous night) fired at 01:05 Wed 2026-05-20. Goal: review the sheets pipeline (cross-repo: madmax + dakota), brainstorm hardening, ship safe-path code while Rod sleeps.
+
+**Overnight local-model handoff:**
+- Built 305KB cross-repo context bundle via `build-context.sh` (without burning Claude's window, per feedback_local_model_context)
+- gemma3:27b timed out at local-agent's 600s cap on the 305KB bundle. Fell back to llama3.1:8b — completed in ~5 min but returned thin output, mostly paraphrasing the prompt
+- Net: my own 35-item brainstorm carried the synthesis. Llama added 1 useful new angle (concurrent-bridge-run safety)
+
+**Overnight: shipped to dakota-software (2 commits, pushed to main):**
+- `docs/sheets/2026-05-20-hardening-review.md` — synthesis doc with Phase 2 triage + 36-item recommendations table + top-5 picks
+- `bot/pdf-extractor/dupe_log_summary.py` + 9 tests — surfacing tool, already finding real signal (11 REJECTED rows in 30 days incl. Via Verona schema mismatch + kickapoo float-precision rejects)
+- `bot/pdf-extractor/scaffolding/openbao_playwright_token.py` + README — OpenBao migration scaffold, NOT WIRED IN
+- `docs/db-migration/schema-v0.sql` — DuckDB schema sketch
+- `tests/test_extract_mortgage_data.py` — one-line fix for sys.modules.setdefault test-pollution that was masking 10 Sorting Hat failures. Net: 12 failures → 2
+
+### Day-of continuation — Rod engaged with overnight findings
+
+After overnight pass landed, Rod woke and walked through the synthesis. Three rounds of clarification + course-correction, then a focused execution sprint to push Phase 2 from ~60% to ~90% in one session.
+
+**Corrections Rod made:**
+- Phase 4 is NOT blocked on Doc fact-check (defaults exist; just dirty data + Sharon update)
+- Phase 6/7 reshuffle: P6 = hardening v2 + DB prep (new), P7 = DuckDB migration (was Phase 6)
+- Kickapoo float-precision REJECT already fixed in `b963d03` on 5/07 (dupe-log entries are pre-fix history)
+- OpenBao wire-in is "load-bearing, don't touch" — keep as scaffold, defer to later-stage hardening
+- Year-flip lint not urgent until August — record the design but don't ship now
+- Silent-failure fix belongs AFTER alert tier work — defer to P6
+- Concurrent-bridge-run race IS worth fixing in P2 (sticky enough)
+
+**Shipped during sprint (commits pushed to dakota main):**
+- `9c3d7e2` — mortgage bridge structural-check + multi-field date repair. Expanded `MORTGAGE_FIELD_SPECS` from 1 field (Balance) to 4 with a `writes_value` flag. Closes the 2 long-standing failing tests. 11/11 mortgage tests now green.
+- `a395ff1` — Phase 2 push to ~90%: bridge lockfile + 3 lock tests, sorting_hat_confidence.py dashboard, property_map.json schema test (8 tests), notification-routing-audit doc, alert-noise-inventory doc, onboard-property checklist doc, Via Verona Sharon writeup, P2-QUICK-STATE single-page status doc, hardening-review doc corrections.
+
+**Shutdown:**
+- Morning-brief.py wired (~/Work/local/scripts/) to surface dupe-log + Sorting Hat alerts via subprocess. Already finding 1 unknown Sorting Hat classification on live test.
+- Overnight cron template saved to `~/Work/test/scaffolding/overnight-cron-template/` (EXECUTE.md + build-context.sh + gemma-prompt.md) — reusable for future overnight drops
+- 3 new memory entries: project_p2_quick_state_pointer, feedback_openbao_load_bearing, feedback_overnight_cron_pattern, feedback_token_frugality_and_gemma_suggestions (4 actually). MEMORY.md index updated.
+- iMessage sent to Rod with Via Verona Sharon-fix summary + routing question
+
+**iMessage sent to Rod:** Via Verona Sharon-fix summary + routing question (no Sharon-direct channel — asked whether Rod will forward or have me send to Dakota group).
+
+**Test suite:** 116 tests, 0 failures (was 12 failures earlier).
+
+**Phase 2 status at end of day:** 21 done / 5 remaining (all human-bound). ~89% by item count, ~95% by Claude-shippable surface.
+
+**🎯 Low-context-return doc:** `dakota-software/docs/sheets/P2-QUICK-STATE.md` — single-page emoji-rich Phase 2 status. New chat? Point Claude at that file → 30-second pickup.
+
+---
+
 ## 2026-05-19 — Backlog setup + nightly triage fix
 
 **Completed:**
