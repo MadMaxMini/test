@@ -51,6 +51,12 @@
 3. ✅ Quarantine cleanup: manual to start (safest default)
 4. 🔄 Chase credit routing: Telegram DM to Rod (msg 306) asking whether 3160/3202 flow to sheets automatically today, before deciding route vs quarantine
 
+**Phase 2 hardening picture clarified:**
+- **Drift fix REMOVED from backlog** — Rod corrected: day-of-month convention (mortgage=1, distribution=15, cc=10) is intentional. Rows reflect DUE DATE, not posting date. Early payments are by design.
+- **Created `docs/sheets/do-not-fix.md`** as catalog of intentional patterns. First entry: day-of-month convention. Future sessions read this before "fixing" sheet behavior.
+- **Pending verification full design captured** in `docs/cash-tracking/2026-05-19-rollup-formulas-and-verification-roadmap.md` section 3. Key insight from Rod: Phase B (verify + roll-off handling) is NOT punt-able because balance reconciliation needs a clean slate before new-txn writes. Bundled as late Phase 2 or Phase 5 hardening candidate.
+- **Open Phase 2 items remaining (all fresh-session candidates):** Credentials hardening, Alert noise reduction, Playwright batching, Naming standardization.
+
 ---
 
 ## 2026-05-19 — Stage B shipped + quit/timeout added
