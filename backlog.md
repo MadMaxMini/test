@@ -8,7 +8,7 @@ Last reviewed: 2026-05-19
 
 ## P0
 
-_(none)_
+- **Sharon sheet review** — get Sharon's eyes on Via Verona 2026 fix + layout audit across all 5 sheets before Phase 4 starts. Buy-in move, not a technical gate. Soft deadline 2026-05-22, then move forward without her. Decide channel (Signal/iMessage/1:1) and send ask. Doc: `dakota-software/docs/sheets/sharon-sheet-review.md`
 
 ## P1
 
